@@ -36,9 +36,6 @@ export default class GenerateFunctions {
     }
     `;
 
-    const methodReturnContextBlah =
-      'import { MethodPayableReturnContext, MethodConstantReturnContext, CallOptions, SendOptions, EstimateGasOptions, MethodReturnContext } from "./method-return-context"';
-
     const methodPayableReturnContext = `export interface MethodPayableReturnContext {
         send(options: SendOptions): Promise<any>;
         send(
