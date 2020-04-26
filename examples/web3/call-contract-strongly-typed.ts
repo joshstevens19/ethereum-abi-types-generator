@@ -1,13 +1,33 @@
 import Web3 from 'web3';
+import {
+  AbiEvents,
+  EventsContext,
+  FactoryAbi,
+  FactoryAbiMethodNames,
+} from '../../abi-types-generator/abi-examples/factory';
+import { Web3ContractContext } from '../../abi-types-generator/src/typescript/web3-contract-context';
 import { AbiExamples } from '../abi-examples';
 
-const web3 = new Web3(
-  'https://mainnet.infura.io/v3/280bb5b627394709938a7cc0b71a4a58'
-);
+const example = async () => {
+  const web3 = new Web3(
+    'https://mainnet.infura.io/v3/280bb5b627394709938a7cc0b71a4a58'
+  );
 
-const contract = new web3.eth.Contract(
-  AbiExamples.factoryAbi as any,
-  AbiExamples.factoryAddress
-);
+  const contract = (new web3.eth.Contract(
+    AbiExamples.factoryAbi as any,
+    AbiExamples.factoryAddress
+  ) as unknown) as Web3ContractContext<
+    FactoryAbi,
+    FactoryAbiMethodNames,
+    EventsContext,
+    AbiEvents
+  >;
 
-console.log(contract);
+  const exchange = await contract.methods
+    .getExchange('0x419D0d8BdD9aF5e606Ae2232ed285Aff190E711b')
+    .call();
+
+  console.log(exchange);
+};
+
+example();

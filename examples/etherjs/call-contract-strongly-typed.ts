@@ -21,8 +21,6 @@ const example = async () => {
     '0x419D0d8BdD9aF5e606Ae2232ed285Aff190E711b'
   );
 
-  contract.on;
-
   console.log(exchange);
 };
 
