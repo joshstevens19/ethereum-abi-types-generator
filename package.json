@@ -1,0 +1,17 @@
+{
+  "name": "ethereum-abi-types-generator",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "fs-extra": "^9.0.0"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^8.1.0"
+  }
+}

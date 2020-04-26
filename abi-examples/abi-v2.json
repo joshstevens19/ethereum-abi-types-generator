@@ -1,0 +1,279 @@
+[
+  {
+    "constant": false,
+    "inputs": [],
+    "name": "acceptOwnership",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "changeOwner",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "components": [
+          {
+            "name": "ID",
+            "type": "bytes32"
+          },
+          {
+            "name": "percentage",
+            "type": "uint256"
+          },
+          {
+            "name": "duration",
+            "type": "uint256"
+          },
+          {
+            "name": "revenueCalculationMethod",
+            "type": "uint256"
+          }
+        ],
+        "name": "o",
+        "type": "tuple"
+      }
+    ],
+    "name": "createOffer",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "offerID",
+        "type": "bytes32"
+      },
+      {
+        "name": "affiliate",
+        "type": "address"
+      },
+      {
+        "name": "validation",
+        "type": "bool"
+      }
+    ],
+    "name": "setAffiliateValidation",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "player",
+        "type": "address"
+      },
+      {
+        "name": "affiliate",
+        "type": "address"
+      },
+      {
+        "name": "offerID",
+        "type": "bytes32"
+      },
+      {
+        "name": "campaignID",
+        "type": "bytes32"
+      }
+    ],
+    "name": "setAffiliation",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "a",
+        "type": "address"
+      }
+    ],
+    "name": "setApprovedOperatorsListAddress",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "name": "",
+        "type": "address"
+      },
+      {
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "affiliations",
+    "outputs": [
+      {
+        "name": "affiliate",
+        "type": "address"
+      },
+      {
+        "name": "offerID",
+        "type": "bytes32"
+      },
+      {
+        "name": "creationTime",
+        "type": "uint256"
+      },
+      {
+        "name": "campaignID",
+        "type": "bytes32"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "name": "",
+        "type": "address"
+      },
+      {
+        "name": "",
+        "type": "bytes32"
+      },
+      {
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "affiliationValidations",
+    "outputs": [
+      {
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "approvedOperatorsListAddress",
+    "outputs": [
+      {
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "name": "player",
+        "type": "address"
+      },
+      {
+        "name": "operator",
+        "type": "address"
+      }
+    ],
+    "name": "getAffiliation",
+    "outputs": [
+      {
+        "name": "affiliate",
+        "type": "address"
+      },
+      {
+        "name": "percentage",
+        "type": "uint256"
+      },
+      {
+        "name": "revenueCalculationMethod",
+        "type": "uint256"
+      },
+      {
+        "name": "campaignID",
+        "type": "bytes32"
+      },
+      {
+        "name": "offerID",
+        "type": "bytes32"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "name": "offers",
+    "outputs": [
+      {
+        "name": "ID",
+        "type": "bytes32"
+      },
+      {
+        "name": "percentage",
+        "type": "uint256"
+      },
+      {
+        "name": "duration",
+        "type": "uint256"
+      },
+      {
+        "name": "revenueCalculationMethod",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "owner",
+    "outputs": [
+      {
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  }
+]
