@@ -13,7 +13,7 @@ export default class GenerateFunctions {
 
   public buildInterfaceFromFunctions() {
     const result: AbiItem[] = JSON.parse(
-      fs.readFileSync('./abi-examples/token-abi.json', 'utf8')
+      fs.readFileSync('./abi-examples/factory-abi.json', 'utf8')
     );
 
     const methodReturnContextOptions = `export interface CallOptions {
@@ -106,7 +106,7 @@ export default class GenerateFunctions {
       objectOutputInterfacesContext +
       abiContext;
 
-    fs.writeFileSync('./abi-examples/token.ts', fullInterface, {
+    fs.writeFileSync('./abi-examples/factory.ts', fullInterface, {
       mode: 0o755,
     });
   }

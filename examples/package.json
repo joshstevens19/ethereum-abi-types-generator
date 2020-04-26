@@ -1,5 +1,5 @@
 {
-  "name": "ethereum-abi-types-generator",
+  "name": "examples",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -9,10 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "fs-extra": "^9.0.0"
-  },
-  "devDependencies": {
-    "@types/fs-extra": "^8.1.0",
-    "ethers": "^4.0.47"
+    "ethers": "^4.0.47",
+    "web3": "^1.2.7"
   }
 }
