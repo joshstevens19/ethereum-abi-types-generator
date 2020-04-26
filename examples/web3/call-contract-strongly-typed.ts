@@ -27,6 +27,8 @@ const example = async () => {
     .getExchange('0x419D0d8BdD9aF5e606Ae2232ed285Aff190E711b')
     .call();
 
+  contract.events.NewExchange({ filter: { token: 'hey' } });
+
   console.log(exchange);
 };
 

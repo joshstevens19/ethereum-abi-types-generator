@@ -43,7 +43,7 @@ export enum AbiEvents {
 }
 export interface EventsContext {
   NewExchange(parameters: {
-    filter?: { token: string | string[]; exchange: string | string[] };
+    filter?: { token?: string | string[]; exchange?: string | string[] };
     fromBlock?: number;
     toBlock?: 'latest' | number;
     topics?: string[];

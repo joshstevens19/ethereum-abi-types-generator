@@ -151,7 +151,7 @@ export default class GenerateFunctions {
             );
             filtersProperties += `${
               abiItems[i].inputs![a].name
-            }: ${paramterType} | ${paramterType}[],`;
+            }?: ${paramterType} | ${paramterType}[],`;
           }
         }
 
