@@ -3,3 +3,6 @@
 
 # build
 /dist
+
+/abi-examples/abi-v2.ts
+/abi-examples/token.ts
