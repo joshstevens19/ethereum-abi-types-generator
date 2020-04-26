@@ -1,8 +1,8 @@
 # dependencies
-/node_modules
+/abi-types-generator/node_modules
 
 # build
-/dist
+/abi-types-generator/dist
 
-/abi-examples/abi-v2.ts
-/abi-examples/token.ts
+/abi-types-generator/abi-examples/abi-v2.ts
+/abi-types-generator/abi-examples/token.ts
