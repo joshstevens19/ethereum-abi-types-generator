@@ -38,6 +38,14 @@ export async function execute(): Promise<void> {
     return Logger.logErrorWithHelp(args.subcommands[0] || null);
   }
 
+  switch (args.command) {
+    case 'generate':
+      Logger.log('hey');
+      break;
+    default:
+      Logger.logHelp();
+  }
+
   //   const cmd = commands[args.command];
 
   //   if (!cmd) {

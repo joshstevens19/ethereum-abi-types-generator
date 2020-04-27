@@ -1,3 +1,5 @@
+import generate from './generate';
+
 export = {
-  logger: true,
+  generate,
 };
