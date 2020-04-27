@@ -5,7 +5,12 @@ const { EOL } = os;
 
 export const generateHelpMessages: IHelpMessage = {
   commands: [],
-  examples: ['abi generate <abiPath>', 'abi generate <abiPath> --output=PATH'],
+  examples: [
+    'abi generate <abiPath>',
+    'abi generate <abiPath> --output=PATH',
+    'abi generate <abiPath> --provider=web3|ethers',
+    'abi generate <abiPath> --output=PATH --provider=web3|ethers',
+  ],
   usage: 'abi generate <abiPath>',
 };
 

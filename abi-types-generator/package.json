@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "gen": "node ./dist/src/bin/generator-cli.js"
+    "gen": "node ./dist/bin/generator-cli.js",
+    "hardcoded": "node ./dist/bin/generator-cli.js generate './abi-examples/factory-abi.json' --outputPath='./abi-examples/factory.ts' --provider=ethers"
   },
   "author": "",
   "license": "ISC",

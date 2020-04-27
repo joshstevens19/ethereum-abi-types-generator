@@ -4,6 +4,7 @@ import { AbiItem } from '../../abi-properties/abi-item';
 import { AbiItemType } from '../../abi-properties/abi-item-type';
 import { InputOutputType } from '../../abi-properties/input-output-type';
 import Helpers from '../../common/helpers';
+import { GeneratorContext } from './contexts/generator-context';
 import { Provider } from './enums/provider';
 
 export default class AbiGenerator {
@@ -11,13 +12,13 @@ export default class AbiGenerator {
   private _events: string[] = [];
   private _methodNames: string[] = [];
 
-  constructor(private _provider: Provider) {
+  constructor(private _context: GeneratorContext) {
     this.generate();
   }
 
-  private generate() {
+  private generate(): void {
     const result: AbiItem[] = JSON.parse(
-      fs.readFileSync('./abi-examples/factory-abi.json', 'utf8')
+      fs.readFileSync(this._context.abiPath, 'utf8')
     );
 
     let abiContext = `
@@ -44,7 +45,6 @@ export default class AbiGenerator {
     }
 
     abiContext += ' }';
-    console.log(abiContext);
 
     // write the object interfaces to types
     let objectOutputInterfacesContext = '';
@@ -55,8 +55,10 @@ export default class AbiGenerator {
     }
 
     const fullInterface =
-      (this._provider === Provider.web3 ? this.buildWeb3Interfaces() : '') +
-      (this._provider === Provider.etherjs
+      (this._context.provider === Provider.web3
+        ? this.buildWeb3Interfaces()
+        : '') +
+      (this._context.provider === Provider.ethers
         ? this.buildEthersInterfaces()
         : '') +
       this.buildEventsEnum() +
@@ -65,7 +67,7 @@ export default class AbiGenerator {
       objectOutputInterfacesContext +
       abiContext;
 
-    fs.writeFileSync('./abi-examples/factory.ts', fullInterface, {
+    fs.writeFileSync(this._context.outputPath, fullInterface, {
       mode: 0o755,
     });
   }
@@ -170,7 +172,7 @@ export default class AbiGenerator {
 
     for (let i = 0; i < abiItems.length; i++) {
       if (abiItems[i].type === AbiItemType.event) {
-        if (this._provider === Provider.web3) {
+        if (this._context.provider === Provider.web3) {
           let filtersProperties = '{';
           for (let a = 0; a < abiItems[i].inputs!.length; a++) {
             if (abiItems[i].inputs![a].indexed === true) {
@@ -198,7 +200,7 @@ export default class AbiGenerator {
             .name!}(parameters: ${parameters}): any;`;
         }
 
-        if (this._provider === Provider.etherjs) {
+        if (this._context.provider === Provider.ethers) {
           eventsInterface += `${abiItems[i]
             .name!}(...parameters: any): EventFilter;`;
         }
@@ -347,30 +349,30 @@ export default class AbiGenerator {
 
   private buildMockReturnContext(type: any, abiItem: AbiItem) {
     if (abiItem.constant === true) {
-      if (this._provider === Provider.web3) {
+      if (this._context.provider === Provider.web3) {
         return `: MethodConstantReturnContext<${type}>`;
       }
 
-      if (this._provider === Provider.etherjs) {
+      if (this._context.provider === Provider.ethers) {
         return `: Promise<${type}>`;
       }
     }
 
     if (abiItem.payable === true) {
-      if (this._provider === Provider.web3) {
+      if (this._context.provider === Provider.web3) {
         return `: MethodPayableReturnContext`;
       }
 
-      if (this._provider === Provider.etherjs) {
+      if (this._context.provider === Provider.ethers) {
         return `: Promise<ContractTransaction>`;
       }
     }
 
-    if (this._provider === Provider.web3) {
+    if (this._context.provider === Provider.web3) {
       return `: MethodReturnContext`;
     }
 
-    if (this._provider === Provider.etherjs) {
+    if (this._context.provider === Provider.ethers) {
       return `: Promise<ContractTransaction>`;
     }
   }

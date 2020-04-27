@@ -10,17 +10,17 @@ export = {
   help: () => Helpers.getHelpMessageByCommandType(CommandTypes.generate),
   async action(cmd: IProgramOptions): Promise<void> {
     const abiPath = cmd.subcommands[0];
-    const ouputPath = cmd.options.ouputPath || abiPath;
+    const outputPath = cmd.options.outputPath || abiPath;
     const language = cmd.options.lang || ConverterType.ts;
     const provider = (cmd.options.provider as Provider) || Provider.web3;
 
     switch (language) {
       case ConverterType.ts:
-        new AbiGenerator(provider);
+        new AbiGenerator({ provider, abiPath, outputPath });
     }
 
     Logger.log(
-      `successfully created typings for abi file ${abiPath} saved ${ouputPath}`
+      `successfully created typings for abi file ${abiPath} saved ${outputPath}`
     );
   },
 };

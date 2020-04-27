@@ -3,6 +3,7 @@
 // import dotenv = require('dotenv');
 // import path = require('path');
 import 'reflect-metadata';
+import commands from '../commands/index';
 // import commands from '../commands';
 import Helpers from '../common/helpers';
 import Logger from '../common/logger';
@@ -11,7 +12,7 @@ import Logger from '../common/logger';
 // if we import it then it wants the package.json in the src folder
 // which we dont want
 // tslint:disable-next-line: no-var-requires
-const packageJson = require('../../../package.json');
+const packageJson = require('../../package.json');
 
 (async () => {
   await execute();
@@ -40,7 +41,7 @@ export async function execute(): Promise<void> {
 
   switch (args.command) {
     case 'generate':
-      Logger.log('hey');
+      await commands.generate.action(args);
       break;
     default:
       Logger.logHelp();
