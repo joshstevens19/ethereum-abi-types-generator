@@ -1,3 +1,4 @@
 import GenerateFunctions from './generate-functions';
+import { Provider } from './provider';
 
-new GenerateFunctions().buildInterfaceFromFunctions();
+new GenerateFunctions(Provider.etherjs).buildInterfaceFromFunctions();

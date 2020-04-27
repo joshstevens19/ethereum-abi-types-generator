@@ -3,19 +3,71 @@ import { AbiInput, AbiItem } from '../abi-properties/abi-item';
 import { AbiItemType } from '../abi-properties/abi-item-type';
 import { InputOutputType } from '../abi-properties/input-output-type';
 import Helpers from '../common/helpers';
+import { Provider } from './provider';
 
 export default class GenerateFunctions {
   private _objectOutputReturnTypeInterfaces: string[] = [];
   private _events: string[] = [];
   private _methodNames: string[] = [];
 
-  constructor() {}
+  constructor(private _provider: Provider) {}
 
   public buildInterfaceFromFunctions() {
     const result: AbiItem[] = JSON.parse(
       fs.readFileSync('./abi-examples/factory-abi.json', 'utf8')
     );
 
+    let abiContext = `
+      export interface FactoryAbi { 
+        `;
+    for (let i = 0; i < result.length; i++) {
+      switch (result[i].type) {
+        case AbiItemType.constructor:
+          abiContext += this.buildInterfacePropertyMainSummary(result[i]);
+          this._methodNames.push('new');
+          abiContext += `'new'${this.workOutInputParameters(result[i])};`;
+          break;
+        case AbiItemType.function:
+          abiContext += this.buildInterfacePropertyMainSummary(result[i]);
+          this._methodNames.push(result[i].name!);
+          abiContext += `${result[i].name}${this.workOutInputParameters(
+            result[i]
+          )};`;
+          break;
+        case AbiItemType.event:
+          this._events.push(result[i].name!);
+          break;
+      }
+    }
+
+    abiContext += ' }';
+    console.log(abiContext);
+
+    // write the object interfaces to types
+    let objectOutputInterfacesContext = '';
+    for (let o = 0; o < this._objectOutputReturnTypeInterfaces.length; o++) {
+      objectOutputInterfacesContext += this._objectOutputReturnTypeInterfaces[
+        o
+      ];
+    }
+
+    const fullInterface =
+      (this._provider === Provider.web3 ? this.buildWeb3Interfaces() : '') +
+      (this._provider === Provider.etherjs
+        ? this.buildEthersInterfaces()
+        : '') +
+      this.buildEventsEnum() +
+      this.buildEventsInterface(result) +
+      this.buildMethodNamesEnum() +
+      objectOutputInterfacesContext +
+      abiContext;
+
+    fs.writeFileSync('./abi-examples/factory.ts', fullInterface, {
+      mode: 0o755,
+    });
+  }
+
+  private buildWeb3Interfaces(): string {
     const methodReturnContextOptions = `export interface CallOptions {
         from?: string;
         gasPrice?: string;
@@ -61,54 +113,26 @@ export default class GenerateFunctions {
 
     const methodReturnContext = `export interface MethodReturnContext extends MethodPayableReturnContext {}`;
 
-    let abiContext = `
-      export interface FactoryAbi { 
-        `;
-    for (let i = 0; i < result.length; i++) {
-      switch (result[i].type) {
-        case AbiItemType.constructor:
-          abiContext += this.buildInterfacePropertyMainSummary(result[i]);
-          this._methodNames.push('new');
-          abiContext += `'new'${this.workOutInputParameters(result[i])};`;
-          break;
-        case AbiItemType.function:
-          abiContext += this.buildInterfacePropertyMainSummary(result[i]);
-          this._methodNames.push(result[i].name!);
-          abiContext += `${result[i].name}${this.workOutInputParameters(
-            result[i]
-          )};`;
-          break;
-        case AbiItemType.event:
-          this._events.push(result[i].name!);
-          break;
-      }
-    }
-
-    abiContext += ' }';
-    console.log(abiContext);
-
-    // write the object interfaces to types
-    let objectOutputInterfacesContext = '';
-    for (let o = 0; o < this._objectOutputReturnTypeInterfaces.length; o++) {
-      objectOutputInterfacesContext += this._objectOutputReturnTypeInterfaces[
-        o
-      ];
-    }
-
-    const fullInterface =
+    return (
       methodReturnContextOptions +
       methodPayableReturnContext +
       methodConstantReturnContext +
-      methodReturnContext +
-      this.buildEventsEnum() +
-      this.buildEventsInterface(result) +
-      this.buildMethodNamesEnum() +
-      objectOutputInterfacesContext +
-      abiContext;
+      methodReturnContext
+    );
+  }
 
-    fs.writeFileSync('./abi-examples/factory.ts', fullInterface, {
-      mode: 0o755,
-    });
+  private buildEthersInterfaces(): string {
+    const ethersImports = 'import { ContractTransaction } from "ethers";';
+
+    const eventFilter = `export declare type EventFilter = {
+        address?: string;
+        topics?: Array<string>;
+        fromBlock?: string | number;
+        toBlock?: string | number;
+      };
+    `;
+
+    return ethersImports + eventFilter;
   }
 
   private buildMethodNamesEnum(): string {
@@ -143,21 +167,22 @@ export default class GenerateFunctions {
 
     for (let i = 0; i < abiItems.length; i++) {
       if (abiItems[i].type === AbiItemType.event) {
-        let filtersProperties = '{';
-        for (let a = 0; a < abiItems[i].inputs!.length; a++) {
-          if (abiItems[i].inputs![a].indexed === true) {
-            const paramterType = this.getInputOutputTsType(
-              abiItems[i].inputs![a].type as InputOutputType
-            );
-            filtersProperties += `${
-              abiItems[i].inputs![a].name
-            }?: ${paramterType} | ${paramterType}[],`;
+        if (this._provider === Provider.web3) {
+          let filtersProperties = '{';
+          for (let a = 0; a < abiItems[i].inputs!.length; a++) {
+            if (abiItems[i].inputs![a].indexed === true) {
+              const paramterType = this.getInputOutputTsType(
+                abiItems[i].inputs![a].type as InputOutputType
+              );
+              filtersProperties += `${
+                abiItems[i].inputs![a].name
+              }?: ${paramterType} | ${paramterType}[],`;
+            }
           }
-        }
 
-        filtersProperties += '}';
+          filtersProperties += '}';
 
-        let parameters = `
+          let parameters = `
          {
              filter?: ${filtersProperties};
              fromBlock?: number;
@@ -166,8 +191,14 @@ export default class GenerateFunctions {
          }
          `;
 
-        eventsInterface += `${abiItems[i]
-          .name!}(parameters: ${parameters}): any;`;
+          eventsInterface += `${abiItems[i]
+            .name!}(parameters: ${parameters}): any;`;
+        }
+
+        if (this._provider === Provider.etherjs) {
+          eventsInterface += `${abiItems[i]
+            .name!}(...parameters: any): EventFilter;`;
+        }
       }
     }
 
@@ -313,14 +344,32 @@ export default class GenerateFunctions {
 
   private buildMockReturnContext(type: any, abiItem: AbiItem) {
     if (abiItem.constant === true) {
-      return `: MethodConstantReturnContext<${type}>`;
+      if (this._provider === Provider.web3) {
+        return `: MethodConstantReturnContext<${type}>`;
+      }
+
+      if (this._provider === Provider.etherjs) {
+        return `: Promise<${type}>`;
+      }
     }
 
     if (abiItem.payable === true) {
-      return `: MethodPayableReturnContext`;
+      if (this._provider === Provider.web3) {
+        return `: MethodPayableReturnContext`;
+      }
+
+      if (this._provider === Provider.etherjs) {
+        return `: Promise<ContractTransaction>`;
+      }
     }
 
-    return `: MethodReturnContext`;
+    if (this._provider === Provider.web3) {
+      return `: MethodReturnContext`;
+    }
+
+    if (this._provider === Provider.etherjs) {
+      return `: Promise<ContractTransaction>`;
+    }
   }
 
   /**

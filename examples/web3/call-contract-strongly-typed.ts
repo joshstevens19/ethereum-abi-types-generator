@@ -23,9 +23,10 @@ const example = async () => {
     AbiEvents
   >;
 
-  const exchange = await contract.methods
-    .getExchange('0x419D0d8BdD9aF5e606Ae2232ed285Aff190E711b')
-    .call();
+  const exchange = await contract.methods.getExchange(
+    '0x419D0d8BdD9aF5e606Ae2232ed285Aff190E711b'
+  );
+  // .call();
 
   contract.events.NewExchange({ filter: { token: 'hey' } });
 
