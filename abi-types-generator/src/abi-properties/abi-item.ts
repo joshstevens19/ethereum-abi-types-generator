@@ -1,3 +1,6 @@
+import { AbiInput } from './abi-input';
+import { AbiOutput } from './abi-output';
+
 export interface AbiItem {
   anonymous?: boolean;
   constant?: boolean;
@@ -8,19 +11,6 @@ export interface AbiItem {
   stateMutability?: StateMutabilityType;
   type: AbiType;
   gas?: number;
-}
-
-export interface AbiInput {
-  name: string;
-  type: string;
-  indexed?: boolean;
-  components?: AbiInput[];
-}
-
-export interface AbiOutput {
-  name: string;
-  type: string;
-  components?: AbiOutput[];
 }
 
 export type StateMutabilityType = 'pure' | 'view' | 'nonpayable' | 'payable';

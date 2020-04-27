@@ -5,7 +5,7 @@ import {
   FactoryAbi,
   FactoryAbiMethodNames,
 } from '../../abi-types-generator/abi-examples/factory';
-import { Web3ContractContext } from '../../abi-types-generator/src/typescript/web3-contract-context';
+import { Web3ContractContext } from '../../abi-types-generator/src/converters/typescript/contexts/web3-contract-context';
 import { AbiExamples } from '../abi-examples';
 
 const example = async () => {
@@ -23,10 +23,9 @@ const example = async () => {
     AbiEvents
   >;
 
-  const exchange = await contract.methods.getExchange(
-    '0x419D0d8BdD9aF5e606Ae2232ed285Aff190E711b'
-  );
-  // .call();
+  const exchange = await contract.methods
+    .getExchange('0x419D0d8BdD9aF5e606Ae2232ed285Aff190E711b')
+    .call();
 
   contract.events.NewExchange({ filter: { token: 'hey' } });
 

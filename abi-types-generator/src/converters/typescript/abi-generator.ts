@@ -1,18 +1,21 @@
 import fs from 'fs-extra';
-import { AbiInput, AbiItem } from '../abi-properties/abi-item';
-import { AbiItemType } from '../abi-properties/abi-item-type';
-import { InputOutputType } from '../abi-properties/input-output-type';
-import Helpers from '../common/helpers';
-import { Provider } from './provider';
+import { AbiInput } from '../../abi-properties';
+import { AbiItem } from '../../abi-properties/abi-item';
+import { AbiItemType } from '../../abi-properties/abi-item-type';
+import { InputOutputType } from '../../abi-properties/input-output-type';
+import Helpers from '../../common/helpers';
+import { Provider } from './enums/provider';
 
-export default class GenerateFunctions {
+export default class AbiGenerator {
   private _objectOutputReturnTypeInterfaces: string[] = [];
   private _events: string[] = [];
   private _methodNames: string[] = [];
 
-  constructor(private _provider: Provider) {}
+  constructor(private _provider: Provider) {
+    this.generate();
+  }
 
-  public buildInterfaceFromFunctions() {
+  private generate() {
     const result: AbiItem[] = JSON.parse(
       fs.readFileSync('./abi-examples/factory-abi.json', 'utf8')
     );

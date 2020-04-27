@@ -4,7 +4,7 @@ import {
   EventsContext,
   FactoryAbi,
 } from '../../abi-types-generator/abi-examples/factory';
-import { EthersContractContext } from '../../abi-types-generator/src/typescript/ethers-contract-context';
+import { EthersContractContext } from '../../abi-types-generator/src/converters/typescript/contexts/ethers-contract-context';
 import { AbiExamples } from '../abi-examples';
 
 // Connect to the network
@@ -65,18 +65,18 @@ const example = async () => {
     await hey.getExchange('0x419D0d8BdD9aF5e606Ae2232ed285Aff190E711b')
   );
 
-  let filter = contract.filters.NewExchange();
+  // // let filter = contract.filters.NewExchange();
 
-  contract.on(filter, (author, oldValue, newValue, event) => {
-    // Called ONLY when your account changes the value
-  });
+  // contract.on(filter, (author, oldValue, newValue, event) => {
+  //   // Called ONLY when your account changes the value
+  // });
 
-  console.log(contract.functions);
-  console.log(
-    await contract.functions.getExchange(
-      '0x419D0d8BdD9aF5e606Ae2232ed285Aff190E711b'
-    )
-  );
+  // console.log(contract.functions);
+  // console.log(
+  //   await contract.functions.getExchange(
+  //     '0x419D0d8BdD9aF5e606Ae2232ed285Aff190E711b'
+  //   )
+  // );
 };
 
 example();

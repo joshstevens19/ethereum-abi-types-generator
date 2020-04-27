@@ -1,4 +1,4 @@
-import { AbiInput, AbiOutput } from '../abi-properties/abi-item';
+import { AbiInput, AbiOutput } from '../../../abi-properties';
 
 export interface Web3ContractContext<
   TMethodsInterface,
