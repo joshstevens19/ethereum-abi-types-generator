@@ -1,3 +1,4 @@
+import { Options } from 'prettier';
 import Helpers from '../common/helpers';
 import Logger from '../common/logger';
 import { IProgramOptions } from '../common/models/iprogram-options';
@@ -13,10 +14,25 @@ export = {
     const outputPath = cmd.options.outputPath || abiPath;
     const language = cmd.options.lang || ConverterType.ts;
     const provider = (cmd.options.provider as Provider) || Provider.web3;
+    const name = cmd.options.name;
+    const prettierOptions: Options | undefined = (cmd.options
+      .prettierOptions as unknown) as Options;
 
     switch (language) {
       case ConverterType.ts:
-        new AbiGenerator({ provider, abiPath, outputPath });
+        new AbiGenerator({
+          provider,
+          abiPath,
+          outputPath,
+          name,
+          prettierOptions,
+        });
+        break;
+      default:
+        Logger.logErrorWithHelp(
+          `${language} is not supported. Support languages are - 'ts'`
+        );
+        return;
     }
 
     Logger.log(

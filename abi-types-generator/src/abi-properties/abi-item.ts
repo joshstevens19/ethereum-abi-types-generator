@@ -5,7 +5,7 @@ export interface AbiItem {
   anonymous?: boolean;
   constant?: boolean;
   inputs?: AbiInput[];
-  name?: string;
+  name: string;
   outputs?: AbiOutput[];
   payable?: boolean;
   stateMutability?: StateMutabilityType;

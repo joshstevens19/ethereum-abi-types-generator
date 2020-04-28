@@ -1,4 +1,5 @@
 export { AbiInput } from './abi-input';
+export { AbiItem } from './abi-item';
 export { AbiItemType } from './abi-item-type';
 export { AbiOutput } from './abi-output';
-export { InputOutputType } from './input-output-type';
+export { SolidityType } from './solidity-type';

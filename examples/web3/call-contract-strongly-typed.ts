@@ -1,8 +1,8 @@
 import Web3 from 'web3';
 import {
-  AbiEvents,
-  EventsContext,
   FactoryAbi,
+  FactoryAbiEvents,
+  FactoryAbiEventsContext,
   FactoryAbiMethodNames,
 } from '../../abi-types-generator/abi-examples/factory';
 import { Web3ContractContext } from '../../abi-types-generator/src/converters/typescript/contexts/web3-contract-context';
@@ -19,8 +19,8 @@ const example = async () => {
   ) as unknown) as Web3ContractContext<
     FactoryAbi,
     FactoryAbiMethodNames,
-    EventsContext,
-    AbiEvents
+    FactoryAbiEventsContext,
+    FactoryAbiEvents
   >;
 
   const exchange = await contract.methods

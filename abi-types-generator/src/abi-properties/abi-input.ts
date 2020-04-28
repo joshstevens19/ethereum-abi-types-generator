@@ -1,8 +1,8 @@
-import { InputOutputType } from './input-output-type';
+import { SolidityType } from './solidity-type';
 
 export interface AbiInput {
   name: string;
-  type: InputOutputType;
+  type: SolidityType;
   indexed?: boolean;
   components?: AbiInput[];
 }

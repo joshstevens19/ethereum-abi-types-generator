@@ -1,14 +1,22 @@
 import fs from 'fs-extra';
-import { AbiInput } from '../../abi-properties';
+import path from 'path';
+import prettier, { Options } from 'prettier';
+import { AbiInput, AbiOutput, SolidityType } from '../../abi-properties';
 import { AbiItem } from '../../abi-properties/abi-item';
 import { AbiItemType } from '../../abi-properties/abi-item-type';
-import { InputOutputType } from '../../abi-properties/input-output-type';
 import Helpers from '../../common/helpers';
+import TypeScriptHelpers from './common/helpers';
 import { GeneratorContext } from './contexts/generator-context';
 import { Provider } from './enums/provider';
+import { EthersFactory } from './ethers-factory';
+import { Web3Factory } from './web3-factory';
 
 export default class AbiGenerator {
-  private _objectOutputReturnTypeInterfaces: string[] = [];
+  private _web3Factory = new Web3Factory();
+  private _ethersFactory = new EthersFactory();
+
+  // the contexts
+  private _parametersAndReturnTypeInterfaces: string[] = [];
   private _events: string[] = [];
   private _methodNames: string[] = [];
 
@@ -16,203 +24,209 @@ export default class AbiGenerator {
     this.generate();
   }
 
+  /**
+   * Generates all the typings
+   */
   private generate(): void {
-    const result: AbiItem[] = JSON.parse(
-      fs.readFileSync(this._context.abiPath, 'utf8')
+    const abi: AbiItem[] = this.getAbiJson();
+
+    const fullTypings = prettier.format(
+      this.buildFullTypings(abi, this.buildAbiInterface(abi)),
+      this.getPrettierOptions()
     );
 
-    let abiContext = `
-      export interface FactoryAbi { 
-        `;
-    for (let i = 0; i < result.length; i++) {
-      switch (result[i].type) {
-        case AbiItemType.constructor:
-          abiContext += this.buildInterfacePropertyMainSummary(result[i]);
-          this._methodNames.push('new');
-          abiContext += `'new'${this.workOutInputParameters(result[i])};`;
-          break;
-        case AbiItemType.function:
-          abiContext += this.buildInterfacePropertyMainSummary(result[i]);
-          this._methodNames.push(result[i].name!);
-          abiContext += `${result[i].name}${this.workOutInputParameters(
-            result[i]
-          )};`;
-          break;
-        case AbiItemType.event:
-          this._events.push(result[i].name!);
-          break;
-      }
-    }
-
-    abiContext += ' }';
-
-    // write the object interfaces to types
-    let objectOutputInterfacesContext = '';
-    for (let o = 0; o < this._objectOutputReturnTypeInterfaces.length; o++) {
-      objectOutputInterfacesContext += this._objectOutputReturnTypeInterfaces[
-        o
-      ];
-    }
-
-    const fullInterface =
-      (this._context.provider === Provider.web3
-        ? this.buildWeb3Interfaces()
-        : '') +
-      (this._context.provider === Provider.ethers
-        ? this.buildEthersInterfaces()
-        : '') +
-      this.buildEventsEnum() +
-      this.buildEventsInterface(result) +
-      this.buildMethodNamesEnum() +
-      objectOutputInterfacesContext +
-      abiContext;
-
-    fs.writeFileSync(this._context.outputPath, fullInterface, {
+    fs.writeFileSync(this._context.outputPath, fullTypings, {
       mode: 0o755,
     });
   }
 
-  private buildWeb3Interfaces(): string {
-    const methodReturnContextOptions = `export interface CallOptions {
-        from?: string;
-        gasPrice?: string;
-        gas?: number;
-    }
-    
-    export interface SendOptions {
-        from: string;
-        value: number | string; // | BN;
-        gasPrice?: string;
-        gas?: number;
+  /**
+   * Get prettier options
+   */
+  private getPrettierOptions(): Options {
+    if (this._context.prettierOptions) {
+      this._context.prettierOptions.parser = 'typescript';
+      return this._context.prettierOptions;
     }
 
-    export interface EstimateGasOptions {
-        from?: string;
-        value?: number | string; // | BN;
-        gas?: number;
+    return {
+      parser: 'typescript',
+      trailingComma: 'es5',
+      singleQuote: true,
+      bracketSpacing: true,
+      printWidth: 80,
+    };
+  }
+
+  /**
+   * Build the full typings
+   * @param abi The abi items
+   * @param abiTypedInterface The abi typed interface
+   */
+  private buildFullTypings(abi: AbiItem[], abiTypedInterface: string): string {
+    let typings = '';
+    switch (this._context.provider) {
+      case Provider.web3:
+        typings += this._web3Factory.buildWeb3Interfaces();
+        break;
+      case Provider.ethers:
+        typings += this._ethersFactory.buildEthersInterfaces();
+        break;
+      default:
+        throw new Error(
+          `${this._context.provider} is not a known supported provider`
+        );
     }
-    `;
-
-    const methodPayableReturnContext = `export interface MethodPayableReturnContext {
-        send(options: SendOptions): Promise<any>;
-        send(
-            options: SendOptions,
-            callback: (error: Error, result: any) => void
-        ): Promise<any>;
-        estimateGas(options: EstimateGasOptions): Promise<any>;
-        estimateGas(
-            options: EstimateGasOptions,
-            callback: (error: Error, result: any) => void
-        ): Promise<any>;
-        encodeABI(): string;
-    }`;
-
-    const methodConstantReturnContext = `export interface MethodConstantReturnContext<TCallReturn> {
-        call(): Promise<TCallReturn>;
-        call(options: CallOptions): Promise<TCallReturn>;
-        call(
-        options: CallOptions,
-        callback: (error: Error, result: TCallReturn) => void
-        ): Promise<TCallReturn>;
-    }`;
-
-    const methodReturnContext = `export interface MethodReturnContext extends MethodPayableReturnContext {}`;
 
     return (
-      methodReturnContextOptions +
-      methodPayableReturnContext +
-      methodConstantReturnContext +
-      methodReturnContext
+      typings +
+      this.buildEventsEnum() +
+      this.buildEventsInterface(abi) +
+      this.buildMethodNamesEnum() +
+      this.buildParametersAndReturnTypeInterfaces() +
+      abiTypedInterface
     );
   }
 
-  private buildEthersInterfaces(): string {
-    const ethersImports = 'import { ContractTransaction } from "ethers";';
-
-    const eventFilter = `export declare type EventFilter = {
-        address?: string;
-        topics?: Array<string>;
-        fromBlock?: string | number;
-        toBlock?: string | number;
-      };
-    `;
-
-    return ethersImports + eventFilter;
-  }
-
-  private buildMethodNamesEnum(): string {
-    let methodNames = 'export enum FactoryAbiMethodNames {';
-
-    for (let i = 0; i < this._methodNames.length; i++) {
-      methodNames += `${this._methodNames[i]} = "${this._methodNames[i]}",`;
+  /**
+   * Gets the abi json
+   */
+  private getAbiJson(): AbiItem[] {
+    if (!fs.existsSync(this._context.abiPath)) {
+      throw new Error(`can not find abi file ${this._context.abiPath}`);
     }
 
-    methodNames += '}';
+    try {
+      const result: AbiItem[] = JSON.parse(
+        fs.readFileSync(this._context.abiPath, 'utf8')
+      );
 
-    return methodNames;
+      return result;
+    } catch (error) {
+      throw new Error(
+        `Abi file ${this._context.abiPath} is not a json file. Abi must be a json file.`
+      );
+    }
+  }
+
+  /**
+   * Build abi interface
+   * @param abi The abi json
+   */
+  private buildAbiInterface(abi: AbiItem[]): string {
+    let properties = '';
+
+    for (let i = 0; i < abi.length; i++) {
+      switch (abi[i].type) {
+        case AbiItemType.constructor:
+          properties += this.buildInterfacePropertyDocs(abi[i]);
+          this._methodNames.push('new');
+          properties += `'new'${this.buildParametersAndReturnTypes(abi[i])};`;
+          break;
+        case AbiItemType.function:
+          properties += this.buildInterfacePropertyDocs(abi[i]);
+          this._methodNames.push(abi[i].name);
+          properties += `${abi[i].name}${this.buildParametersAndReturnTypes(
+            abi[i]
+          )};`;
+          break;
+        case AbiItemType.event:
+          this._events.push(abi[i].name);
+          break;
+      }
+    }
+
+    return TypeScriptHelpers.buildInterface(this.getAbiName(), properties);
+  }
+
+  /**
+   * Get abi name
+   */
+  private getAbiName(): string {
+    if (this._context.name) {
+      return name;
+    }
+
+    const basename = path.basename(this._context.abiPath);
+    const fileName = basename.split('.')[0];
+    return fileName
+      .split('-')
+      .map((value) => Helpers.capitalize(value))
+      .join('');
+  }
+
+  /**
+   * Build method names enum
+   */
+  private buildMethodNamesEnum(): string {
+    let members = '';
+
+    this._methodNames.map((method) => {
+      members += `${method} = "${method}",`;
+    });
+
+    return TypeScriptHelpers.buildEnum(
+      `${this.getAbiName()}MethodNames`,
+      members
+    );
+  }
+
+  /**
+   * Build the parameters and return type interface if they accept an object of some form
+   */
+  private buildParametersAndReturnTypeInterfaces(): string {
+    let objectOutputReturnType = '';
+
+    this._parametersAndReturnTypeInterfaces.map((typeInterface) => {
+      objectOutputReturnType += typeInterface;
+    });
+
+    return objectOutputReturnType;
   }
 
   /**
    * Build events enum
    */
   private buildEventsEnum(): string {
-    let events = 'export enum AbiEvents {';
+    let members = '';
 
-    for (let i = 0; i < this._events.length; i++) {
-      events += `${this._events[i]} = "${this._events[i]}",`;
-    }
+    this._events.map((event) => {
+      members += `${event} = "${event}",`;
+    });
 
-    events += '}';
-
-    return events;
+    return TypeScriptHelpers.buildEnum(`${this.getAbiName()}Events`, members);
   }
 
-  private buildEventsInterface(abiItems: AbiItem[]) {
-    let eventsInterface = 'export interface EventsContext {';
+  /**
+   * Build the event context interface
+   * @param abiItems The abi json
+   */
+  private buildEventsInterface(abiItems: AbiItem[]): string {
+    const eventsInterfaceName = `${this.getAbiName()}EventsContext`;
 
-    for (let i = 0; i < abiItems.length; i++) {
-      if (abiItems[i].type === AbiItemType.event) {
-        if (this._context.provider === Provider.web3) {
-          let filtersProperties = '{';
-          for (let a = 0; a < abiItems[i].inputs!.length; a++) {
-            if (abiItems[i].inputs![a].indexed === true) {
-              const paramterType = this.getInputOutputTsType(
-                abiItems[i].inputs![a].type as InputOutputType
-              );
-              filtersProperties += `${
-                abiItems[i].inputs![a].name
-              }?: ${paramterType} | ${paramterType}[],`;
-            }
-          }
-
-          filtersProperties += '}';
-
-          let parameters = `
-         {
-             filter?: ${filtersProperties};
-             fromBlock?: number;
-             toBlock?: 'latest' | number;
-             topics?: string[]
-         }
-         `;
-
-          eventsInterface += `${abiItems[i]
-            .name!}(parameters: ${parameters}): any;`;
-        }
-
-        if (this._context.provider === Provider.ethers) {
-          eventsInterface += `${abiItems[i]
-            .name!}(...parameters: any): EventFilter;`;
-        }
-      }
+    switch (this._context.provider) {
+      case Provider.web3:
+        return TypeScriptHelpers.buildInterface(
+          eventsInterfaceName,
+          this._web3Factory.buildEventInterfaceProperties(abiItems)
+        );
+      case Provider.ethers:
+        return TypeScriptHelpers.buildInterface(
+          eventsInterfaceName,
+          this._ethersFactory.buildEventInterfaceProperties(abiItems)
+        );
+      default:
+        throw new Error(
+          `${this._context.provider} is not a known supported provider`
+        );
     }
-
-    eventsInterface += '}';
-
-    return eventsInterface;
   }
 
-  private buildInterfacePropertyMainSummary(abiItem: AbiItem) {
+  /**
+   * Build the abi property summaries
+   * @param abiItem The abi json
+   */
+  private buildInterfacePropertyDocs(abiItem: AbiItem): string {
     let paramsDocs = '';
 
     if (abiItem.inputs) {
@@ -240,10 +254,19 @@ export default class AbiGenerator {
   }
 
   /**
-   *
-   * @param abiItem
+   * Builds the input and output property type
+   * @param abiItem The abi json
    */
-  private workOutInputParameters(abiItem: AbiItem) {
+  private buildParametersAndReturnTypes(abiItem: AbiItem): string {
+    let parameters = this.buildParameters(abiItem);
+    return `${parameters}${this.buildPropertyReturnTypeInterface(abiItem)}`;
+  }
+
+  /**
+   * Build parameters for abi interface
+   * @param abiItem The abi item
+   */
+  private buildParameters(abiItem: AbiItem): string {
     let input = '(';
     if (abiItem.inputs) {
       for (let i = 0; i < abiItem.inputs.length; i++) {
@@ -257,148 +280,100 @@ export default class AbiGenerator {
           inputName = `parameter${i}`;
         }
 
-        if (abiItem.inputs[i].type === InputOutputType.tuple) {
-          input += `${inputName}: ${this.buildTupleInputInterface(
-            abiItem.name!,
+        if (abiItem.inputs[i].type === SolidityType.tuple) {
+          input += `${inputName}: ${this.buildTupleParametersInterface(
+            abiItem.name,
             abiItem.inputs[i]
           )}`;
         } else {
-          input += `${inputName}: ${this.getInputOutputTsType(
-            abiItem.inputs[i].type as InputOutputType
+          input += `${inputName}: ${TypeScriptHelpers.getSolidityTsType(
+            abiItem.inputs[i].type
           )}`;
         }
       }
-
-      input += `)${this.workOutReturnContext(abiItem)}`;
-
-      return input;
     }
+
+    return (input += ')');
   }
 
-  private getInputOutputTsType(type: InputOutputType) {
-    switch (type) {
-      case InputOutputType.address:
-      case InputOutputType.bytes32:
-      case InputOutputType.uint256:
-        return 'string';
-      case InputOutputType.bool:
-        return 'boolean';
-    }
-  }
-
-  private buildTupleInputInterface(name: string, abiInput: AbiInput): string {
+  /**
+   * Build the object request parameter interface
+   * @param name The abi item name
+   * @param abiInput The abi input
+   */
+  private buildTupleParametersInterface(
+    name: string,
+    abiInput: AbiInput
+  ): string {
     const interfaceName = `${Helpers.capitalize(name)}Request`;
 
-    let returnTypeInterface = `export interface ${interfaceName} { `;
+    let properties = '';
 
     for (let i = 0; i < abiInput.components!.length; i++) {
-      returnTypeInterface += `${
+      properties += `${
         abiInput.components![i].name
-      }: ${this.getInputOutputTsType(
-        abiInput.components![i].type as InputOutputType
-      )};`;
+      }: ${TypeScriptHelpers.getSolidityTsType(abiInput.components![i].type)};`;
     }
 
-    returnTypeInterface += '}';
-
-    this._objectOutputReturnTypeInterfaces.push(returnTypeInterface);
+    this._parametersAndReturnTypeInterfaces.push(
+      TypeScriptHelpers.buildInterface(interfaceName, properties)
+    );
 
     return `${interfaceName}[]`;
   }
 
-  private workOutReturnContext(abiItem: AbiItem) {
+  /**
+   * Build property return type interface and return the return type context
+   * @param abiItem The abit json
+   */
+  private buildPropertyReturnTypeInterface(abiItem: AbiItem): string {
     let output = '';
 
     if (abiItem.outputs && abiItem.outputs.length > 0) {
       if (abiItem.outputs.length === 1) {
-        output += this.buildMockReturnContext(
-          this.getOutTsType(abiItem.outputs[0].type as InputOutputType),
+        output += this.buildMethodReturnContext(
+          TypeScriptHelpers.getSolidityTsType(abiItem.outputs[0].type),
           abiItem
         );
       } else {
-        const objectOutputReturnTypeInterfaceName = `${Helpers.capitalize(
-          abiItem.name!
-        )}Response`;
-        let objectOutputReturnTypeInterface = `export interface ${objectOutputReturnTypeInterfaceName} { `;
+        const interfaceName = `${Helpers.capitalize(abiItem.name)}Response`;
 
-        for (let i = 0; i < abiItem.outputs.length; i++) {
-          objectOutputReturnTypeInterface += `${
-            abiItem.outputs[i].name
-          }: ${this.getInputOutputTsType(
-            abiItem.outputs[i].type as InputOutputType
-          )};`;
-        }
+        let ouputProperties = '';
 
-        objectOutputReturnTypeInterface += '}';
+        abiItem.outputs.map((output: AbiOutput) => {
+          ouputProperties += `${
+            output.name
+          }: ${TypeScriptHelpers.getSolidityTsType(output.type)};`;
+        });
 
-        this._objectOutputReturnTypeInterfaces.push(
-          objectOutputReturnTypeInterface
+        this._parametersAndReturnTypeInterfaces.push(
+          TypeScriptHelpers.buildInterface(interfaceName, ouputProperties)
         );
 
-        output += this.buildMockReturnContext(
-          objectOutputReturnTypeInterfaceName,
-          abiItem
-        );
+        output += this.buildMethodReturnContext(interfaceName, abiItem);
       }
     } else {
-      output += this.buildMockReturnContext('void', abiItem);
+      output += this.buildMethodReturnContext('void', abiItem);
     }
 
     return output;
   }
 
-  private buildMockReturnContext(type: any, abiItem: AbiItem) {
-    if (abiItem.constant === true) {
-      if (this._context.provider === Provider.web3) {
-        return `: MethodConstantReturnContext<${type}>`;
-      }
-
-      if (this._context.provider === Provider.ethers) {
-        return `: Promise<${type}>`;
-      }
-    }
-
-    if (abiItem.payable === true) {
-      if (this._context.provider === Provider.web3) {
-        return `: MethodPayableReturnContext`;
-      }
-
-      if (this._context.provider === Provider.ethers) {
-        return `: Promise<ContractTransaction>`;
-      }
-    }
-
-    if (this._context.provider === Provider.web3) {
-      return `: MethodReturnContext`;
-    }
-
-    if (this._context.provider === Provider.ethers) {
-      return `: Promise<ContractTransaction>`;
-    }
-  }
-
   /**
-   * Work out is the abit item is a mapping or public getter
-   * @param abiItem
+   * Build the method return context
+   * @param type The type it returns
+   * @param abiItem The abi item
    */
-  private isAMappingOrPublicGetter(abiItem: AbiItem) {
-    if (abiItem.inputs === undefined) {
-      return false;
-    }
-
-    return abiItem.inputs.find((i) => i.name.length === 0) !== undefined;
-  }
-
-  private getOutTsType(type: InputOutputType): string {
-    switch (type) {
-      case InputOutputType.address:
-      case InputOutputType.bytes32:
-      case InputOutputType.uint256:
-        return 'string';
-      case InputOutputType.bool:
-        return 'boolean';
+  private buildMethodReturnContext(type: any, abiItem: AbiItem) {
+    switch (this._context.provider) {
+      case Provider.web3:
+        return this._web3Factory.buildMethodReturnContext(type, abiItem);
+      case Provider.ethers:
+        return this._ethersFactory.buildMethodReturnContext(type, abiItem);
       default:
-        throw new Error(`${type} is not a whitelisted input output type`);
+        throw new Error(
+          `${this._context.provider} is not a known supported provider`
+        );
     }
   }
 }

@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "gen": "node ./dist/bin/generator-cli.js",
-    "hardcoded": "node ./dist/bin/generator-cli.js generate './abi-examples/factory-abi.json' --outputPath='./abi-examples/factory.ts' --provider=ethers"
+    "hardcoded": "node ./dist/bin/generator-cli.js generate './abi-examples/factory-abi.json' --outputPath='./abi-examples/factory.ts' --provider=ethers",
+    "prettier": "prettier --write './abi-examples/factory.ts'"
   },
   "author": "",
   "license": "ISC",
@@ -14,10 +15,12 @@
     "colors": "^1.4.0",
     "dotenv": "^8.2.0",
     "fs-extra": "^9.0.0",
+    "prettier": "^2.0.5",
     "reflect-metadata": "^0.1.13",
     "yargs": "^15.3.1"
   },
   "devDependencies": {
+    "@types/prettier": "^2.0.0",
     "@types/dotenv": "^8.2.0",
     "@types/fs-extra": "^8.1.0",
     "@types/yargs": "^15.0.4",
