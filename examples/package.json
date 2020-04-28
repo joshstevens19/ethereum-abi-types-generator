@@ -11,6 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "ethereum-abi-types-generator": "file:ethereum-abi-types-generator-1.0.0.tgz",
     "ethers": "^4.0.47",
     "web3": "^1.2.7"
   }

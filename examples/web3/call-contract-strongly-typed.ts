@@ -27,6 +27,11 @@ const example = async () => {
     .getExchange('0x419D0d8BdD9aF5e606Ae2232ed285Aff190E711b')
     .call();
 
+  const hey = await contract.methods
+    .initializeFactory('123')
+    .send({ from: '0xde0B295669a9FD93d5F28D9Ec85E40f4cb697BAe' })
+    .on('transactionHash', (hash: string) => {});
+
   // contract.events.NewExchange({ filter: { token: 'hey' } });
 
   console.log(exchange);

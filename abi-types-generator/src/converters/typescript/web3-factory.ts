@@ -8,6 +8,11 @@ export class Web3Factory {
    * Build web3 genertic interfaces
    */
   public buildWeb3Interfaces(): string {
+    const bnImport = 'import BN from "bn.js";';
+
+    const web3Imports =
+      'import { PromiEvent, TransactionReceipt } from "ethereum-abi-types-generator";';
+
     const methodReturnContextOptions = `export interface CallOptions {
         from?: string;
         gasPrice?: string;
@@ -16,29 +21,29 @@ export class Web3Factory {
     
     export interface SendOptions {
         from: string;
-        value: number | string; // | BN;
+        value?: number | string | BN;
         gasPrice?: string;
         gas?: number;
     }
 
     export interface EstimateGasOptions {
         from?: string;
-        value?: number | string; // | BN;
+        value?: number | string | BN;
         gas?: number;
     }
     `;
 
     const methodPayableReturnContext = `export interface MethodPayableReturnContext {
-        send(options: SendOptions): Promise<any>;
+        send(options: SendOptions):PromiEvent<TransactionReceipt>;
         send(
             options: SendOptions,
             callback: (error: Error, result: any) => void
-        ): Promise<any>;
-        estimateGas(options: EstimateGasOptions): Promise<any>;
+        ): PromiEvent<TransactionReceipt>;
+        estimateGas(options: EstimateGasOptions): Promise<number>;
         estimateGas(
             options: EstimateGasOptions,
             callback: (error: Error, result: any) => void
-        ): Promise<any>;
+        ): Promise<number>;
         encodeABI(): string;
     }`;
 
@@ -54,6 +59,8 @@ export class Web3Factory {
     const methodReturnContext = `export interface MethodReturnContext extends MethodPayableReturnContext {}`;
 
     return (
+      bnImport +
+      web3Imports +
       methodReturnContextOptions +
       methodPayableReturnContext +
       methodConstantReturnContext +

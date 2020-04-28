@@ -1,3 +1,5 @@
+import BN from 'bn.js';
+import { PromiEvent, TransactionReceipt } from 'ethereum-abi-types-generator';
 export interface CallOptions {
   from?: string;
   gasPrice?: string;
@@ -6,29 +8,30 @@ export interface CallOptions {
 
 export interface SendOptions {
   from: string;
-  value: number | string; // | BN;
+  value?: number | string | BN;
   gasPrice?: string;
   gas?: number;
 }
 
 export interface EstimateGasOptions {
   from?: string;
-  value?: number | string; // | BN;
+  value?: number | string | BN;
   gas?: number;
 }
 export interface MethodPayableReturnContext {
-  send(options: SendOptions): Promise<any>;
+  send(options: SendOptions): PromiEvent<TransactionReceipt>;
   send(
     options: SendOptions,
     callback: (error: Error, result: any) => void
-  ): Promise<any>;
-  estimateGas(options: EstimateGasOptions): Promise<any>;
+  ): PromiEvent<TransactionReceipt>;
+  estimateGas(options: EstimateGasOptions): Promise<number>;
   estimateGas(
     options: EstimateGasOptions,
     callback: (error: Error, result: any) => void
-  ): Promise<any>;
+  ): Promise<number>;
   encodeABI(): string;
 }
+
 export interface MethodConstantReturnContext<TCallReturn> {
   call(): Promise<TCallReturn>;
   call(options: CallOptions): Promise<TCallReturn>;

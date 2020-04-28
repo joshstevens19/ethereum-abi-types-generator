@@ -129,10 +129,7 @@ export interface EstimateGasOptions {
 }
 
 export interface PromiEvent<T> extends Promise<T> {
-  once(
-    type: 'transactionHash',
-    handler: (receipt: string) => void
-  ): PromiEvent<T>;
+  once(type: 'transactionHash', handler: (hash: string) => void): PromiEvent<T>;
 
   once(
     type: 'receipt',
@@ -146,10 +143,7 @@ export interface PromiEvent<T> extends Promise<T> {
 
   once(type: 'error', handler: (error: Error) => void): PromiEvent<T>;
 
-  on(
-    type: 'transactionHash',
-    handler: (receipt: string) => void
-  ): PromiEvent<T>;
+  on(type: 'transactionHash', handler: (hash: string) => void): PromiEvent<T>;
 
   on(
     type: 'receipt',
