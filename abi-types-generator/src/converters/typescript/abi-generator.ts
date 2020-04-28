@@ -67,10 +67,10 @@ export default class AbiGenerator {
     let typings = '';
     switch (this._context.provider) {
       case Provider.web3:
-        typings += this._web3Factory.buildWeb3Interfaces();
+        typings += this._web3Factory.buildWeb3Interfaces(this.getAbiName());
         break;
       case Provider.ethers:
-        typings += this._ethersFactory.buildEthersInterfaces();
+        typings += this._ethersFactory.buildEthersInterfaces(this.getAbiName());
         break;
       default:
         throw new Error(

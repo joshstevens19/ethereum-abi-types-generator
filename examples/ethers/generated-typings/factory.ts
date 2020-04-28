@@ -1,4 +1,10 @@
+import { EthersContractContext } from 'ethereum-abi-types-generator';
 import { ContractTransaction } from 'ethers';
+export type ContractContext = EthersContractContext<
+  UniswapFactoryAbi,
+  UniswapFactoryAbiEventsContext,
+  UniswapFactoryAbiEvents
+>;
 export declare type EventFilter = {
   address?: string;
   topics?: Array<string>;

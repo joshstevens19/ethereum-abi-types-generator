@@ -6,8 +6,17 @@ export class EthersFactory {
   /**
    * Build ethers generic interfaces
    */
-  public buildEthersInterfaces(): string {
-    const ethersImports = 'import { ContractTransaction } from "ethers";';
+  public buildEthersInterfaces(abiName: string): string {
+    const ethersImports = `import { ContractTransaction } from "ethers";
+      import { EthersContractContext } from "ethereum-abi-types-generator";
+      `;
+
+    const ethersContractContextType = `export type ContractContext = EthersContractContext<
+      ${abiName},
+      ${abiName}EventsContext,
+      ${abiName}Events
+    >;
+    `;
 
     const eventFilter = `export declare type EventFilter = {
         address?: string;
@@ -17,7 +26,7 @@ export class EthersFactory {
       };
     `;
 
-    return ethersImports + eventFilter;
+    return ethersImports + ethersContractContextType + eventFilter;
   }
 
   /**

@@ -1,5 +1,12 @@
-import { Contract, Signer } from 'ethers';
-import { BlockTag, Listener, Provider } from 'ethers/providers';
+import { ContractFunction, Signer } from 'ethers';
+import {
+  BlockTag,
+  Listener,
+  Provider,
+  TransactionRequest,
+  TransactionResponse,
+} from 'ethers/providers';
+import { Interface } from 'ethers/utils';
 
 export declare type EventFilter = {
   address?: string;
@@ -14,7 +21,6 @@ export type EthersContractContext<
   TEventEnums
 > = EthersContract<TMethods, TEventsContext, TEventEnums> & TMethods;
 
-// @ts-ignore
 interface EthersContract<TMethods, TEventsContext, TEventEnums>
   extends Contract {
   // readonly estimate: TMethods => Promise<BigNumber>;
@@ -53,4 +59,19 @@ interface EthersContract<TMethods, TEventsContext, TEventEnums>
     eventName: TEventEnums,
     listener: Listener
   ): EthersContractContext<TMethods, TEventsContext, TEventEnums>;
+}
+
+interface Contract {
+  readonly address: string;
+  readonly interface: Interface;
+  readonly signer: Signer;
+  readonly provider: Provider;
+  readonly [name: string]: ContractFunction | any;
+  readonly addressPromise: Promise<string>;
+  readonly deployTransaction: TransactionResponse;
+  fallback(overrides?: TransactionRequest): Promise<TransactionResponse>;
+  // static isIndexed(value: any): value is Indexed;
+  emit(eventName: EventFilter | string, ...args: Array<any>): boolean;
+  listenerCount(eventName?: EventFilter | string): number;
+  listeners(eventName: EventFilter | string): Array<Listener>;
 }

@@ -1,9 +1,10 @@
 import BN from 'bn.js';
 import {
-  EventData,
-  EventResponse,
   PromiEvent,
   TransactionReceipt,
+  EventResponse,
+  EventData,
+  Web3ContractContext,
 } from 'ethereum-abi-types-generator';
 export interface CallOptions {
   from?: string;
@@ -45,6 +46,12 @@ export interface MethodConstantReturnContext<TCallReturn> {
   ): Promise<TCallReturn>;
 }
 export interface MethodReturnContext extends MethodPayableReturnContext {}
+export type ContractContext = Web3ContractContext<
+  UniswapFactoryAbi,
+  UniswapFactoryAbiMethodNames,
+  UniswapFactoryAbiEventsContext,
+  UniswapFactoryAbiEvents
+>;
 export enum UniswapFactoryAbiEvents {
   NewExchange = 'NewExchange',
 }

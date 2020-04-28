@@ -7,11 +7,11 @@ export class Web3Factory {
   /**
    * Build web3 genertic interfaces
    */
-  public buildWeb3Interfaces(): string {
+  public buildWeb3Interfaces(abiName: string): string {
     const bnImport = 'import BN from "bn.js";';
 
     const web3Imports =
-      'import { PromiEvent, TransactionReceipt, EventResponse, EventData } from "ethereum-abi-types-generator";';
+      'import { PromiEvent, TransactionReceipt, EventResponse, EventData, Web3ContractContext } from "ethereum-abi-types-generator";';
 
     const methodReturnContextOptions = `export interface CallOptions {
         from?: string;
@@ -58,13 +58,22 @@ export class Web3Factory {
 
     const methodReturnContext = `export interface MethodReturnContext extends MethodPayableReturnContext {}`;
 
+    const web3ContractContextType = `export type ContractContext = Web3ContractContext<
+      ${abiName},
+      ${abiName}MethodNames,
+      ${abiName}EventsContext,
+      ${abiName}Events
+    >;
+    `;
+
     return (
       bnImport +
       web3Imports +
       methodReturnContextOptions +
       methodPayableReturnContext +
       methodConstantReturnContext +
-      methodReturnContext
+      methodReturnContext +
+      web3ContractContextType
     );
   }
 

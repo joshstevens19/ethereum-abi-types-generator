@@ -1,10 +1,8 @@
 import { ethers } from 'ethers';
-import { EthersContractContext } from '../../abi-types-generator/src/converters/typescript/contexts/ethers-contract-context';
 import { AbiExamples } from '../abi-examples';
 import {
-  UniswapFactoryAbi,
+  ContractContext,
   UniswapFactoryAbiEvents,
-  UniswapFactoryAbiEventsContext,
 } from './generated-typings/factory';
 
 // Connect to the network
@@ -19,11 +17,7 @@ const example = async () => {
     AbiExamples.factoryAddress,
     AbiExamples.factoryAbi,
     customHttpProvider
-  ) as unknown) as EthersContractContext<
-    UniswapFactoryAbi,
-    UniswapFactoryAbiEventsContext,
-    UniswapFactoryAbiEvents
-  >;
+  ) as unknown) as ContractContext;
 
   const exchange = await contract.getExchange(
     '0x419D0d8BdD9aF5e606Ae2232ed285Aff190E711b'
