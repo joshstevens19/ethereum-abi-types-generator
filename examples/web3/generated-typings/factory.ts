@@ -1,5 +1,10 @@
 import BN from 'bn.js';
-import { PromiEvent, TransactionReceipt } from 'ethereum-abi-types-generator';
+import {
+  EventData,
+  EventResponse,
+  PromiEvent,
+  TransactionReceipt,
+} from 'ethereum-abi-types-generator';
 export interface CallOptions {
   from?: string;
   gasPrice?: string;
@@ -31,7 +36,6 @@ export interface MethodPayableReturnContext {
   ): Promise<number>;
   encodeABI(): string;
 }
-
 export interface MethodConstantReturnContext<TCallReturn> {
   call(): Promise<TCallReturn>;
   call(options: CallOptions): Promise<TCallReturn>;
@@ -45,12 +49,15 @@ export enum UniswapFactoryAbiEvents {
   NewExchange = 'NewExchange',
 }
 export interface UniswapFactoryAbiEventsContext {
-  NewExchange(parameters: {
-    filter?: { token?: string | string[]; exchange?: string | string[] };
-    fromBlock?: number;
-    toBlock?: 'latest' | number;
-    topics?: string[];
-  }): any;
+  NewExchange(
+    parameters: {
+      filter?: { token?: string | string[]; exchange?: string | string[] };
+      fromBlock?: number;
+      toBlock?: 'latest' | number;
+      topics?: string[];
+    },
+    callback?: (error: Error, event: EventData) => void
+  ): EventResponse;
 }
 export enum UniswapFactoryAbiMethodNames {
   initializeFactory = 'initializeFactory',

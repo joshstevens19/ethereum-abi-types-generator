@@ -1,3 +1,4 @@
+import { EventData } from 'ethereum-abi-types-generator';
 import Web3 from 'web3';
 import { Web3ContractContext } from '../../abi-types-generator/src/converters/typescript/contexts/web3-contract-context';
 import { AbiExamples } from '../abi-examples';
@@ -32,7 +33,9 @@ const example = async () => {
     .send({ from: '0xde0B295669a9FD93d5F28D9Ec85E40f4cb697BAe' })
     .on('transactionHash', (hash: string) => {});
 
-  // contract.events.NewExchange({ filter: { token: 'hey' } });
+  contract.events
+    .NewExchange({ filter: { token: 'hey' } })
+    .on('data', (data: EventData) => {});
 
   console.log(exchange);
 };

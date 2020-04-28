@@ -11,7 +11,7 @@ export class Web3Factory {
     const bnImport = 'import BN from "bn.js";';
 
     const web3Imports =
-      'import { PromiEvent, TransactionReceipt } from "ethereum-abi-types-generator";';
+      'import { PromiEvent, TransactionReceipt, EventResponse, EventData } from "ethereum-abi-types-generator";';
 
     const methodReturnContextOptions = `export interface CallOptions {
         from?: string;
@@ -99,7 +99,7 @@ export class Web3Factory {
          }
          `;
 
-        eventPropeties += `${abiItems[i].name}(parameters: ${parameters}): any;`;
+        eventPropeties += `${abiItems[i].name}(parameters: ${parameters}, callback?: (error: Error, event: EventData) => void): EventResponse;`;
       }
     }
 

@@ -32,7 +32,13 @@ export interface Web3ContractContext<
     callback: (error: Error, event: EventData) => void
   ): void;
 
-  events: TEventsInterface;
+  events: TEventsInterface & {
+    allEvents(options: EventOptions): EventResponse;
+    allEvents(
+      options: EventOptions,
+      callback: (error: Error, event: EventData) => void
+    ): EventResponse;
+  };
 
   getPastEvents(event: TEventEnum): Promise<EventData[]>;
   getPastEvents(
@@ -224,8 +230,8 @@ export interface EventOptions {
   topics?: any[];
 }
 
-export interface EventResponse<T> {
-  once(type: 'data', handler: (event: EventData) => void): EventResponse<T>;
-  once(type: 'changed', handler: (event: EventData) => void): EventResponse<T>;
-  once(type: 'error', handler: (error: Error) => void): EventResponse<T>;
+export interface EventResponse {
+  on(type: 'data', handler: (event: EventData) => void): EventResponse;
+  on(type: 'changed', handler: (event: EventData) => void): EventResponse;
+  on(type: 'error', handler: (error: Error) => void): EventResponse;
 }
