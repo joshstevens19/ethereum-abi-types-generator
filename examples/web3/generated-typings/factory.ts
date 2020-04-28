@@ -38,10 +38,10 @@ export interface MethodConstantReturnContext<TCallReturn> {
   ): Promise<TCallReturn>;
 }
 export interface MethodReturnContext extends MethodPayableReturnContext {}
-export enum FactoryAbiEvents {
+export enum UniswapFactoryAbiEvents {
   NewExchange = 'NewExchange',
 }
-export interface FactoryAbiEventsContext {
+export interface UniswapFactoryAbiEventsContext {
   NewExchange(parameters: {
     filter?: { token?: string | string[]; exchange?: string | string[] };
     fromBlock?: number;
@@ -49,7 +49,7 @@ export interface FactoryAbiEventsContext {
     topics?: string[];
   }): any;
 }
-export enum FactoryAbiMethodNames {
+export enum UniswapFactoryAbiMethodNames {
   initializeFactory = 'initializeFactory',
   createExchange = 'createExchange',
   getExchange = 'getExchange',
@@ -58,7 +58,7 @@ export enum FactoryAbiMethodNames {
   exchangeTemplate = 'exchangeTemplate',
   tokenCount = 'tokenCount',
 }
-export interface FactoryAbi {
+export interface UniswapFactoryAbi {
   /**
    * Payable: false
    * Constant: false

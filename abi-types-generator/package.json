@@ -6,8 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "gen": "node ./dist/bin/generator-cli.js",
-    "hardcoded": "node ./dist/bin/generator-cli.js generate './abi-examples/factory-abi.json' --outputPath='./abi-examples/factory.ts' --provider=ethers",
-    "prettier": "prettier --write './abi-examples/factory.ts'"
+    "hardcoded": "node ./dist/bin/generator-cli.js generate '../examples/abi-examples/uniswap-factory-abi.json' --outputPath='../../examples/etherjs/generated-typings/factory.ts' --provider=ethers",
+    "web3": "node ./dist/bin/generator-cli.js generate '../examples/abi-examples/uniswap-factory-abi.json' --outputPath='../examples/web3/generated-typings/factory.ts' --provider=web3"
   },
   "author": "",
   "license": "ISC",

@@ -1,11 +1,11 @@
 import { ethers } from 'ethers';
-import {
-  AbiEvents,
-  EventsContext,
-  FactoryAbi,
-} from '../../abi-types-generator/abi-examples/factory';
 import { EthersContractContext } from '../../abi-types-generator/src/converters/typescript/contexts/ethers-contract-context';
 import { AbiExamples } from '../abi-examples';
+import {
+  UniswapFactoryAbi,
+  UniswapFactoryAbiEvents,
+  UniswapFactoryAbiEventsContext,
+} from './generated-typings/factory';
 
 // Connect to the network
 let customHttpProvider = new ethers.providers.JsonRpcProvider(
@@ -19,7 +19,11 @@ const example = async () => {
     AbiExamples.factoryAddress,
     AbiExamples.factoryAbi,
     customHttpProvider
-  ) as unknown) as EthersContractContext<FactoryAbi, EventsContext, AbiEvents>;
+  ) as unknown) as EthersContractContext<
+    UniswapFactoryAbi,
+    UniswapFactoryAbiEventsContext,
+    UniswapFactoryAbiEvents
+  >;
 
   const exchange = await contract.getExchange(
     '0x419D0d8BdD9aF5e606Ae2232ed285Aff190E711b'
@@ -42,7 +46,7 @@ const example = async () => {
   // console.log(tx);
 
   const hey = contract.on(
-    AbiEvents.NewExchange,
+    UniswapFactoryAbiEvents.NewExchange,
     (author, oldValue, newValue, event) => {
       // Called when anyone changes the value
 

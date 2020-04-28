@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "ethers": "node ./dist/examples/etherjs/call-contract-strongly-typed.js",
+    "web3": "node ./dist/examples/web3/call-contract-strongly-typed.js"
   },
   "author": "",
   "license": "ISC",

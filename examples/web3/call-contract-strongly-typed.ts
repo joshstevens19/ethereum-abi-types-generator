@@ -1,12 +1,12 @@
 import Web3 from 'web3';
-import {
-  FactoryAbi,
-  FactoryAbiEvents,
-  FactoryAbiEventsContext,
-  FactoryAbiMethodNames,
-} from '../../abi-types-generator/abi-examples/factory';
 import { Web3ContractContext } from '../../abi-types-generator/src/converters/typescript/contexts/web3-contract-context';
 import { AbiExamples } from '../abi-examples';
+import {
+  UniswapFactoryAbi,
+  UniswapFactoryAbiEvents,
+  UniswapFactoryAbiEventsContext,
+  UniswapFactoryAbiMethodNames,
+} from './generated-typings/factory';
 
 const example = async () => {
   const web3 = new Web3(
@@ -17,17 +17,17 @@ const example = async () => {
     AbiExamples.factoryAbi as any,
     AbiExamples.factoryAddress
   ) as unknown) as Web3ContractContext<
-    FactoryAbi,
-    FactoryAbiMethodNames,
-    FactoryAbiEventsContext,
-    FactoryAbiEvents
+    UniswapFactoryAbi,
+    UniswapFactoryAbiMethodNames,
+    UniswapFactoryAbiEventsContext,
+    UniswapFactoryAbiEvents
   >;
 
   const exchange = await contract.methods
     .getExchange('0x419D0d8BdD9aF5e606Ae2232ed285Aff190E711b')
     .call();
 
-  contract.events.NewExchange({ filter: { token: 'hey' } });
+  // contract.events.NewExchange({ filter: { token: 'hey' } });
 
   console.log(exchange);
 };
