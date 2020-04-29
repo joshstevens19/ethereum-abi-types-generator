@@ -4,7 +4,7 @@ THIS IS NOT DEPLOYED YET ITS STILL WORK IN PROGRESS!!!!!
 
 Typings for all your ethereum ABI contract methods and events with integration with `web3` and `ethers` 👏👏👏👏 Never have to have a runtime error again and bring them into compile time errors in 2 minutes.
 
-A CLI tool which allows you to convert an ABI json file into fully loaded types.
+A CLI tool which allows you to convert an ABI json file into fully loaded interfaces types.
 
 ## Installation
 
@@ -74,30 +74,30 @@ If not supplied it will take the file name and use that as the abi name througho
 Example:
 
 ```ts
-$ ethereum-abi-types-generator '../examples/abi-examples/uniswap-factory-abi.json'
+$ ethereum-abi-types-generator ./examples/abi-examples/uniswap-factory-abi.json
 ```
 
-generates: `'../examples/abi-examples/uniswap-factory-abi.ts'`
+generates: `./examples/abi-examples/uniswap-factory-abi.ts`
 
 Example:
 
 ```ts
-$ ethereum-abi-types-generator '../examples/abi-examples/uniswap-factory-abi.json' --name='foo-abi'
+$ ethereum-abi-types-generator ./examples/abi-examples/uniswap-factory-abi.json --name=foo-abi
 ```
 
-generates: `'../examples/abi-examples/foo-abi.ts'`
+generates: `./examples/abi-examples/foo-abi.ts`
 
 ```ts
-$ ethereum-abi-types-generator '../examples/abi-examples/uniswap-factory-abi.json' --name='foo.abi'
+$ ethereum-abi-types-generator ./examples/abi-examples/uniswap-factory-abi.json --name=foo.abi
 ```
 
-generates: `'../examples/abi-examples/foo.abi.ts'`
+generates: `./examples/abi-examples/foo.abi.ts`
 
 ```ts
-$ ethereum-abi-types-generator '../examples/abi-examples/uniswap-factory-abi.json' --name='foo'
+$ ethereum-abi-types-generator ./examples/abi-examples/uniswap-factory-abi.json --name=foo
 ```
 
-generates: `'../examples/abi-examples/foo.ts'`
+generates: `./examples/abi-examples/foo.ts`
 
 ### `--prettierOptions={YOUR_PRETTIER_OPTIONS}`
 
@@ -247,7 +247,7 @@ If it's an invalid prettier options object it will emit a error log in the CLI c
 Example:
 
 ```ts
-$ ethereum-abi-types-generator '../examples/abi-examples/uniswap-factory-abi.json' --prettierOptions='{singleQuote: false}'
+$ ethereum-abi-types-generator ./examples/abi-examples/uniswap-factory-abi.json --prettierOptions={singleQuote: false}
 ```
 
 Will generate double quotes in the `.ts` output.
@@ -255,7 +255,7 @@ Will generate double quotes in the `.ts` output.
 Example:
 
 ```ts
-$ ethereum-abi-types-generator '../examples/abi-examples/uniswap-factory-abi.json'
+$ ethereum-abi-types-generator ./examples/abi-examples/uniswap-factory-abi.json
 ```
 
 Will fallback to the default prettier options.
@@ -269,24 +269,24 @@ If not supplied it will use the directory of the `<abiFileLocation>` and generat
 Example:
 
 ```ts
-$ ethereum-abi-types-generator '../examples/abi-examples/uniswap-factory-abi.json'
+$ ethereum-abi-types-generator ./examples/abi-examples/uniswap-factory-abi.json
 ```
 
-generates in: `'../examples/abi-examples/uniswap-factory-abi.ts'`
+generates in: `./examples/abi-examples/uniswap-factory-abi.ts`
 
 Example:
 
 ```ts
-$ ethereum-abi-types-generator '../examples/abi-examples/uniswap-factory-abi.json' --output='../examples/ethers/generated-typings'
+$ ethereum-abi-types-generator ./examples/abi-examples/uniswap-factory-abi.json --output=./examples/ethers/generated-typings
 ```
 
-generates in: `'../examples/ethers/generated-typings/uniswap-factory-abi.ts'`
+generates in: `./examples/ethers/generated-typings/uniswap-factory-abi.ts`
 
 ```ts
-$ ethereum-abi-types-generator '../examples/abi-examples/uniswap-factory-abi.json' --output='../examples/ethers/generated-typings' --name='foo'
+$ ethereum-abi-types-generator ./examples/abi-examples/uniswap-factory-abi.json --output=./examples/ethers/generated-typings --name=foo
 ```
 
-generates: `'../examples/ethers/generated-typings/foo.ts'`
+generates: `./examples/ethers/generated-typings/foo.ts`
 
 ### `--provider=web3|ethers`
 
@@ -304,7 +304,7 @@ If not supplied it will fallback to `web3`
 Example:
 
 ```ts
-$ ethereum-abi-types-generator '../examples/abi-examples/uniswap-factory-abi.json'
+$ ethereum-abi-types-generator ./examples/abi-examples/uniswap-factory-abi.json
 ```
 
 generates the web3 contract typings based on the web3 lib.
@@ -312,7 +312,7 @@ generates the web3 contract typings based on the web3 lib.
 Example:
 
 ```ts
-$ ethereum-abi-types-generator '../examples/abi-examples/uniswap-factory-abi.json' --provider='ethers'
+$ ethereum-abi-types-generator ./examples/abi-examples/uniswap-factory-abi.json --provider=ethers
 ```
 
 generates the ethers contract typings based on the web3 lib.
@@ -330,12 +330,12 @@ The cli tool will generate all your typings for you and expose them in the gener
 Lets say i run the cli command:
 
 ```ts
-$ ethereum-abi-types-generator '../examples/abi-examples/uniswap-factory-abi.json'  --output='../examples/web3/generated-typings' --name='factory-abi'
+$ ethereum-abi-types-generator ./examples/abi-examples/uniswap-factory-abi.json  --output=./examples/web3/generated-typings --name=factory-abi
 ```
 
-This will generate me a `ts` file of `'../examples/web3/factory-abi.ts'`.
+This will generate me a `ts` file of `./examples/web3/factory-abi.ts`.
 
-You now just need to cast your `new web3.eth.Contract` code to `ContractContext` which is exposed in the `'../examples/web3/factory-abi.ts'`.
+You now just need to cast your `new web3.eth.Contract` code to `ContractContext` which is exposed in the `'./examples/web3/factory-abi.ts'`.
 
 Example:
 
