@@ -2,8 +2,8 @@ import { SolidityType } from '../../../abi-properties';
 
 export default class TypeScriptHelpers {
   /**
-   * Get the solidity type mapped to typescript type
-   * @param type
+   * Get the solidity type mapped to typescript type (map out all types!!!)
+   * @param type The solidity type
    */
   public static getSolidityTsType(type: SolidityType) {
     switch (type) {
