@@ -69,11 +69,11 @@ describe('EthersFactory', () => {
       ).toEqual(': Promise<ContractTransaction>');
     });
 
-    it('should return `Promise<ContractTransaction>` if abiItem.constant === false', () => {
+    it('should return `Promise<ContractTransaction>` if abiItem.constant === false and payable === false', () => {
       expect(
         ethersFactory.buildMethodReturnContext(
           'void',
-          AbiPropertiesMock.AbiTokenMock.find((m) => !m.constant && m.payable)!
+          AbiPropertiesMock.AbiTokenMock.find((m) => !m.constant && !m.payable)!
         )
       ).toEqual(': Promise<ContractTransaction>');
     });
