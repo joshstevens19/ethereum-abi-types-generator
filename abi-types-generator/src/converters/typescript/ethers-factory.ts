@@ -38,6 +38,7 @@ export class EthersFactory {
 
     for (let i = 0; i < abiItems.length; i++) {
       if (abiItems[i].type === AbiItemType.event) {
+        // TODO make parameters strongly typed if i can
         eventPropeties += `${abiItems[i].name}(...parameters: any): EventFilter;`;
       }
     }
@@ -53,10 +54,6 @@ export class EthersFactory {
   public buildMethodReturnContext(type: any, abiItem: AbiItem) {
     if (abiItem.constant === true) {
       return `: Promise<${type}>`;
-    }
-
-    if (abiItem.payable === true) {
-      return `: Promise<ContractTransaction>`;
     }
 
     return `: Promise<ContractTransaction>`;
