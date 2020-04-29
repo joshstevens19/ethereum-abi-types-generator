@@ -5,6 +5,7 @@ import { AbiInput, AbiOutput, SolidityType } from '../../abi-properties';
 import { AbiItem } from '../../abi-properties/abi-item';
 import { AbiItemType } from '../../abi-properties/abi-item-type';
 import Helpers from '../../common/helpers';
+import Logger from '../../common/logger';
 import TypeScriptHelpers from './common/helpers';
 import { GeneratorContext } from './contexts/generator-context';
 import { Provider } from './enums/provider';
@@ -20,24 +21,75 @@ export default class AbiGenerator {
   private _events: string[] = [];
   private _methodNames: string[] = [];
 
-  constructor(private _context: GeneratorContext) {
-    this.generate();
-  }
+  constructor(private _context: GeneratorContext) {}
 
   /**
    * Generates all the typings
+   * @returns The location the file was generated to
    */
-  private generate(): void {
+  public generate(): string {
+    if (!this.isDirectory(this.getOutputPathDirectory())) {
+      throw new Error('output path must be a directory');
+    }
+
     const abi: AbiItem[] = this.getAbiJson();
 
-    const fullTypings = prettier.format(
-      this.buildFullTypings(abi, this.buildAbiInterface(abi)),
-      this.getPrettierOptions()
-    );
+    const fullTypings = this.buildFullTypings(abi, this.buildAbiInterface(abi));
+    let fullTypingsFormatted: string;
 
-    fs.writeFileSync(this._context.outputPath, fullTypings, {
+    try {
+      fullTypingsFormatted = prettier.format(
+        fullTypings,
+        this.getPrettierOptions()
+      );
+    } catch (error) {
+      // users probably not supplied the correct prettier options
+      // fallback to default
+
+      Logger.error(
+        'Your prettier options were not valid so falling back to default one.'
+      );
+      Logger.log('');
+
+      fullTypingsFormatted = prettier.format(
+        fullTypings,
+        this.getDefaultPrettierOptions()
+      );
+    }
+
+    const outputLocation = this.buildOutputLocation();
+
+    fs.writeFileSync(outputLocation, fullTypingsFormatted, {
       mode: 0o755,
     });
+
+    return outputLocation;
+  }
+
+  /**
+   * Get the output path directory
+   */
+  private getOutputPathDirectory(): string {
+    if (this._context.outputPathDirectory) {
+      return this._context.outputPathDirectory;
+    }
+
+    return path.dirname(this._context.abiFileLocation);
+  }
+
+  /**
+   * Build output location
+   */
+  private buildOutputLocation(): string {
+    const name = this._context.name || this.getAbiFileLocationRawName();
+
+    const outputPathDirectory = this.getOutputPathDirectory();
+
+    if (outputPathDirectory.substring(outputPathDirectory.length - 1) === '/') {
+      return `${outputPathDirectory}${name}.ts`;
+    }
+
+    return `${outputPathDirectory}/${name}.ts`;
   }
 
   /**
@@ -49,6 +101,13 @@ export default class AbiGenerator {
       return this._context.prettierOptions;
     }
 
+    return this.getDefaultPrettierOptions();
+  }
+
+  /**
+   * Get default prettier options
+   */
+  private getDefaultPrettierOptions(): Options {
     return {
       parser: 'typescript',
       trailingComma: 'es5',
@@ -92,21 +151,29 @@ export default class AbiGenerator {
    * Gets the abi json
    */
   private getAbiJson(): AbiItem[] {
-    if (!fs.existsSync(this._context.abiPath)) {
-      throw new Error(`can not find abi file ${this._context.abiPath}`);
+    if (!fs.existsSync(this._context.abiFileLocation)) {
+      throw new Error(`can not find abi file ${this._context.abiFileLocation}`);
     }
 
     try {
       const result: AbiItem[] = JSON.parse(
-        fs.readFileSync(this._context.abiPath, 'utf8')
+        fs.readFileSync(this._context.abiFileLocation, 'utf8')
       );
 
       return result;
     } catch (error) {
       throw new Error(
-        `Abi file ${this._context.abiPath} is not a json file. Abi must be a json file.`
+        `Abi file ${this._context.abiFileLocation} is not a json file. Abi must be a json file.`
       );
     }
+  }
+
+  /**
+   * Check is a path is a directory
+   * @param pathValue The path value
+   */
+  private isDirectory(pathValue: string) {
+    return fs.existsSync(pathValue) && fs.lstatSync(pathValue).isDirectory();
   }
 
   /**
@@ -144,15 +211,32 @@ export default class AbiGenerator {
    */
   private getAbiName(): string {
     if (this._context.name) {
-      return name;
+      return this.formatAbiName(this._context.name);
     }
 
-    const basename = path.basename(this._context.abiPath);
-    const fileName = basename.split('.')[0];
-    return fileName
+    return this.formatAbiName(this.getAbiFileLocationRawName());
+  }
+
+  /**
+   * Formats the abi name
+   * @param name
+   */
+  private formatAbiName(name: string) {
+    return name
       .split('-')
       .map((value) => Helpers.capitalize(value))
+      .join('')
+      .split('.')
+      .map((value) => Helpers.capitalize(value))
       .join('');
+  }
+
+  /**
+   * Get abi file location raw name
+   */
+  private getAbiFileLocationRawName(): string {
+    const basename = path.basename(this._context.abiFileLocation);
+    return basename.split('.')[0];
   }
 
   /**
@@ -217,7 +301,7 @@ export default class AbiGenerator {
         );
       default:
         throw new Error(
-          `${this._context.provider} is not a known supported provider`
+          `${this._context.provider} is not a known supported provider. Supported providers are ethers or web3`
         );
     }
   }

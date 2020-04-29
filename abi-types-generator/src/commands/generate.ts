@@ -7,36 +7,45 @@ import AbiGenerator from '../converters/typescript/abi-generator';
 import { Provider } from '../converters/typescript/enums/provider';
 import { CommandTypes } from './enums/command-types';
 
-export = {
-  help: () => Helpers.getHelpMessageByCommandType(CommandTypes.generate),
-  async action(cmd: IProgramOptions): Promise<void> {
-    const abiPath = cmd.subcommands[0];
-    const outputPath = cmd.options.outputPath || abiPath;
-    const language = cmd.options.lang || ConverterType.ts;
-    const provider = (cmd.options.provider as Provider) || Provider.web3;
-    const name = cmd.options.name;
-    const prettierOptions: Options | undefined = (cmd.options
-      .prettierOptions as unknown) as Options;
+const help = Helpers.getHelpMessageByCommandType(CommandTypes.generate);
 
-    switch (language) {
-      case ConverterType.ts:
-        new AbiGenerator({
-          provider,
-          abiPath,
-          outputPath,
-          name,
-          prettierOptions,
-        });
-        break;
-      default:
-        Logger.logErrorWithHelp(
-          `${language} is not supported. Support languages are - 'ts'`
-        );
-        return;
+export = {
+  async action(cmd: IProgramOptions): Promise<void> {
+    if (cmd.subcommands.length === 0) {
+      return Logger.log(help);
+    }
+
+    const abiFileLocation = cmd.subcommands[0];
+    const language = cmd.options.lang || ConverterType.ts;
+
+    let outputLocation: string;
+
+    try {
+      switch (language) {
+        case ConverterType.ts:
+          outputLocation = new AbiGenerator({
+            provider: (cmd.options.provider as Provider) || Provider.web3,
+            abiFileLocation,
+            outputPathDirectory: cmd.options.output,
+            name: cmd.options.name,
+            prettierOptions: (cmd.options
+              .prettierOptions as unknown) as Options,
+          }).generate();
+          break;
+        default:
+          Logger.error(
+            `"${language}" is not supported. Support languages are - 'ts'`
+          );
+          return;
+      }
+    } catch (error) {
+      console.log(error);
+      Logger.error(error.message);
+      return;
     }
 
     Logger.log(
-      `successfully created typings for abi file ${abiPath} saved ${outputPath}`
+      `successfully created typings for abi file ${abiFileLocation} saved in ${outputLocation}`
     );
   },
 };

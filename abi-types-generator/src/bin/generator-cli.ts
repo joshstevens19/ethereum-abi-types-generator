@@ -18,7 +18,6 @@ const packageJson = require('../../package.json');
   await execute();
 })().catch((err) => Logger.error(err.message));
 
-// To make it testable
 export async function execute(): Promise<void> {
   Logger.log('');
 
@@ -28,15 +27,15 @@ export async function execute(): Promise<void> {
   Logger.log(args);
 
   if (args.options.v || args.options.version) {
-    return Logger.log('v' + packageJson.version);
+    return Logger.log(packageJson.version);
   }
 
   if (args.options.help) {
     // return Logger.logErrorWithHelp(null);
   }
 
-  if (args.command === 'help') {
-    return Logger.logErrorWithHelp(args.subcommands[0] || null);
+  if (args.command === 'help' || args.options.help) {
+    return Logger.logHelp();
   }
 
   switch (args.command) {
