@@ -476,7 +476,7 @@ export default class AbiGenerator {
       TypeScriptHelpers.buildInterface(interfaceName, properties)
     );
 
-    return `${interfaceName}[]`;
+    return `${interfaceName}`;
   }
 
   /**

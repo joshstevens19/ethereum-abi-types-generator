@@ -1,7 +1,9 @@
 export enum SolidityType {
   address = 'address',
-  uint256 = 'uint256',
-  bytes32 = 'bytes32',
+  uint = 'uint',
+  bytes = 'bytes',
   bool = 'bool',
   tuple = 'tuple',
+  string = 'string',
+  int = 'int',
 }
