@@ -3,6 +3,7 @@
 // import dotenv = require('dotenv');
 // import path = require('path');
 import 'reflect-metadata';
+import { CommandTypes } from '../commands/enums/command-types';
 import commands from '../commands/index';
 // import commands from '../commands';
 import Helpers from '../common/helpers';
@@ -27,28 +28,13 @@ export async function execute(): Promise<void> {
     return Logger.log(packageJson.version);
   }
 
-  if (args.options.help) {
-    // return Logger.logErrorWithHelp(null);
-  }
-
   if (args.command === 'help' || args.options.help) {
-    return Logger.logHelp();
+    // only supported command right now but written in away to extend wouldnt be too
+    // much restructing
+    return Logger.log(
+      Helpers.getHelpMessageByCommandType(CommandTypes.generate)
+    );
   }
 
   await commands.generate.action(args);
-
-  //   const cmd = commands[args.command];
-
-  //   if (!cmd) {
-  //     if (args.command) {
-  //       return Logger.logErrorWithHelp(
-  //         null,
-  //         `${args.command} is not a valid command`
-  //       );
-  //     } else {
-  //       return Logger.logHelp();
-  //     }
-  //   }
-
-  //   await cmd.action(args);
 }

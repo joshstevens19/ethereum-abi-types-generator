@@ -20,6 +20,9 @@
   "bugs": {
     "url": "https://github.com/joshstevens19/ethereum-abi-types-generator/issues"
   },
+  "bin": {
+    "ethereum-abi-types-generator": "./dist/bin/generator-cli.js"
+  },
   "homepage": "https://github.com/joshstevens19/ethereum-abi-types-generator#readme",
   "author": "joshstevens19@hotmail.co.uk",
   "license": "MIT",

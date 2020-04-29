@@ -2,7 +2,9 @@
 
 THIS IS NOT DEPLOYED YET ITS STILL WORK IN PROGRESS!!!!!
 
-A CLI tool which allows you to pass an ABI json file to it and it generate typings for you, this will expose web3 or ethers contract interface for you which you can cast in 1 line and you now have full typings.
+Typings for all your ethereum ABI contract methods and events with integration with `web3` and `ethers` 👏👏👏👏 Never have to have a runtime error again and bring them into compile time errors in 2 minutes.
+
+A CLI tool which allows you to convert an ABI json file into fully loaded types.
 
 ## Installation
 
@@ -17,6 +19,8 @@ $ npm install ethereum-abi-types-generator
 ```js
 $ yarn add ethereum-abi-types-generator
 ```
+
+You can install this globally as well but you **must** make sure wherever the `--output` location is which generates the typings file has `ethereum-abi-types-generator` installed in that project, as it uses imports from this package to map the `ContractContext` to make your life easier handling the generic type build up automatically.
 
 ## CLI usage
 
