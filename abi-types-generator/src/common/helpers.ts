@@ -81,4 +81,12 @@ export default class Helpers {
   public static removeAllWhiteSpace(value: string): string {
     return value.replace(/\s+/g, '');
   }
+
+  /**
+   * Deep clone a object
+   * @param object The object
+   */
+  public static deepClone<T>(object: T): T {
+    return JSON.parse(JSON.stringify(object)) as T;
+  }
 }
