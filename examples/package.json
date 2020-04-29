@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "generate-web3-typings": "ethereum-abi-types-generator",
     "ethers": "node ./dist/examples/etherjs/call-contract-strongly-typed.js",
     "web3": "node ./dist/examples/web3/call-contract-strongly-typed.js"
   },
