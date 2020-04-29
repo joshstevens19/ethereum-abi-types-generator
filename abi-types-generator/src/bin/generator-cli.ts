@@ -23,9 +23,6 @@ export async function execute(): Promise<void> {
 
   const args = Helpers.getProgramArguments();
 
-  // @ts-ignore
-  Logger.log(args);
-
   if (args.options.v || args.options.version) {
     return Logger.log(packageJson.version);
   }
@@ -38,13 +35,7 @@ export async function execute(): Promise<void> {
     return Logger.logHelp();
   }
 
-  switch (args.command) {
-    case 'generate':
-      await commands.generate.action(args);
-      break;
-    default:
-      Logger.logHelp();
-  }
+  await commands.generate.action(args);
 
   //   const cmd = commands[args.command];
 

@@ -21,22 +21,22 @@ $ yarn add ethereum-abi-types-generator
 ## CLI usage
 
 ```ts
-$ ethereum-abi-types-generator generate <abiFileLocation>
-$ ethereum-abi-types-generator generate <abiFileLocation> --name=ABI_NAME
-$ ethereum-abi-types-generator generate <abiFileLocation> --name=ABI_NAME --prettierOptions={YOUR_PRETTIER_OPTIONS}
-$ ethereum-abi-types-generator generate <abiFileLocation> --prettierOptions={YOUR_PRETTIER_OPTIONS}
-$ ethereum-abi-types-generator generate <abiFileLocation> --output=PATH_DIRECTORY
-$ ethereum-abi-types-generator generate <abiFileLocation> --output=PATH_DIRECTORY --name=ABI_NAME
-$ ethereum-abi-types-generator generate <abiFileLocation> --output=PATH_DIRECTORY --prettierOptions={YOUR_PRETTIER_OPTIONS}
-$ ethereum-abi-types-generator generate <abiFileLocation> --output=PATH_DIRECTORY --name=ABI_NAME --prettierOptions={YOUR_PRETTIER_OPTIONS}
-$ ethereum-abi-types-generator generate <abiFileLocation> --provider=web3|ethers
-$ ethereum-abi-types-generator generate <abiFileLocation> --provider=web3|ethers --prettierOptions={YOUR_PRETTIER_OPTIONS}
-$ ethereum-abi-types-generator generate <abiFileLocation> --name=ABI_NAME --provider=web3|ethers
-$ ethereum-abi-types-generator generate <abiFileLocation> --name=ABI_NAME --provider=web3|ethers --prettierOptions={YOUR_PRETTIER_OPTIONS}
-$ ethereum-abi-types-generator generate <abiFileLocation> --output=PATH_DIRECTORY --provider=web3|ethers
-$ ethereum-abi-types-generator generate <abiFileLocation> --output=PATH_DIRECTORY --provider=web3|ethers --prettierOptions={YOUR_PRETTIER_OPTIONS}
-$ ethereum-abi-types-generator generate <abiFileLocation> --output=PATH_DIRECTORY --name=ABI_NAME --provider=web3|ethers
-$ ethereum-abi-types-generator generate <abiFileLocation> --output=PATH_DIRECTORY --name=ABI_NAME --provider=web3|ethers --prettierOptions={YOUR_PRETTIER_OPTIONS}
+$ ethereum-abi-types-generator <abiFileLocation>
+$ ethereum-abi-types-generator <abiFileLocation> --name=ABI_NAME
+$ ethereum-abi-types-generator <abiFileLocation> --name=ABI_NAME --prettierOptions={YOUR_PRETTIER_OPTIONS}
+$ ethereum-abi-types-generator <abiFileLocation> --prettierOptions={YOUR_PRETTIER_OPTIONS}
+$ ethereum-abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY
+$ ethereum-abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --name=ABI_NAME
+$ ethereum-abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --prettierOptions={YOUR_PRETTIER_OPTIONS}
+$ ethereum-abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --name=ABI_NAME --prettierOptions={YOUR_PRETTIER_OPTIONS}
+$ ethereum-abi-types-generator <abiFileLocation> --provider=web3|ethers
+$ ethereum-abi-types-generator <abiFileLocation> --provider=web3|ethers --prettierOptions={YOUR_PRETTIER_OPTIONS}
+$ ethereum-abi-types-generator <abiFileLocation> --name=ABI_NAME --provider=web3|ethers
+$ ethereum-abi-types-generator <abiFileLocation> --name=ABI_NAME --provider=web3|ethers --prettierOptions={YOUR_PRETTIER_OPTIONS}
+$ ethereum-abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --provider=web3|ethers
+$ ethereum-abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --provider=web3|ethers --prettierOptions={YOUR_PRETTIER_OPTIONS}
+$ ethereum-abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --name=ABI_NAME --provider=web3|ethers
+$ ethereum-abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --name=ABI_NAME --provider=web3|ethers --prettierOptions={YOUR_PRETTIER_OPTIONS}
 ```
 
 ### Arguments

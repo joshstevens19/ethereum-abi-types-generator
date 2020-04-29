@@ -11,11 +11,11 @@ const help = Helpers.getHelpMessageByCommandType(CommandTypes.generate);
 
 export = {
   async action(cmd: IProgramOptions): Promise<void> {
-    if (cmd.subcommands.length === 0) {
+    if (cmd.command.length === 0) {
       return Logger.log(help);
     }
 
-    const abiFileLocation = cmd.subcommands[0];
+    const abiFileLocation = cmd.command;
     const language = cmd.options.lang || ConverterType.ts;
 
     let outputLocation: string;
