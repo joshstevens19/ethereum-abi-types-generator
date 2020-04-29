@@ -34,7 +34,7 @@ export default class TypeScriptHelpers {
    * so we can only strongly type the fixed length of the first array
    * for example `bytes32[4][][2][][9][]` > `[string,string,string,string,string][][][][][]`
    * is you have any other fixed size arrays passed dimension it will have to generate a unbounded
-   * array size aka `bytes32[][4] > `[][]`
+   * array size aka `bytes32[][4] > `string[][]`
    * @param abiType The ABI type in the json
    * @param tsType The typescript type
    */
