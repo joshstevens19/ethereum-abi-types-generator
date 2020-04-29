@@ -10,6 +10,7 @@ import TypeScriptHelpers from './common/helpers';
 import { GeneratorContext } from './contexts/generator-context';
 import { Provider } from './enums/provider';
 import { EthersFactory } from './ethers-factory';
+import { GenerateResponse } from './models/generate-response';
 import { Web3Factory } from './web3-factory';
 
 export default class AbiGenerator {
@@ -27,7 +28,8 @@ export default class AbiGenerator {
    * Generates all the typings
    * @returns The location the file was generated to
    */
-  public generate(): string {
+  public generate(): GenerateResponse {
+    this.clearAllQuotesFromContextInfo();
     if (!this.isDirectory(this.getOutputPathDirectory())) {
       throw new Error('output path must be a directory');
     }
@@ -69,7 +71,26 @@ export default class AbiGenerator {
       this.watchForChanges();
     }
 
-    return outputLocation;
+    return {
+      outputLocation,
+      abiJsonFileLocation: this.getAbiFileFullPathLocation(),
+    };
+  }
+
+  /**
+   * Clear all quotes from the context file info
+   */
+  private clearAllQuotesFromContextInfo() {
+    this._context.abiFileLocation = this._context.abiFileLocation.replace(
+      /\'/g,
+      ''
+    );
+    if (this._context.outputPathDirectory) {
+      this._context.outputPathDirectory = this._context.outputPathDirectory.replace(
+        /\'/g,
+        ''
+      );
+    }
   }
 
   /**
@@ -88,7 +109,7 @@ export default class AbiGenerator {
     // dont let anymore watches happen once the first one is registered
     this._context.watch = false;
     let fsWait = false;
-    fs.watch(this._context.abiFileLocation, (event, filename) => {
+    fs.watch(this.getAbiFileFullPathLocation(), (event, filename) => {
       if (filename) {
         if (fsWait) return;
         setTimeout(() => {
@@ -97,7 +118,7 @@ export default class AbiGenerator {
 
         const outputLocation = this.generate();
         Logger.log(
-          `successfully updated typings for abi file ${this._context.abiFileLocation} saved in ${outputLocation}`
+          `successfully updated typings for abi file ${this.getAbiFileFullPathLocation()} saved in ${outputLocation}`
         );
       }
     });
@@ -111,7 +132,7 @@ export default class AbiGenerator {
       return this._context.outputPathDirectory;
     }
 
-    return path.dirname(this._context.abiFileLocation);
+    return path.dirname(this.getAbiFileFullPathLocation());
   }
 
   /**
@@ -126,7 +147,7 @@ export default class AbiGenerator {
       return `${outputPathDirectory}${name}.ts`;
     }
 
-    return `${outputPathDirectory}/${name}.ts`;
+    return this.buildExecutingPath(`${outputPathDirectory}/${name}.ts`);
   }
 
   /**
@@ -188,21 +209,36 @@ export default class AbiGenerator {
    * Gets the abi json
    */
   private getAbiJson(): AbiItem[] {
-    if (!fs.existsSync(this._context.abiFileLocation)) {
-      throw new Error(`can not find abi file ${this._context.abiFileLocation}`);
+    const abiFileFullPath = this.getAbiFileFullPathLocation();
+    if (!fs.existsSync(abiFileFullPath)) {
+      throw new Error(`can not find abi file ${abiFileFullPath}`);
     }
 
     try {
       const result: AbiItem[] = JSON.parse(
-        fs.readFileSync(this._context.abiFileLocation, 'utf8')
+        fs.readFileSync(abiFileFullPath, 'utf8')
       );
 
       return result;
     } catch (error) {
       throw new Error(
-        `Abi file ${this._context.abiFileLocation} is not a json file. Abi must be a json file.`
+        `Abi file ${abiFileFullPath} is not a json file. Abi must be a json file.`
       );
     }
+  }
+
+  /**
+   * Get the abi file full path location with executing path
+   */
+  private getAbiFileFullPathLocation(): string {
+    return this.buildExecutingPath(this._context.abiFileLocation);
+  }
+
+  /**
+   * Build the executing path
+   */
+  private buildExecutingPath(joinPath: string): string {
+    return path.resolve(process.cwd(), joinPath);
   }
 
   /**

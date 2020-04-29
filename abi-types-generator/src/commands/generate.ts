@@ -5,6 +5,7 @@ import { IProgramOptions } from '../common/models/iprogram-options';
 import { ConverterType } from '../converters/enums/converter-type';
 import AbiGenerator from '../converters/typescript/abi-generator';
 import { Provider } from '../converters/typescript/enums/provider';
+import { GenerateResponse } from '../converters/typescript/models/generate-response';
 import { CommandTypes } from './enums/command-types';
 
 const help = Helpers.getHelpMessageByCommandType(CommandTypes.generate);
@@ -15,17 +16,16 @@ export = {
       return Logger.log(help);
     }
 
-    const abiFileLocation = cmd.command;
     const language = cmd.options.lang || ConverterType.ts;
 
-    let outputLocation: string;
+    let generateResponse: GenerateResponse;
 
     try {
       switch (language) {
         case ConverterType.ts:
-          outputLocation = new AbiGenerator({
+          generateResponse = new AbiGenerator({
             provider: (cmd.options.provider as Provider) || Provider.web3,
-            abiFileLocation,
+            abiFileLocation: cmd.command,
             outputPathDirectory: cmd.options.output,
             name: cmd.options.name,
             prettierOptions: (cmd.options
@@ -46,7 +46,7 @@ export = {
     }
 
     Logger.log(
-      `successfully created typings for abi file ${abiFileLocation} saved in ${outputLocation}`
+      `successfully created typings for abi file ${generateResponse.abiJsonFileLocation} saved in ${generateResponse.outputLocation}`
     );
   },
 };

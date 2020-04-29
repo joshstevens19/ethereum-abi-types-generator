@@ -20,8 +20,6 @@ const packageJson = require('../../package.json');
 })().catch((err) => Logger.error(err.message));
 
 export async function execute(): Promise<void> {
-  Logger.log('');
-
   const args = Helpers.getProgramArguments();
 
   if (args.options.v || args.options.version) {
