@@ -30,6 +30,7 @@ export = {
             name: cmd.options.name,
             prettierOptions: (cmd.options
               .prettierOptions as unknown) as Options,
+            watch: cmd.options.watch !== undefined,
           }).generate();
           break;
         default:

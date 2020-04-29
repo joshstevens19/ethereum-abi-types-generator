@@ -28,19 +28,35 @@ You can install this globally as well but you **must** make sure wherever the `-
 $ ethereum-abi-types-generator <abiFileLocation>
 $ ethereum-abi-types-generator <abiFileLocation> --name=ABI_NAME
 $ ethereum-abi-types-generator <abiFileLocation> --name=ABI_NAME --prettierOptions={YOUR_PRETTIER_OPTIONS}
+$ ethereum-abi-types-generator <abiFileLocation> --watch
+$ ethereum-abi-types-generator <abiFileLocation> --name=ABI_NAME --watch
+$ ethereum-abi-types-generator <abiFileLocation> --name=ABI_NAME --prettierOptions={YOUR_PRETTIER_OPTIONS} --watch
 $ ethereum-abi-types-generator <abiFileLocation> --prettierOptions={YOUR_PRETTIER_OPTIONS}
+$ ethereum-abi-types-generator <abiFileLocation> --prettierOptions={YOUR_PRETTIER_OPTIONS} --watch
 $ ethereum-abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY
+$ ethereum-abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --watch
 $ ethereum-abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --name=ABI_NAME
+$ ethereum-abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --name=ABI_NAME --watch
 $ ethereum-abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --prettierOptions={YOUR_PRETTIER_OPTIONS}
+$ ethereum-abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --prettierOptions={YOUR_PRETTIER_OPTIONS} --watch
 $ ethereum-abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --name=ABI_NAME --prettierOptions={YOUR_PRETTIER_OPTIONS}
+$ ethereum-abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --name=ABI_NAME --prettierOptions={YOUR_PRETTIER_OPTIONS} --watch
 $ ethereum-abi-types-generator <abiFileLocation> --provider=web3|ethers
+$ ethereum-abi-types-generator <abiFileLocation> --provider=web3|ethers --watch
 $ ethereum-abi-types-generator <abiFileLocation> --provider=web3|ethers --prettierOptions={YOUR_PRETTIER_OPTIONS}
+$ ethereum-abi-types-generator <abiFileLocation> --provider=web3|ethers --prettierOptions={YOUR_PRETTIER_OPTIONS} --watch
 $ ethereum-abi-types-generator <abiFileLocation> --name=ABI_NAME --provider=web3|ethers
+$ ethereum-abi-types-generator <abiFileLocation> --name=ABI_NAME --provider=web3|ethers --watch
 $ ethereum-abi-types-generator <abiFileLocation> --name=ABI_NAME --provider=web3|ethers --prettierOptions={YOUR_PRETTIER_OPTIONS}
+$ ethereum-abi-types-generator <abiFileLocation> --name=ABI_NAME --provider=web3|ethers --prettierOptions={YOUR_PRETTIER_OPTIONS} --watch
 $ ethereum-abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --provider=web3|ethers
+$ ethereum-abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --provider=web3|ethers --watch
 $ ethereum-abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --provider=web3|ethers --prettierOptions={YOUR_PRETTIER_OPTIONS}
+$ ethereum-abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --provider=web3|ethers --prettierOptions={YOUR_PRETTIER_OPTIONS} --watch
 $ ethereum-abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --name=ABI_NAME --provider=web3|ethers
+$ ethereum-abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --name=ABI_NAME --provider=web3|ethers --watch
 $ ethereum-abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --name=ABI_NAME --provider=web3|ethers --prettierOptions={YOUR_PRETTIER_OPTIONS}
+$ ethereum-abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --name=ABI_NAME --provider=web3|ethers --prettierOptions={YOUR_PRETTIER_OPTIONS} --watch
 ```
 
 ### Arguments
@@ -300,6 +316,10 @@ $ ethereum-abi-types-generator '../examples/abi-examples/uniswap-factory-abi.jso
 ```
 
 generates the ethers contract typings based on the web3 lib.
+
+### `--watch`
+
+This will watch the `<abiFileLocation>` for changes and if anything does change it will regenerate the typings and resave them in the `--output` defined or use the default one if one is not defined.
 
 ### Using with web3 and ethers
 

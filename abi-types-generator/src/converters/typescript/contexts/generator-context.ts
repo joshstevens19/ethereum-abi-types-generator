@@ -7,4 +7,5 @@ export interface GeneratorContext {
   outputPathDirectory?: string | undefined;
   name?: string | undefined;
   prettierOptions?: Options | undefined;
+  watch?: boolean;
 }

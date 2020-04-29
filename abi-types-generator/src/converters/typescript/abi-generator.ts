@@ -63,7 +63,44 @@ export default class AbiGenerator {
       mode: 0o755,
     });
 
+    this.clearState();
+
+    if (this._context.watch) {
+      this.watchForChanges();
+    }
+
     return outputLocation;
+  }
+
+  /**
+   * Clear the state down
+   */
+  private clearState(): void {
+    this._parametersAndReturnTypeInterfaces = [];
+    this._events = [];
+    this._methodNames = [];
+  }
+
+  /**
+   * Watch for ABI file changes
+   */
+  private watchForChanges(): void {
+    // dont let anymore watches happen once the first one is registered
+    this._context.watch = false;
+    let fsWait = false;
+    fs.watch(this._context.abiFileLocation, (event, filename) => {
+      if (filename) {
+        if (fsWait) return;
+        setTimeout(() => {
+          fsWait = false;
+        }, 100);
+
+        const outputLocation = this.generate();
+        Logger.log(
+          `successfully updated typings for abi file ${this._context.abiFileLocation} saved in ${outputLocation}`
+        );
+      }
+    });
   }
 
   /**

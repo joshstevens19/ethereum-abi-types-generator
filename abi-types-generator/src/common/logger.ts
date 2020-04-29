@@ -1,7 +1,6 @@
 import colors = require('colors');
 import util = require('util');
 import commands = require('../commands');
-import { genericHelpMessage } from '../commands/help-messages';
 
 const { error: consoleErrorNative, log: consoleLogNative } = console;
 
@@ -13,14 +12,6 @@ export default class Logger {
    */
   public static error(msg: string, ...objects: any[]): void {
     this.consoleError(colors.red(msg), objects);
-  }
-
-  /**
-   * Wrapper around `error` will just render `console.error`
-   * @param command The invalid command string
-   */
-  public static invalidCommand(command: string): void {
-    this.consoleError(command + ' is not a valid command');
   }
 
   /**
@@ -46,33 +37,6 @@ export default class Logger {
     }
   ): void {
     this.log(util.inspect(msg, options));
-  }
-
-  /**
-   * Render `console.error` as error message and also renders help message
-   * @param command The command
-   * @param optionalErrorMessage The error message
-   */
-  public static logErrorWithHelp(
-    command: string | null,
-    optionalErrorMessage?: string
-  ): void {
-    if (optionalErrorMessage) {
-      this.error(optionalErrorMessage);
-    }
-    if (!command) {
-      this.logHelp();
-    } else {
-      // this.log((commands[command] as any).help);
-      this.log('hey');
-    }
-  }
-
-  /**
-   * Log help message
-   */
-  public static logHelp(): void {
-    this.log(genericHelpMessage);
   }
 
   /**
