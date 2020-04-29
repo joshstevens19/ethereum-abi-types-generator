@@ -1,0 +1,23 @@
+name: Push to branch checks
+
+on:
+  push:
+    branches:
+      - master
+      - release/*
+      - feat/*
+      - fix/*
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: npm install, and test
+        run: |
+          cd ./abi-types-generator
+          npm install
+          npm test
+        env:
+          CI: true

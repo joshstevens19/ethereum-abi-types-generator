@@ -1,0 +1,20 @@
+name: Pull request branch checks
+
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: npm install, and test
+        run: |
+          cd ./abi-types-generator
+          npm install
+          npm test
+        env:
+          CI: true
