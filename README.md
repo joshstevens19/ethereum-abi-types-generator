@@ -45,7 +45,7 @@ $ abi generate <abiFileLocation> --output=PATH_DIRECTORY --name=ABI_NAME --provi
 
 The ABI json file path location. Must be a JSON file path.
 
-### `<name>`
+### `--name=ABI_NAME`
 
 The ABI ts file you want it to be named as, this will also name interface and enums as this. It will remove any `-` and `.` for the `ts` interfaces and enum names.
 
