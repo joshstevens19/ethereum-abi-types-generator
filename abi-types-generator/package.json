@@ -1,17 +1,28 @@
 {
   "name": "ethereum-abi-types-generator",
   "version": "1.0.0",
-  "description": "",
+  "description": "Generate types from an ethereum ABI json file.",
   "main": "dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "gen": "node ./dist/bin/generator-cli.js",
     "hardcoded": "node ./dist/bin/generator-cli.js generate '../examples/abi-examples/uniswap-factory-abi.json' --outputPath='../../examples/etherjs/generated-typings/factory.ts' --provider=ethers",
     "web3": "node ./dist/bin/generator-cli.js generate '../examples/abi-examples/uniswap-factory-abi.json' --outputPath='../examples/web3/generated-typings/factory.ts' --provider=web3",
     "ethers": "node ./dist/bin/generator-cli.js generate '../examples/abi-examples/uniswap-factory-abi.json' --outputPath='../examples/ethers/generated-typings/factory.ts' --provider=ethers"
   },
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "ethereum",
+    "blockchain",
+    "types",
+    "abi",
+    "typescript"
+  ],
+  "bugs": {
+    "url": "https://github.com/joshstevens19/ethereum-abi-types-generator/issues"
+  },
+  "homepage": "https://github.com/joshstevens19/ethereum-abi-types-generator#readme",
+  "author": "joshstevens19@hotmail.co.uk",
+  "license": "MIT",
   "dependencies": {
     "colors": "^1.4.0",
     "dotenv": "^8.2.0",
@@ -24,9 +35,14 @@
     "@types/bn.js": "^4.11.6",
     "@types/dotenv": "^8.2.0",
     "@types/fs-extra": "^8.1.0",
+    "@types/jest": "^24.0.18",
     "@types/prettier": "^2.0.0",
     "@types/yargs": "^15.0.4",
     "ethers": "^4.0.47",
+    "jest": "^24.9.0",
+    "ts-jest": "^24.1.0",
+    "tslint": "^6.1.2",
+    "typescript": "^3.8.3",
     "web3": "^1.2.7"
   }
 }

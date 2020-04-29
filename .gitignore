@@ -1,10 +1,5 @@
-# dependencies
 /abi-types-generator/node_modules
 /examples/node_modules
-
-# build
 /abi-types-generator/dist
 /examples/dist
-
-/abi-types-generator/abi-examples/abi-v2.ts
-/abi-types-generator/abi-examples/token.ts
+/abi-types-generator/coverage

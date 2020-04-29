@@ -73,4 +73,12 @@ export default class Helpers {
 
     return message;
   }
+
+  /**
+   * Remove all white spaces
+   * @param value The value
+   */
+  public static removeAllWhiteSpace(value: string): string {
+    return value.replace(/\s+/g, '');
+  }
 }
