@@ -41,10 +41,6 @@ describe('EthersFactory', () => {
       expect(ethersFactory.buildEventInterfaceProperties([])).toEqual('');
     });
 
-    it('should return empty string if 0 length abi items', () => {
-      expect(ethersFactory.buildEventInterfaceProperties([])).toEqual('');
-    });
-
     it('should build all events from the ABI', () => {
       expect(
         ethersFactory.buildEventInterfaceProperties(
