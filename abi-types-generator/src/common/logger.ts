@@ -1,6 +1,4 @@
 import colors = require('colors');
-import util = require('util');
-import commands = require('../commands');
 
 const { error: consoleErrorNative, log: consoleLogNative } = console;
 
@@ -21,22 +19,6 @@ export class Logger {
    */
   public static log(msg: string, ...objects: any[]): void {
     this.consoleLog(msg, objects);
-  }
-
-  /**
-   * Render `console.log` in the terminal
-   * @param msg The message
-   * @param objects Any additional logs
-   */
-  public static logWithColour(
-    msg: string | object,
-    options: util.InspectOptions = {
-      colors: true,
-      depth: null,
-      compact: false,
-    }
-  ): void {
-    this.log(util.inspect(msg, options));
   }
 
   /**
