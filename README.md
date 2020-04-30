@@ -28,6 +28,12 @@ A CLI tool which allows you to convert an ABI json file into fully loaded interf
 <br/>
 🚀 Automatic documenation generated on each method outputting all the details about it which is on the ABI - no jumping back and forth
 
+## Motivation
+
+Blockchain development in JavaScript is already super hard. You have all these tools like `truffle,` `ethers`, `web3` (the list goes on) which you have to get use to and the learning curve is already quite high. On top of this, you have loads of other tools to get things to work as you need. TypeScript allows you to bring runtime errors in the compiler but on contract calls most developers have to either build their own types meaning maintaining them and easily getting out of sync or have no compile type errors using the dreaded `any` hoping and praying you don't break anything. The idea was to not have to make the developer wrap any kind of `web3` or `ethers` instance or use a new tool to get this working but with a simple 1 line change you can use all the same libraries interfaces as what the developer is use to but with `types` `auto-generated` for you to bring back compile-time errors on any contract calls with super ease.
+
+The ABI file is the source of truth for all contract calls so by building types from this file we can be assured our types correct. This is perfect for teams that are working across both contracts and the client.
+
 ## Installation
 
 ### npm:
