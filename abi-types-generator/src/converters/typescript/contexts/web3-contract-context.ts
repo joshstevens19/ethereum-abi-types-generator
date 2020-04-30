@@ -4,10 +4,10 @@ export interface Web3ContractContext<
   TMethodsInterface,
   TMethodNamesEnum,
   TEventsInterface,
-  TEventEnum
+  TEventType
 > {
   address: string;
-  jsonInterface: AbiModel<TMethodNamesEnum, TEventEnum>;
+  jsonInterface: AbiModel<TMethodNamesEnum, TEventType>;
 
   options: Options;
 
@@ -15,7 +15,7 @@ export interface Web3ContractContext<
     TMethodsInterface,
     TMethodNamesEnum,
     TEventsInterface,
-    TEventEnum
+    TEventType
   >;
 
   deploy(options: DeployOptions): ContractSendMethod;
@@ -23,11 +23,11 @@ export interface Web3ContractContext<
   methods: TMethodsInterface;
 
   once(
-    event: TEventEnum,
+    event: TEventType,
     callback: (error: Error, event: EventData) => void
   ): void;
   once(
-    event: TEventEnum,
+    event: TEventType,
     options: EventOptions,
     callback: (error: Error, event: EventData) => void
   ): void;
@@ -40,15 +40,15 @@ export interface Web3ContractContext<
     ): EventResponse;
   };
 
-  getPastEvents(event: TEventEnum): Promise<EventData[]>;
+  getPastEvents(event: TEventType): Promise<EventData[]>;
   getPastEvents(
-    event: TEventEnum,
+    event: TEventType,
     options: EventOptions,
     callback: (error: Error, event: EventData) => void
   ): Promise<EventData[]>;
-  getPastEvents(event: TEventEnum, options: EventOptions): Promise<EventData[]>;
+  getPastEvents(event: TEventType, options: EventOptions): Promise<EventData[]>;
   getPastEvents(
-    event: TEventEnum,
+    event: TEventType,
     callback: (error: Error, event: EventData) => void
   ): Promise<EventData[]>;
 }

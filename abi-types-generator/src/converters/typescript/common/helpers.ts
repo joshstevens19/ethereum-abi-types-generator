@@ -276,10 +276,10 @@ export default class TypeScriptHelpers {
       result += `"${type}"`;
     });
 
-    if (result.length > 0) {
-      return `export type ${typeName} = ${result};`;
+    if (result.length === 0) {
+      result += 'undefined';
     }
 
-    return '';
+    return `export type ${typeName} = ${result};`;
   }
 }

@@ -1295,12 +1295,14 @@ describe('TypeScriptHelpers', () => {
   describe('buildType', () => {
     it('should build type', () => {
       expect(
-        TypeScriptHelpers.buildType('TestEnum', ['test', 'test2'])
-      ).toEqual('export type TestEnum = "test" | "test2";');
+        TypeScriptHelpers.buildType('TestEvents', ['test', 'test2'])
+      ).toEqual('export type TestEvents = "test" | "test2";');
     });
 
-    it('should return empty string', () => {
-      expect(TypeScriptHelpers.buildType('TestEnum', [])).toEqual('');
+    it('should return correct build tupe if no events exist', () => {
+      expect(TypeScriptHelpers.buildType('TestEvents', [])).toEqual(
+        'export type TestEvents = undefined;'
+      );
     });
   });
 });

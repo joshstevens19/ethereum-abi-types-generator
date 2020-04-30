@@ -18,47 +18,47 @@ export declare type EventFilter = {
 export type EthersContractContext<
   TMethods,
   TEventsContext,
-  TEventEnums
-> = EthersContract<TMethods, TEventsContext, TEventEnums> & TMethods;
+  TEventType
+> = EthersContract<TMethods, TEventsContext, TEventType> & TMethods;
 
-interface EthersContract<TMethods, TEventsContext, TEventEnums>
+interface EthersContract<TMethods, TEventsContext, TEventType>
   extends Contract {
   // readonly estimate: TMethods => Promise<BigNumber>;
   readonly functions: TMethods;
   // to do not exposing any string methods now which is nicer
   readonly filters: TEventsContext;
   deployed(): Promise<
-    EthersContractContext<TMethods, TEventsContext, TEventEnums>
+    EthersContractContext<TMethods, TEventsContext, TEventType>
   >;
   _deployed(
     blockTag?: BlockTag
-  ): Promise<EthersContractContext<TMethods, TEventsContext, TEventEnums>>;
+  ): Promise<EthersContractContext<TMethods, TEventsContext, TEventType>>;
   connect(
     signerOrProvider: Signer | Provider | string
-  ): EthersContractContext<TMethods, TEventsContext, TEventEnums>;
+  ): EthersContractContext<TMethods, TEventsContext, TEventType>;
   attach(
     addressOrName: string
-  ): EthersContractContext<TMethods, TEventsContext, TEventEnums>;
+  ): EthersContractContext<TMethods, TEventsContext, TEventType>;
   // need to overwrite the event filters for strongly typed events
   on(
-    event: EventFilter | TEventEnums,
+    event: EventFilter | TEventType,
     listener: Listener
-  ): EthersContractContext<TMethods, TEventsContext, TEventEnums>;
+  ): EthersContractContext<TMethods, TEventsContext, TEventType>;
   once(
-    event: EventFilter | TEventEnums,
+    event: EventFilter | TEventType,
     listener: Listener
-  ): EthersContractContext<TMethods, TEventsContext, TEventEnums>;
+  ): EthersContractContext<TMethods, TEventsContext, TEventType>;
   addListener(
-    eventName: EventFilter | TEventEnums,
+    eventName: EventFilter | TEventType,
     listener: Listener
-  ): EthersContractContext<TMethods, TEventsContext, TEventEnums>;
+  ): EthersContractContext<TMethods, TEventsContext, TEventType>;
   removeAllListeners(
-    eventName: EventFilter | TEventEnums
-  ): EthersContractContext<TMethods, TEventsContext, TEventEnums>;
+    eventName: EventFilter | TEventType
+  ): EthersContractContext<TMethods, TEventsContext, TEventType>;
   removeListener(
-    eventName: TEventEnums,
+    eventName: TEventType,
     listener: Listener
-  ): EthersContractContext<TMethods, TEventsContext, TEventEnums>;
+  ): EthersContractContext<TMethods, TEventsContext, TEventType>;
 }
 
 interface Contract {
