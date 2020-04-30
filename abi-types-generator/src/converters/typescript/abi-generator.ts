@@ -1,7 +1,7 @@
 import fs from 'fs-extra';
 import path from 'path';
 import prettier, { Options } from 'prettier';
-import { AbiInput, AbiOutput, SolidityType } from '../../abi-properties';
+import { AbiInput, SolidityType } from '../../abi-properties';
 import { AbiItem } from '../../abi-properties/abi-item';
 import { AbiItemType } from '../../abi-properties/abi-item-type';
 import Helpers from '../../common/helpers';
@@ -434,8 +434,9 @@ export default class AbiGenerator {
             abiItem.inputs[i]
           )}`;
         } else {
-          input += `${inputName}: ${TypeScriptHelpers.getSolidityTsType(
-            abiItem.inputs[i].type
+          input += `${inputName}: ${TypeScriptHelpers.getSolidityInputTsType(
+            abiItem.inputs[i].type,
+            this._context.provider
           )}`;
         }
       }
@@ -460,7 +461,10 @@ export default class AbiGenerator {
     for (let i = 0; i < abiInput.components!.length; i++) {
       properties += `${
         abiInput.components![i].name
-      }: ${TypeScriptHelpers.getSolidityTsType(abiInput.components![i].type)};`;
+      }: ${TypeScriptHelpers.getSolidityInputTsType(
+        abiInput.components![i].type,
+        this._context.provider
+      )};`;
     }
 
     this._parametersAndReturnTypeInterfaces.push(
@@ -480,7 +484,10 @@ export default class AbiGenerator {
     if (abiItem.outputs && abiItem.outputs.length > 0) {
       if (abiItem.outputs.length === 1) {
         output += this.buildMethodReturnContext(
-          TypeScriptHelpers.getSolidityTsType(abiItem.outputs[0].type),
+          TypeScriptHelpers.getSolidityOutputTsType(
+            abiItem.outputs[0].type,
+            this._context.provider
+          ),
           abiItem
         );
       } else {
@@ -488,11 +495,26 @@ export default class AbiGenerator {
 
         let ouputProperties = '';
 
-        abiItem.outputs.map((output: AbiOutput) => {
+        for (let i = 0; i < abiItem.outputs.length; i++) {
+          const output = abiItem.outputs[i];
           ouputProperties += `${
             output.name
-          }: ${TypeScriptHelpers.getSolidityTsType(output.type)};`;
-        });
+          }: ${TypeScriptHelpers.getSolidityOutputTsType(
+            output.type,
+            this._context.provider
+          )};`;
+
+          if (this._context.provider === Provider.ethers) {
+            ouputProperties += `${i}: ${TypeScriptHelpers.getSolidityOutputTsType(
+              output.type,
+              this._context.provider
+            )};`;
+          }
+        }
+
+        if (this._context.provider === Provider.ethers) {
+          ouputProperties += `length: ${abiItem.outputs.length};`;
+        }
 
         this._parametersAndReturnTypeInterfaces.push(
           TypeScriptHelpers.buildInterface(interfaceName, ouputProperties)

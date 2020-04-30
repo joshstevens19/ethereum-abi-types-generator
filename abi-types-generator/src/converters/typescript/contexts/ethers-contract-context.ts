@@ -1,4 +1,4 @@
-import { ContractFunction, Signer } from 'ethers';
+import { Signer } from 'ethers';
 import {
   BlockTag,
   Listener,
@@ -66,7 +66,7 @@ interface Contract {
   readonly interface: Interface;
   readonly signer: Signer;
   readonly provider: Provider;
-  readonly [name: string]: ContractFunction | any;
+  // readonly [name: string]: ContractFunction | any;
   readonly addressPromise: Promise<string>;
   readonly deployTransaction: TransactionResponse;
   fallback(overrides?: TransactionRequest): Promise<TransactionResponse>;

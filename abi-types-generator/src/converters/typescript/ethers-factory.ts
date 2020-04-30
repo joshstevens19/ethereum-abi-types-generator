@@ -7,26 +7,24 @@ export class EthersFactory {
    * Build ethers generic interfaces
    */
   public buildEthersInterfaces(abiName: string): string {
-    const ethersImports = `import { ContractTransaction } from "ethers";
+    return `
+      import { ContractTransaction } from "ethers";
+      import { Arrayish, BigNumber, BigNumberish, Interface } from "ethers/utils";
       import { EthersContractContext } from "ethereum-abi-types-generator";
-      `;
 
-    const ethersContractContextType = `export type ContractContext = EthersContractContext<
-      ${abiName},
-      ${abiName}EventsContext,
-      ${abiName}Events
-    >;
-    `;
+      export type ContractContext = EthersContractContext<
+        ${abiName},
+        ${abiName}EventsContext,
+        ${abiName}Events
+      >;
 
-    const eventFilter = `export declare type EventFilter = {
+      export declare type EventFilter = {
         address?: string;
         topics?: Array<string>;
         fromBlock?: string | number;
         toBlock?: string | number;
       };
     `;
-
-    return ethersImports + ethersContractContextType + eventFilter;
   }
 
   /**

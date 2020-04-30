@@ -1,5 +1,6 @@
 import { AbiItem, AbiItemType } from '../../abi-properties';
 import TypeScriptHelpers from './common/helpers';
+import { Provider } from './enums/provider';
 
 export class Web3Factory {
   constructor() {}
@@ -88,8 +89,9 @@ export class Web3Factory {
         let filtersProperties = '{';
         for (let a = 0; a < abiItems[i].inputs!.length; a++) {
           if (abiItems[i].inputs![a].indexed === true) {
-            const paramterType = TypeScriptHelpers.getSolidityTsType(
-              abiItems[i].inputs![a].type
+            const paramterType = TypeScriptHelpers.getSolidityInputTsType(
+              abiItems[i].inputs![a].type,
+              Provider.web3
             );
             filtersProperties += `${
               abiItems[i].inputs![a].name

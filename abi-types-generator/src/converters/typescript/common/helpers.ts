@@ -1,17 +1,86 @@
 import { SolidityType } from '../../../abi-properties';
+import Helpers from '../../../common/helpers';
+import { Provider } from '../enums/provider';
 
 export default class TypeScriptHelpers {
   /**
-   * Get the solidity type mapped to typescript type (map out all types!!!)
+   * Get the solidity ouput type mapped to typescript type
    * @param type The solidity type
    */
-  public static getSolidityTsType(type: string) {
+  public static getSolidityInputTsType(type: string, provider: Provider) {
+    switch (provider) {
+      case Provider.ethers: {
+        if (type.includes(SolidityType.bytes)) {
+          if (type.includes('[')) {
+            return this.buildUpMultidimensionalArrayTypes(type, 'Arrayish');
+          }
+
+          return 'Arrayish';
+        }
+
+        if (
+          type.includes(SolidityType.uint) ||
+          type.includes(SolidityType.int)
+        ) {
+          if (type.includes('[')) {
+            return this.buildUpMultidimensionalArrayTypes(type, 'BigNumberish');
+          }
+
+          return 'BigNumberish';
+        }
+      }
+      case Provider.web3: {
+        if (type.includes(SolidityType.bytes)) {
+          if (type.includes('[')) {
+            return this.buildUpMultidimensionalArrayTypes(
+              type,
+              'string | number[]'
+            );
+          }
+
+          return 'string | number[]';
+        }
+
+        if (
+          type.includes(SolidityType.uint) ||
+          type.includes(SolidityType.int)
+        ) {
+          if (type.includes(SolidityType.uint)) {
+            const numberType = this.buildWeb3NumberType(
+              type,
+              SolidityType.uint
+            );
+
+            if (type.includes('[')) {
+              return this.buildUpMultidimensionalArrayTypes(type, numberType);
+            }
+
+            return numberType;
+          }
+
+          if (type.includes(SolidityType.int)) {
+            const numberType = this.buildWeb3NumberType(type, SolidityType.int);
+
+            if (type.includes('[')) {
+              return this.buildUpMultidimensionalArrayTypes(type, numberType);
+            }
+
+            return numberType;
+          }
+        }
+      }
+    }
+
     if (type.includes(SolidityType.bool)) {
       if (type.includes('[')) {
         return this.buildUpMultidimensionalArrayTypes(type, 'boolean');
       }
       return 'boolean';
-    } else if (
+    }
+
+    // always fall back to hex string if something goes nuts in the ABI
+    // should not happen but good having some fallback
+    if (
       type.includes(SolidityType.address) ||
       type.includes(SolidityType.uint) ||
       type.includes(SolidityType.bytes) ||
@@ -26,6 +95,111 @@ export default class TypeScriptHelpers {
     }
 
     throw new Error(`${type} is not valid solidty type`);
+  }
+
+  /**
+   * Get the solidity type mapped to typescript type
+   * @param type The solidity type
+   */
+  public static getSolidityOutputTsType(type: string, provider: Provider) {
+    // any bespoke provider output type logic
+    switch (provider) {
+      case Provider.ethers: {
+        if (
+          type.includes(SolidityType.uint) ||
+          type.includes(SolidityType.int)
+        ) {
+          if (type.includes(SolidityType.uint)) {
+            const numberType = this.buildEtherjsNumberType(
+              type,
+              SolidityType.uint
+            );
+
+            if (type.includes('[')) {
+              return this.buildUpMultidimensionalArrayTypes(type, numberType);
+            }
+
+            return numberType;
+          }
+
+          if (type.includes(SolidityType.int)) {
+            const numberType = this.buildEtherjsNumberType(
+              type,
+              SolidityType.int
+            );
+
+            if (type.includes('[')) {
+              return this.buildUpMultidimensionalArrayTypes(type, numberType);
+            }
+
+            return numberType;
+          }
+        }
+      }
+    }
+
+    if (type.includes(SolidityType.bool)) {
+      if (type.includes('[')) {
+        return this.buildUpMultidimensionalArrayTypes(type, 'boolean');
+      }
+      return 'boolean';
+    }
+
+    if (
+      type.includes(SolidityType.address) ||
+      type.includes(SolidityType.string) ||
+      type.includes(SolidityType.bytes) ||
+      type.includes(SolidityType.uint) ||
+      type.includes(SolidityType.int)
+    ) {
+      if (type.includes('[')) {
+        return this.buildUpMultidimensionalArrayTypes(type, 'string');
+      }
+
+      return 'string';
+    }
+
+    throw new Error(`${type} is not valid solidty type`);
+  }
+
+  /**
+   * Build etherjs number type
+   * @param type The ABI type
+   * @param solidityType The solidity type
+   */
+  private static buildEtherjsNumberType(
+    type: string,
+    solidityType: SolidityType.uint | SolidityType.int
+  ) {
+    const clonedType = Helpers.deepClone(type);
+
+    const bits = clonedType.replace(solidityType, '').split('[')[0];
+    const totalBits = Number(bits);
+    if (bits.length > 0 && !isNaN(totalBits)) {
+      return totalBits <= 48 ? 'number' : 'BigNumber';
+    }
+
+    return 'BigNumber';
+  }
+
+  /**
+   * Build web3 number type
+   * @param type The ABI type
+   * @param solidityType The solidity type
+   */
+  private static buildWeb3NumberType(
+    type: string,
+    solidityType: SolidityType.uint | SolidityType.int
+  ) {
+    const clonedType = Helpers.deepClone(type);
+
+    const bits = clonedType.replace(solidityType, '').split('[')[0];
+    const totalBits = Number(bits);
+    if (bits.length > 0 && !isNaN(totalBits)) {
+      return totalBits <= 48 ? 'string | number' : 'string';
+    }
+
+    return 'string';
   }
 
   /**
@@ -102,6 +276,10 @@ export default class TypeScriptHelpers {
       result += `"${type}"`;
     });
 
-    return `export type ${typeName} = ${result};`;
+    if (result.length > 0) {
+      return `export type ${typeName} = ${result};`;
+    }
+
+    return '';
   }
 }
