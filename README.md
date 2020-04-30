@@ -1,23 +1,37 @@
-## ethereum-abi-types-generator
+## abi-types-generator
 
 THIS IS NOT DEPLOYED YET ITS STILL WORK IN PROGRESS!!!!!
 
-Typings for all your ethereum ABI contract methods and events with integration with `web3` and `ethers` 👏👏👏👏 Never have to have a runtime error again and bring them into compile time errors in 2 minutes.
+Dev typings for all your ethereum ABI contract methods and events with 1 liner integrations with `web3` and `ethers` 👏👏👏👏. Never have to have a runtime error again and bring them into compile time errors in 2 minutes.
+
+<img src="./images/gif-demo.gif" />
 
 A CLI tool which allows you to convert an ABI json file into fully loaded interfaces types.
+
+## Features 🚀
+
+🚀 Compile time errors, never make easy dynamic mistakes again.
+🚀 Easy 1 line solution to get working
+🚀 Use the same interfaces as the provider your use to, no changes in how you develop
+🚀 Works with just a simple ABI json file
+🚀 Supports `ethers` and `web3` out the box
+🚀 0 bundle increase, its all dev dependencies so get all the benefit with no negative impact on your build size
+🚀 Nice easy CLI to allow you to generate these however you like, build scripts, watch file change events its up to you
+🚀 Supported multidimensional return types aka `bytes32[4] >`[string, string, string, string, string]`
+🚀 Automatic documenation generated on each method outputting all the details about it which is on the ABI - no jumping back and forth
 
 ## Installation
 
 ### npm:
 
 ```js
-$ npm install ethereum-abi-types-generator
+$ npm install ethereum-abi-types-generator --save-dev
 ```
 
 ### yarn:
 
 ```js
-$ yarn add ethereum-abi-types-generator
+$ yarn add ethereum-abi-types-generator --dev
 ```
 
 You can install this globally as well but you **must** make sure wherever the `--output` location is which generates the typings file has `ethereum-abi-types-generator` installed in that project, as it uses imports from this package to map the `ContractContext` to make your life easier handling the generic type build up automatically.
@@ -25,38 +39,38 @@ You can install this globally as well but you **must** make sure wherever the `-
 ## CLI usage
 
 ```ts
-$ ethereum-abi-types-generator <abiFileLocation>
-$ ethereum-abi-types-generator <abiFileLocation> --name=ABI_NAME
-$ ethereum-abi-types-generator <abiFileLocation> --name=ABI_NAME --prettierOptions={YOUR_PRETTIER_OPTIONS}
-$ ethereum-abi-types-generator <abiFileLocation> --watch
-$ ethereum-abi-types-generator <abiFileLocation> --name=ABI_NAME --watch
-$ ethereum-abi-types-generator <abiFileLocation> --name=ABI_NAME --prettierOptions={YOUR_PRETTIER_OPTIONS} --watch
-$ ethereum-abi-types-generator <abiFileLocation> --prettierOptions={YOUR_PRETTIER_OPTIONS}
-$ ethereum-abi-types-generator <abiFileLocation> --prettierOptions={YOUR_PRETTIER_OPTIONS} --watch
-$ ethereum-abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY
-$ ethereum-abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --watch
-$ ethereum-abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --name=ABI_NAME
-$ ethereum-abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --name=ABI_NAME --watch
-$ ethereum-abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --prettierOptions={YOUR_PRETTIER_OPTIONS}
-$ ethereum-abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --prettierOptions={YOUR_PRETTIER_OPTIONS} --watch
-$ ethereum-abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --name=ABI_NAME --prettierOptions={YOUR_PRETTIER_OPTIONS}
-$ ethereum-abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --name=ABI_NAME --prettierOptions={YOUR_PRETTIER_OPTIONS} --watch
-$ ethereum-abi-types-generator <abiFileLocation> --provider=web3|ethers
-$ ethereum-abi-types-generator <abiFileLocation> --provider=web3|ethers --watch
-$ ethereum-abi-types-generator <abiFileLocation> --provider=web3|ethers --prettierOptions={YOUR_PRETTIER_OPTIONS}
-$ ethereum-abi-types-generator <abiFileLocation> --provider=web3|ethers --prettierOptions={YOUR_PRETTIER_OPTIONS} --watch
-$ ethereum-abi-types-generator <abiFileLocation> --name=ABI_NAME --provider=web3|ethers
-$ ethereum-abi-types-generator <abiFileLocation> --name=ABI_NAME --provider=web3|ethers --watch
-$ ethereum-abi-types-generator <abiFileLocation> --name=ABI_NAME --provider=web3|ethers --prettierOptions={YOUR_PRETTIER_OPTIONS}
-$ ethereum-abi-types-generator <abiFileLocation> --name=ABI_NAME --provider=web3|ethers --prettierOptions={YOUR_PRETTIER_OPTIONS} --watch
-$ ethereum-abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --provider=web3|ethers
-$ ethereum-abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --provider=web3|ethers --watch
-$ ethereum-abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --provider=web3|ethers --prettierOptions={YOUR_PRETTIER_OPTIONS}
-$ ethereum-abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --provider=web3|ethers --prettierOptions={YOUR_PRETTIER_OPTIONS} --watch
-$ ethereum-abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --name=ABI_NAME --provider=web3|ethers
-$ ethereum-abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --name=ABI_NAME --provider=web3|ethers --watch
-$ ethereum-abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --name=ABI_NAME --provider=web3|ethers --prettierOptions={YOUR_PRETTIER_OPTIONS}
-$ ethereum-abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --name=ABI_NAME --provider=web3|ethers --prettierOptions={YOUR_PRETTIER_OPTIONS} --watch
+$ abi-types-generator <abiFileLocation>
+$ abi-types-generator <abiFileLocation> --name=ABI_NAME
+$ abi-types-generator <abiFileLocation> --name=ABI_NAME --prettierOptions={YOUR_PRETTIER_OPTIONS}
+$ abi-types-generator <abiFileLocation> --watch
+$ abi-types-generator <abiFileLocation> --name=ABI_NAME --watch
+$ abi-types-generator <abiFileLocation> --name=ABI_NAME --prettierOptions={YOUR_PRETTIER_OPTIONS} --watch
+$ abi-types-generator <abiFileLocation> --prettierOptions={YOUR_PRETTIER_OPTIONS}
+$ abi-types-generator <abiFileLocation> --prettierOptions={YOUR_PRETTIER_OPTIONS} --watch
+$ abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY
+$ abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --watch
+$ abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --name=ABI_NAME
+$ abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --name=ABI_NAME --watch
+$ abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --prettierOptions={YOUR_PRETTIER_OPTIONS}
+$ abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --prettierOptions={YOUR_PRETTIER_OPTIONS} --watch
+$ abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --name=ABI_NAME --prettierOptions={YOUR_PRETTIER_OPTIONS}
+$ abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --name=ABI_NAME --prettierOptions={YOUR_PRETTIER_OPTIONS} --watch
+$ abi-types-generator <abiFileLocation> --provider=web3|ethers
+$ abi-types-generator <abiFileLocation> --provider=web3|ethers --watch
+$ abi-types-generator <abiFileLocation> --provider=web3|ethers --prettierOptions={YOUR_PRETTIER_OPTIONS}
+$ abi-types-generator <abiFileLocation> --provider=web3|ethers --prettierOptions={YOUR_PRETTIER_OPTIONS} --watch
+$ abi-types-generator <abiFileLocation> --name=ABI_NAME --provider=web3|ethers
+$ abi-types-generator <abiFileLocation> --name=ABI_NAME --provider=web3|ethers --watch
+$ abi-types-generator <abiFileLocation> --name=ABI_NAME --provider=web3|ethers --prettierOptions={YOUR_PRETTIER_OPTIONS}
+$ abi-types-generator <abiFileLocation> --name=ABI_NAME --provider=web3|ethers --prettierOptions={YOUR_PRETTIER_OPTIONS} --watch
+$ abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --provider=web3|ethers
+$ abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --provider=web3|ethers --watch
+$ abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --provider=web3|ethers --prettierOptions={YOUR_PRETTIER_OPTIONS}
+$ abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --provider=web3|ethers --prettierOptions={YOUR_PRETTIER_OPTIONS} --watch
+$ abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --name=ABI_NAME --provider=web3|ethers
+$ abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --name=ABI_NAME --provider=web3|ethers --watch
+$ abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --name=ABI_NAME --provider=web3|ethers --prettierOptions={YOUR_PRETTIER_OPTIONS}
+$ abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --name=ABI_NAME --provider=web3|ethers --prettierOptions={YOUR_PRETTIER_OPTIONS} --watch
 ```
 
 ### Arguments
@@ -74,7 +88,7 @@ If not supplied it will take the file name and use that as the abi name througho
 Example:
 
 ```ts
-$ ethereum-abi-types-generator ./examples/abi-examples/uniswap-factory-abi.json
+$ abi-types-generator ./examples/abi-examples/uniswap-factory-abi.json
 ```
 
 generates: `./examples/abi-examples/uniswap-factory-abi.ts`
@@ -82,19 +96,19 @@ generates: `./examples/abi-examples/uniswap-factory-abi.ts`
 Example:
 
 ```ts
-$ ethereum-abi-types-generator ./examples/abi-examples/uniswap-factory-abi.json --name=foo-abi
+$ abi-types-generator ./examples/abi-examples/uniswap-factory-abi.json --name=foo-abi
 ```
 
 generates: `./examples/abi-examples/foo-abi.ts`
 
 ```ts
-$ ethereum-abi-types-generator ./examples/abi-examples/uniswap-factory-abi.json --name=foo.abi
+$ abi-types-generator ./examples/abi-examples/uniswap-factory-abi.json --name=foo.abi
 ```
 
 generates: `./examples/abi-examples/foo.abi.ts`
 
 ```ts
-$ ethereum-abi-types-generator ./examples/abi-examples/uniswap-factory-abi.json --name=foo
+$ abi-types-generator ./examples/abi-examples/uniswap-factory-abi.json --name=foo
 ```
 
 generates: `./examples/abi-examples/foo.ts`
@@ -247,7 +261,7 @@ If it's an invalid prettier options object it will emit a error log in the CLI c
 Example:
 
 ```ts
-$ ethereum-abi-types-generator ./examples/abi-examples/uniswap-factory-abi.json --prettierOptions={singleQuote: false}
+$ abi-types-generator ./examples/abi-examples/uniswap-factory-abi.json --prettierOptions={singleQuote: false}
 ```
 
 Will generate double quotes in the `.ts` output.
@@ -255,7 +269,7 @@ Will generate double quotes in the `.ts` output.
 Example:
 
 ```ts
-$ ethereum-abi-types-generator ./examples/abi-examples/uniswap-factory-abi.json
+$ abi-types-generator ./examples/abi-examples/uniswap-factory-abi.json
 ```
 
 Will fallback to the default prettier options.
@@ -269,7 +283,7 @@ If not supplied it will use the directory of the `<abiFileLocation>` and generat
 Example:
 
 ```ts
-$ ethereum-abi-types-generator ./examples/abi-examples/uniswap-factory-abi.json
+$ abi-types-generator ./examples/abi-examples/uniswap-factory-abi.json
 ```
 
 generates in: `./examples/abi-examples/uniswap-factory-abi.ts`
@@ -277,13 +291,13 @@ generates in: `./examples/abi-examples/uniswap-factory-abi.ts`
 Example:
 
 ```ts
-$ ethereum-abi-types-generator ./examples/abi-examples/uniswap-factory-abi.json --output=./examples/ethers/generated-typings
+$ abi-types-generator ./examples/abi-examples/uniswap-factory-abi.json --output=./examples/ethers/generated-typings
 ```
 
 generates in: `./examples/ethers/generated-typings/uniswap-factory-abi.ts`
 
 ```ts
-$ ethereum-abi-types-generator ./examples/abi-examples/uniswap-factory-abi.json --output=./examples/ethers/generated-typings --name=foo
+$ abi-types-generator ./examples/abi-examples/uniswap-factory-abi.json --output=./examples/ethers/generated-typings --name=foo
 ```
 
 generates: `./examples/ethers/generated-typings/foo.ts`
@@ -304,7 +318,7 @@ If not supplied it will fallback to `web3`
 Example:
 
 ```ts
-$ ethereum-abi-types-generator ./examples/abi-examples/uniswap-factory-abi.json
+$ abi-types-generator ./examples/abi-examples/uniswap-factory-abi.json
 ```
 
 generates the web3 contract typings based on the web3 lib.
@@ -312,7 +326,7 @@ generates the web3 contract typings based on the web3 lib.
 Example:
 
 ```ts
-$ ethereum-abi-types-generator ./examples/abi-examples/uniswap-factory-abi.json --provider=ethers
+$ abi-types-generator ./examples/abi-examples/uniswap-factory-abi.json --provider=ethers
 ```
 
 generates the ethers contract typings based on the web3 lib.
@@ -330,7 +344,7 @@ The cli tool will generate all your typings for you and expose them in the gener
 Lets say i run the cli command:
 
 ```ts
-$ ethereum-abi-types-generator ./examples/abi-examples/uniswap-factory-abi.json  --output=./examples/web3/generated-typings --name=factory-abi
+$ abi-types-generator ./examples/abi-examples/uniswap-factory-abi.json  --output=./examples/web3/generated-typings --name=factory-abi
 ```
 
 This will generate me a `ts` file of `./examples/web3/factory-abi.ts`.
@@ -340,11 +354,17 @@ You now just need to cast your `new web3.eth.Contract` code to `ContractContext`
 Example:
 
 ```ts
-import { EventData } from 'ethereum-abi-types-generator';
 import Web3 from 'web3';
-import { ContractContext } from './generated-typings/factory-abi';
+import { AbiExamples } from '../abi-examples';
+import {
+  ContractContext,
+  TupleInputOnlyRequest,
+  TupleNoInputNamesResponse,
+} from './generated-typings/fake-contract';
 
 const example = async () => {
+  const mockEthereumAddress = '0x419D0d8BdD9aF5e606Ae2232ed285Aff190E711b';
+
   const web3 = new Web3(
     'https://mainnet.infura.io/v3/280bb5b627394709938a7cc0b71a4a58'
   );
@@ -354,36 +374,62 @@ const example = async () => {
   // This all work great but the compiler gets confused.
   // Casting to unknown first then the `ContractContext` solves this.
   const contract = (new web3.eth.Contract(
-    YOUR_ABI,
-    YOUR_ABI_ADDRESS
+    AbiExamples.YOUR_ABI as any,
+    AbiExamples.YOUR_CONTRACT_ADDRESS
   ) as unknown) as ContractContext;
 
   // you now have full typings on `contract.methods` which has generated docs
-  const exchange = await contract.methods
-    .getExchange('0x419D0d8BdD9aF5e606Ae2232ed285Aff190E711b')
+  const simpleCall = await contract.methods
+    .easyExample(true, mockEthereumAddress, new Date().getTime())
     .call();
+
+  console.log(simpleCall);
+
+  // build up a proper typed request object with the interface importable
+  // from the typings file generated
+  const tupleExampleRequest: TupleInputOnlyRequest = {
+    address: mockEthereumAddress,
+    timestamps: [
+      new Date().getTime(),
+      new Date().getTime(),
+      new Date().getTime(),
+    ],
+  };
+
+  // encode abi method all exposed
+  const data = contract.methods.tupleInputOnly(tupleExampleRequest).encodeABI();
+  console.log(data);
 
   // any none constant methods will have the correct interface on them as well
   // aka you cant call `.call()` here and the compile will show you this.
   // will also expose the event emitters for your typings to still work with web3
   contract.methods
-    .initializeFactory('123')
-    .send({ from: '0xde0B295669a9FD93d5F28D9Ec85E40f4cb697BAe' })
-    .on('transactionHash', (hash: string) => {
-      console.log(
-        'This is will not do a proper call but just showing you an example'
-      );
+    .tupleInputOnly(tupleExampleRequest)
+    .send({ from: mockEthereumAddress })
+    .on('transactionHash', (hash) => {
+      console.log(hash);
     });
+
+  const result: TupleNoInputNamesResponse = await contract.methods
+    .tupleNoInputNames(mockEthereumAddress, mockEthereumAddress)
+    .call();
+
+  console.log(result);
 
   // full typings on your events with even the filter indexs which will
-  // not compile if supply it incorrectly
+  // not compile if supply it incorrectly and only expose the correct ones for you
   contract.events
-    .NewExchange({ filter: { token: 'EXAMPLE_TOKEN' } })
-    .on('data', (data: EventData) => {
-      console.log('My event emitter has fired the event data', data);
+    .Event1({ filter: { token: '0x00' } })
+    .on('changed', (event) => {
+      console.log(event);
     });
 
-  console.log(exchange);
+  // can any past events only allowing you to query events which actually exist
+  const event = await contract.getPastEvents('Event1', {
+    filter: { token: '0x00' },
+  });
+
+  console.log(event);
 };
 
 example();

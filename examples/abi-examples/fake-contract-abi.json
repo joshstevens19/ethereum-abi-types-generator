@@ -1,0 +1,218 @@
+[
+  {
+    "name": "Event1",
+    "inputs": [
+      { "type": "address", "name": "token", "indexed": true },
+      { "type": "address", "name": "exchange", "indexed": true },
+      { "type": "address", "name": "user", "indexed": false },
+      { "type": "uint256", "name": "_value", "indexed": true }
+    ],
+    "anonymous": false,
+    "type": "event"
+  },
+  {
+    "name": "Event2",
+    "inputs": [
+      { "type": "address", "name": "_owner", "indexed": true },
+      { "type": "address", "name": "_spender", "indexed": true },
+      { "type": "uint256", "name": "_value", "indexed": false }
+    ],
+    "anonymous": false,
+    "type": "event"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "components": [
+          {
+            "name": "address",
+            "type": "address"
+          },
+          {
+            "name": "timestamps",
+            "type": "uint8[2]"
+          }
+        ],
+        "name": "o",
+        "type": "tuple"
+      }
+    ],
+    "name": "tupleInputOnly",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "name": "exchangeAddress",
+        "type": "address"
+      },
+      {
+        "name": "internalAddress",
+        "type": "address"
+      }
+    ],
+    "name": "tupleInputAndOutput",
+    "outputs": [
+      {
+        "name": "affiliate",
+        "type": "address"
+      },
+      {
+        "name": "offerID",
+        "type": "bytes32"
+      },
+      {
+        "name": "creationTime",
+        "type": "uint256"
+      },
+      {
+        "name": "timestamp",
+        "type": "uint8"
+      },
+      {
+        "name": "timestamps",
+        "type": "uint8[5]"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "name": "",
+        "type": "address"
+      },
+      {
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "tupleNoInputNames",
+    "outputs": [
+      {
+        "name": "affiliate",
+        "type": "address"
+      },
+      {
+        "name": "offerID",
+        "type": "bytes32"
+      },
+      {
+        "name": "creationTime",
+        "type": "uint256"
+      },
+      {
+        "name": "timestamp",
+        "type": "uint8"
+      },
+      {
+        "name": "timestamps",
+        "type": "uint8[5]"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "name": "address1",
+        "type": "address"
+      },
+      {
+        "name": "address2",
+        "type": "address"
+      }
+    ],
+    "name": "tupleWithParametersNames",
+    "outputs": [
+      {
+        "name": "affiliate",
+        "type": "address"
+      },
+      {
+        "name": "offerID",
+        "type": "bytes32"
+      },
+      {
+        "name": "creationTime",
+        "type": "uint256"
+      },
+      {
+        "name": "timestamp",
+        "type": "uint8"
+      },
+      {
+        "name": "timestamps",
+        "type": "uint8[5]"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "inputData",
+        "type": "bytes32[2]"
+      }
+    ],
+    "name": "byteArrayInputExample",
+    "outputs": [],
+    "payable": true,
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "name": "int8ReturnExample",
+    "outputs": [{ "type": "uint8", "name": "out" }],
+    "inputs": [],
+    "constant": true,
+    "payable": false,
+    "type": "function",
+    "gas": 783
+  },
+  {
+    "name": "int256ReturnExample",
+    "outputs": [{ "type": "uint256", "name": "out" }],
+    "inputs": [],
+    "constant": true,
+    "payable": false,
+    "type": "function",
+    "gas": 783
+  },
+  {
+    "name": "easyExample",
+    "outputs": [{ "type": "uint256", "name": "out" }],
+    "inputs": [
+      {
+        "name": "valid",
+        "type": "boolean"
+      },
+      {
+        "name": "exchangeAddress",
+        "type": "address"
+      },
+      {
+        "name": "timestamp",
+        "type": "uint8"
+      }
+    ],
+    "constant": true,
+    "payable": false,
+    "type": "function",
+    "gas": 783
+  }
+]

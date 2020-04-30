@@ -1,3 +1,5 @@
+import { AbiItem } from 'ethereum-abi-types-generator';
+
 export class AbiExamples {
   /**
    * The uniswap factory contract address (mainnet only)
@@ -81,4 +83,10 @@ export class AbiExamples {
       gas: 663,
     },
   ];
+
+  // used for giffs
+  public static YOUR_ABI = ('' as unknown) as AbiItem[];
+
+  // used for giffs
+  public static YOUR_CONTRACT_ADDRESS = AbiExamples.factoryAddress;
 }

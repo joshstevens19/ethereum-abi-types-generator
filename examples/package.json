@@ -4,11 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "generate-web3-typings": "ethereum-abi-types-generator",
-    "web3-abi2": "ethereum-abi-types-generator './abi-examples/abi-v2.json' --output='./web3/generated-typings' --name=abi-example",
-    "ethers": "node ./dist/examples/etherjs/call-contract-strongly-typed.js",
-    "web3": "node ./dist/examples/web3/call-contract-strongly-typed.js"
+    "web3-example": "ethereum-abi-types-generator './abi-examples/fake-contract-abi.json' --output='./web3/generated-typings' --name=fake-contract"
   },
   "author": "",
   "license": "ISC",
