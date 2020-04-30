@@ -5,7 +5,7 @@ import { AbiInput, SolidityType } from '../../abi-properties';
 import { AbiItem } from '../../abi-properties/abi-item';
 import { AbiItemType } from '../../abi-properties/abi-item-type';
 import Helpers from '../../common/helpers';
-import Logger from '../../common/logger';
+import { Logger } from '../../common/logger';
 import TypeScriptHelpers from './common/helpers';
 import { GeneratorContext } from './contexts/generator-context';
 import { Provider } from './enums/provider';

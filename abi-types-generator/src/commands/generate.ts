@@ -1,6 +1,6 @@
 import { Options } from 'prettier';
 import Helpers from '../common/helpers';
-import Logger from '../common/logger';
+import { Logger } from '../common/logger';
 import { IProgramOptions } from '../common/models/iprogram-options';
 import { ConverterType } from '../converters/enums/converter-type';
 import AbiGenerator from '../converters/typescript/abi-generator';

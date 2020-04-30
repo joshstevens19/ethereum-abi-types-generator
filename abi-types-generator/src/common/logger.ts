@@ -4,7 +4,7 @@ import commands = require('../commands');
 
 const { error: consoleErrorNative, log: consoleLogNative } = console;
 
-export default class Logger {
+export class Logger {
   /**
    * Render `console.error` in the terminal
    * @param msg The message
