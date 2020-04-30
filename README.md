@@ -11,13 +11,21 @@ A CLI tool which allows you to convert an ABI json file into fully loaded interf
 ## Features 🚀
 
 🚀 Compile time errors, never make easy dynamic mistakes again.
+<br/>
 🚀 Easy 1 line solution to get working
+<br/>
 🚀 Use the same interfaces as the provider your use to, no changes in how you develop
+<br/>
 🚀 Works with just a simple ABI json file
+<br/>
 🚀 Supports `ethers` and `web3` out the box
+<br/>
 🚀 0 bundle increase, its all dev dependencies so get all the benefit with no negative impact on your build size
+<br/>
 🚀 Nice easy CLI to allow you to generate these however you like, build scripts, watch file change events its up to you
+<br/>
 🚀 Supported multidimensional return types aka `bytes32[4] >`[string, string, string, string, string]`
+<br/>
 🚀 Automatic documenation generated on each method outputting all the details about it which is on the ABI - no jumping back and forth
 
 ## Installation
