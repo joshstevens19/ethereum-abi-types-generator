@@ -46,5 +46,12 @@
     "ts-jest": "^24.1.0",
     "tslint": "^6.1.2",
     "typescript": "^3.8.3"
-  }
+  },
+  "files": [
+    "dist",
+    "package.json",
+    "package-lock.json",
+    "../README.md",
+    "../LICENSE"
+  ]
 }
