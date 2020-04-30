@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "web3-example": "abi-types-generator './abi-examples/fake-contract-abi.json' --output='./web3/generated-typings' --name=fake-contract",
+    "web3-example": "abi-types-generator './abi-examples/fake-contract-abi.json' --output='./web3/generated-typings' --name=fake-contract --prettierOptions='{'printWidth': 1000}'",
     "ethers-example": "abi-types-generator './abi-examples/fake-contract-abi.json' --output='./ethers/generated-typings' --name=fake-contract --provider=ethers"
   },
   "author": "",
