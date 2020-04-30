@@ -18,6 +18,7 @@ describe('EthersFactory', () => {
       ).toEqual(
         Helpers.removeAllWhiteSpace(`
           import { ContractTransaction } from "ethers";
+          import { Arrayish, BigNumber, BigNumberish, Interface } from "ethers/utils";
           import { EthersContractContext } from "ethereum-abi-types-generator";
           export type ContractContext = EthersContractContext<
           TestAbi,
