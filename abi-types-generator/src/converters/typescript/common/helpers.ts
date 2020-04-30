@@ -88,11 +88,20 @@ export default class TypeScriptHelpers {
   }
 
   /**
-   * Build enum
-   * @param enumName The enum name
-   * @param enumMembers The enum members
+   * Build type
+   * @param typeName The type name
+   * @param types The types
    */
-  public static buildEnum(enumName: string, enumContext: string): string {
-    return `export enum ${enumName} { ${enumContext} }`;
+  public static buildType(typeName: string, types: any[]): string {
+    let result = '';
+
+    types.map((type) => {
+      if (result.length > 0) {
+        result += ' | ';
+      }
+      result += `"${type}"`;
+    });
+
+    return `export type ${typeName} = ${result};`;
   }
 }

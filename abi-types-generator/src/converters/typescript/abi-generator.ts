@@ -197,9 +197,9 @@ export default class AbiGenerator {
 
     return (
       typings +
-      this.buildEventsEnum() +
+      this.buildEventsType() +
       this.buildEventsInterface(abi) +
-      this.buildMethodNamesEnum() +
+      this.buildMethodNamesType() +
       this.buildParametersAndReturnTypeInterfaces() +
       abiTypedInterface
     );
@@ -313,18 +313,12 @@ export default class AbiGenerator {
   }
 
   /**
-   * Build method names enum
+   * Build method names type
    */
-  private buildMethodNamesEnum(): string {
-    let members = '';
-
-    this._methodNames.map((method) => {
-      members += `${method} = "${method}",`;
-    });
-
-    return TypeScriptHelpers.buildEnum(
+  private buildMethodNamesType(): string {
+    return TypeScriptHelpers.buildType(
       `${this.getAbiName()}MethodNames`,
-      members
+      this._methodNames
     );
   }
 
@@ -342,16 +336,13 @@ export default class AbiGenerator {
   }
 
   /**
-   * Build events enum
+   * Build events type
    */
-  private buildEventsEnum(): string {
-    let members = '';
-
-    this._events.map((event) => {
-      members += `${event} = "${event}",`;
-    });
-
-    return TypeScriptHelpers.buildEnum(`${this.getAbiName()}Events`, members);
+  private buildEventsType(): string {
+    return TypeScriptHelpers.buildType(
+      `${this.getAbiName()}Events`,
+      this._events
+    );
   }
 
   /**

@@ -186,11 +186,11 @@ describe('TypeScriptHelpers', () => {
     });
   });
 
-  describe('buildEnum', () => {
-    it('should build enum', () => {
-      expect(TypeScriptHelpers.buildEnum('TestEnum', 'test = "test"')).toEqual(
-        'export enum TestEnum { test = "test" }'
-      );
+  describe('buildType', () => {
+    it('should build type', () => {
+      expect(
+        TypeScriptHelpers.buildType('TestEnum', ['test', 'test2'])
+      ).toEqual('export type TestEnum = "test" | "test2"');
     });
   });
 });
