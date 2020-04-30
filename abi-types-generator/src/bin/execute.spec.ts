@@ -98,15 +98,19 @@ describe('Generator CLI', () => {
     it('should call `commands.generate.action`', async () => {
       const logSpy = spyOn(Logger, 'log').and.callThrough();
 
+      spyOn(Helpers, 'getProgramArguments').and.returnValue({
+        command: 'location',
+        subcommands: [],
+        options: {},
+      });
+
       await execute(version);
 
       expect(actionSpy).toHaveBeenCalledTimes(1);
       expect(actionSpy).toHaveBeenCalledWith({
-        command: undefined,
-        options: {
-          $0: 'node_modules\\jest-worker\\build\\workers\\processChild.js',
-        },
+        command: 'location',
         subcommands: [],
+        options: {},
       });
       expect(logSpy).toHaveBeenCalledTimes(0);
     });
