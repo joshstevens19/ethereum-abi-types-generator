@@ -40,7 +40,6 @@ export = {
           return;
       }
     } catch (error) {
-      console.log(error);
       Logger.error(error.message);
       return;
     }
