@@ -85,7 +85,8 @@ export type FakeContractMethodNames =
   | 'byteArrayInputExample'
   | 'int8ReturnExample'
   | 'int256ReturnExample'
-  | 'easyExample';
+  | 'easyExample'
+  | 'new';
 export interface TupleInputOnlyRequest {
   address: string;
   timestamps: [string | number, string | number, string | number];
@@ -194,4 +195,20 @@ export interface FakeContract {
     exchangeAddress: string,
     timestamp: string | number
   ): MethodConstantReturnContext<string>;
+  /**
+   * Payable: false
+   * Constant: false
+   * StateMutability: undefined
+   * Type: constructor
+   * @param _name Type: bytes32, Indexed: false
+   * @param _symbol Type: bytes32, Indexed: false
+   * @param _decimals Type: uint256, Indexed: false
+   * @param _supply Type: uint256, Indexed: false
+   */
+  'new'(
+    _name: string | number[],
+    _symbol: string | number[],
+    _decimals: string,
+    _supply: string
+  ): MethodReturnContext;
 }

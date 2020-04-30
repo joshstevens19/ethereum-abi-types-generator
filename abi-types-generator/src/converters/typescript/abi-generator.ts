@@ -1,6 +1,8 @@
 import fs from 'fs-extra';
 import path from 'path';
-import prettier, { Options } from 'prettier';
+import { Options } from 'prettier';
+import prettierTS from 'prettier/parser-typescript';
+import prettier from 'prettier/standalone';
 import { AbiInput, SolidityType } from '../../abi-properties';
 import { AbiItem } from '../../abi-properties/abi-item';
 import { AbiItemType } from '../../abi-properties/abi-item-type';
@@ -156,6 +158,7 @@ export default class AbiGenerator {
   private getPrettierOptions(): Options {
     if (this._context.prettierOptions) {
       this._context.prettierOptions.parser = 'typescript';
+      this._context.prettierOptions.plugins = [prettierTS];
       return this._context.prettierOptions;
     }
 
@@ -172,6 +175,7 @@ export default class AbiGenerator {
       singleQuote: true,
       bracketSpacing: true,
       printWidth: 80,
+      plugins: [prettierTS],
     };
   }
 

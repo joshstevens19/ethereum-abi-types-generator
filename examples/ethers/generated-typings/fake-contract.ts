@@ -1,6 +1,6 @@
-import { EthersContractContext } from 'ethereum-abi-types-generator';
 import { ContractTransaction } from 'ethers';
-import { Arrayish, BigNumber, BigNumberish } from 'ethers/utils';
+import { Arrayish, BigNumber, BigNumberish, Interface } from 'ethers/utils';
+import { EthersContractContext } from 'ethereum-abi-types-generator';
 
 export type ContractContext = EthersContractContext<
   FakeContract,
@@ -27,7 +27,8 @@ export type FakeContractMethodNames =
   | 'byteArrayInputExample'
   | 'int8ReturnExample'
   | 'int256ReturnExample'
-  | 'easyExample';
+  | 'easyExample'
+  | 'new';
 export interface TupleInputOnlyRequest {
   address: string;
   timestamps: [BigNumberish, BigNumberish, BigNumberish];
@@ -154,4 +155,20 @@ export interface FakeContract {
     exchangeAddress: string,
     timestamp: BigNumberish
   ): Promise<BigNumber>;
+  /**
+   * Payable: false
+   * Constant: false
+   * StateMutability: undefined
+   * Type: constructor
+   * @param _name Type: bytes32, Indexed: false
+   * @param _symbol Type: bytes32, Indexed: false
+   * @param _decimals Type: uint256, Indexed: false
+   * @param _supply Type: uint256, Indexed: false
+   */
+  'new'(
+    _name: Arrayish,
+    _symbol: Arrayish,
+    _decimals: BigNumberish,
+    _supply: BigNumberish
+  ): Promise<ContractTransaction>;
 }

@@ -1,17 +1,18 @@
 module.exports = {
   roots: ['<rootDir>/src'],
   transform: {
-    '^.+\\.tsx?$': 'ts-jest'
+    '^.+\\.tsx?$': 'ts-jest',
   },
   transformIgnorePatterns: ['/node_modules/.*'],
   setupFilesAfterEnv: ['<rootDir>/src/jest/setup-jest.ts'],
   collectCoverage: true,
+  coveragePathIgnorePatterns: ['<rootDir>/src/jest/*', '.mock.ts'],
   verbose: true,
   coverageReporters: ['html'],
   coveragePathIgnorePatterns: ['<rootDir>/src/jest/*'],
   globals: {
     'ts-jest': {
-      diagnostics: false
-    }
-  }
+      diagnostics: false,
+    },
+  },
 };
