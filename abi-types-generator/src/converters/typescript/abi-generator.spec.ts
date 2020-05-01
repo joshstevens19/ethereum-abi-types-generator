@@ -128,28 +128,28 @@ describe('AbiGenerator', () => {
     expect(pathDirnameSpy).toHaveBeenCalledTimes(0);
   });
 
-  it('should call path.dirname 2 times if `this._context.outputPathDirectory` is not defined', () => {
+  it('should call path.dirname 3 times if `this._context.outputPathDirectory` is not defined', () => {
     const generatorContextClone = Helpers.deepClone(generatorContext);
     generatorContextClone.outputPathDirectory = undefined;
 
     callSuccessAbiGeneratorInstance(abiGenertorOptions, generatorContextClone);
 
-    expect(pathDirnameSpy).toHaveBeenCalledTimes(2);
+    expect(pathDirnameSpy).toHaveBeenCalledTimes(3);
   });
 
-  it('should call path.resolve 3 time if `this._context.outputPathDirectory` is defined', () => {
+  it('should call path.resolve 5 time if `this._context.outputPathDirectory` is defined', () => {
     callSuccessAbiGeneratorInstance();
 
-    expect(pathResolveSpy).toHaveBeenCalledTimes(3);
+    expect(pathResolveSpy).toHaveBeenCalledTimes(5);
   });
 
-  it('should call path.resolve 5 time if `this._context.outputPathDirectory` is not defined', () => {
+  it('should call path.resolve 8 time if `this._context.outputPathDirectory` is not defined', () => {
     const generatorContextClone = Helpers.deepClone(generatorContext);
     generatorContextClone.outputPathDirectory = undefined;
 
     callSuccessAbiGeneratorInstance(abiGenertorOptions, generatorContextClone);
 
-    expect(pathResolveSpy).toHaveBeenCalledTimes(5);
+    expect(pathResolveSpy).toHaveBeenCalledTimes(8);
   });
 
   it('should call fs.existsSync 2 time', () => {
@@ -204,20 +204,6 @@ describe('AbiGenerator', () => {
       JSON.stringify(preitterFormatSpy.calls.mostRecent().args[1])
     ).toEqual(
       '{"parser":"typescript","trailingComma":"es5","singleQuote":true,"bracketSpacing":true,"printWidth":80,"plugins":[{"parsers":{"typescript":{"astFormat":"estree"}}}]}'
-    );
-  });
-
-  it('should call prettier once with the settings passed in', () => {
-    const generatorContextClone = Helpers.deepClone(generatorContext);
-    generatorContextClone.prettierOptions = { singleQuote: false };
-
-    callSuccessAbiGeneratorInstance(abiGenertorOptions, generatorContextClone);
-
-    expect(preitterFormatSpy).toHaveBeenCalledTimes(1);
-    expect(
-      JSON.stringify(preitterFormatSpy.calls.mostRecent().args[1])
-    ).toEqual(
-      '{"singleQuote":false,"parser":"typescript","plugins":[{"parsers":{"typescript":{"astFormat":"estree"}}}]}'
     );
   });
 

@@ -156,13 +156,42 @@ export default class AbiGenerator {
    * Get prettier options
    */
   private getPrettierOptions(): Options {
-    if (this._context.prettierOptions) {
-      this._context.prettierOptions.parser = 'typescript';
-      this._context.prettierOptions.plugins = [prettierTS];
-      return this._context.prettierOptions;
+    const usersPrettierrConfig = this.findPrettierrcContent(
+      this.buildExecutingPath(this.getOutputPathDirectory())
+    );
+    if (usersPrettierrConfig) {
+      usersPrettierrConfig.parser = 'typescript';
+      usersPrettierrConfig.plugins = [prettierTS];
+      return usersPrettierrConfig;
     }
 
     return this.getDefaultPrettierOptions();
+  }
+
+  /**
+   * Loop through all the of dir to try to fine the .prettierrc file
+   * @param dirPath The path
+   */
+  private findPrettierrcContent(dirPath: string): Options | null {
+    const files = fs.readdirSync(dirPath);
+    for (let i = 0; i < files.length; i++) {
+      if (files[i] === '.prettierrc') {
+        try {
+          return JSON.parse(
+            fs.readFileSync(path.join(dirPath, '.prettierrc'), 'utf8')
+          ) as Options;
+        } catch (error) {
+          // mute it
+        }
+      }
+    }
+
+    const nextPath = path.join(dirPath, '..');
+    if (nextPath !== dirPath) {
+      return this.findPrettierrcContent(nextPath);
+    }
+
+    return null;
   }
 
   /**

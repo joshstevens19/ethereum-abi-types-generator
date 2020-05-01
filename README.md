@@ -55,36 +55,20 @@ You can install this globally as well but you **must** make sure wherever the `-
 ```ts
 $ abi-types-generator <abiFileLocation>
 $ abi-types-generator <abiFileLocation> --name=ABI_NAME
-$ abi-types-generator <abiFileLocation> --name=ABI_NAME --prettierOptions={YOUR_PRETTIER_OPTIONS}
 $ abi-types-generator <abiFileLocation> --watch
 $ abi-types-generator <abiFileLocation> --name=ABI_NAME --watch
-$ abi-types-generator <abiFileLocation> --name=ABI_NAME --prettierOptions={YOUR_PRETTIER_OPTIONS} --watch
-$ abi-types-generator <abiFileLocation> --prettierOptions={YOUR_PRETTIER_OPTIONS}
-$ abi-types-generator <abiFileLocation> --prettierOptions={YOUR_PRETTIER_OPTIONS} --watch
 $ abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY
 $ abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --watch
 $ abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --name=ABI_NAME
 $ abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --name=ABI_NAME --watch
-$ abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --prettierOptions={YOUR_PRETTIER_OPTIONS}
-$ abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --prettierOptions={YOUR_PRETTIER_OPTIONS} --watch
-$ abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --name=ABI_NAME --prettierOptions={YOUR_PRETTIER_OPTIONS}
-$ abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --name=ABI_NAME --prettierOptions={YOUR_PRETTIER_OPTIONS} --watch
 $ abi-types-generator <abiFileLocation> --provider=web3|ethers
 $ abi-types-generator <abiFileLocation> --provider=web3|ethers --watch
-$ abi-types-generator <abiFileLocation> --provider=web3|ethers --prettierOptions={YOUR_PRETTIER_OPTIONS}
-$ abi-types-generator <abiFileLocation> --provider=web3|ethers --prettierOptions={YOUR_PRETTIER_OPTIONS} --watch
 $ abi-types-generator <abiFileLocation> --name=ABI_NAME --provider=web3|ethers
 $ abi-types-generator <abiFileLocation> --name=ABI_NAME --provider=web3|ethers --watch
-$ abi-types-generator <abiFileLocation> --name=ABI_NAME --provider=web3|ethers --prettierOptions={YOUR_PRETTIER_OPTIONS}
-$ abi-types-generator <abiFileLocation> --name=ABI_NAME --provider=web3|ethers --prettierOptions={YOUR_PRETTIER_OPTIONS} --watch
 $ abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --provider=web3|ethers
 $ abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --provider=web3|ethers --watch
-$ abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --provider=web3|ethers --prettierOptions={YOUR_PRETTIER_OPTIONS}
-$ abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --provider=web3|ethers --prettierOptions={YOUR_PRETTIER_OPTIONS} --watch
 $ abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --name=ABI_NAME --provider=web3|ethers
 $ abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --name=ABI_NAME --provider=web3|ethers --watch
-$ abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --name=ABI_NAME --provider=web3|ethers --prettierOptions={YOUR_PRETTIER_OPTIONS}
-$ abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --name=ABI_NAME --provider=web3|ethers --prettierOptions={YOUR_PRETTIER_OPTIONS} --watch
 ```
 
 ### Arguments
@@ -126,167 +110,6 @@ $ abi-types-generator ./examples/abi-examples/uniswap-factory-abi.json --name=fo
 ```
 
 generates: `./examples/abi-examples/foo.ts`
-
-### `--prettierOptions={YOUR_PRETTIER_OPTIONS}`
-
-The prettier options you want to parse the `.ts` file as.
-
-YOUR_PRETTIER_OPTIONS:
-
-```ts
-export interface RequiredOptions {
-  /**
-   * Specify the line length that the printer will wrap on.
-   * @default 80
-   */
-  printWidth: number;
-  /**
-   * Specify the number of spaces per indentation-level.
-   * @default 2
-   */
-  tabWidth: number;
-  /**
-   * Indent lines with tabs instead of spaces
-   * @default false
-   */
-  useTabs: boolean;
-  /**
-   * Print semicolons at the ends of statements.
-   * @default true
-   */
-  semi: boolean;
-  /**
-   * Use single quotes instead of double quotes.
-   * @default false
-   */
-  singleQuote: boolean;
-  /**
-   * Use single quotes in JSX.
-   * @default false
-   */
-  jsxSingleQuote: boolean;
-  /**
-   * Print trailing commas wherever possible.
-   * @default 'es5'
-   */
-  trailingComma: 'none' | 'es5' | 'all';
-  /**
-   * Print spaces between brackets in object literals.
-   * @default true
-   */
-  bracketSpacing: boolean;
-  /**
-   * Put the `>` of a multi-line JSX element at the end of the last line instead of being alone on the next line.
-   * @default false
-   */
-  jsxBracketSameLine: boolean;
-  /**
-   * Format only a segment of a file.
-   * @default 0
-   */
-  rangeStart: number;
-  /**
-   * Format only a segment of a file.
-   * @default Infinity
-   */
-  rangeEnd: number;
-  /**
-   * Specify which parser to use.
-   */
-  parser: BuiltInParserName | CustomParser;
-  /**
-   * Specify the input filepath. This will be used to do parser inference.
-   */
-  filepath: string;
-  /**
-   * Prettier can restrict itself to only format files that contain a special comment, called a pragma, at the top of the file.
-   * This is very useful when gradually transitioning large, unformatted codebases to prettier.
-   * @default false
-   */
-  requirePragma: boolean;
-  /**
-   * Prettier can insert a special @format marker at the top of files specifying that
-   * the file has been formatted with prettier. This works well when used in tandem with
-   * the --require-pragma option. If there is already a docblock at the top of
-   * the file then this option will add a newline to it with the @format marker.
-   * @default false
-   */
-  insertPragma: boolean;
-  /**
-   * By default, Prettier will wrap markdown text as-is since some services use a linebreak-sensitive renderer.
-   * In some cases you may want to rely on editor/viewer soft wrapping instead, so this option allows you to opt out.
-   * @default 'preserve'
-   */
-  proseWrap: 'always' | 'never' | 'preserve';
-  /**
-   * Include parentheses around a sole arrow function parameter.
-   * @default 'always'
-   */
-  arrowParens: 'avoid' | 'always';
-  /**
-   * The plugin API is in a beta state.
-   */
-  plugins: Array<string | Plugin>;
-  /**
-   * How to handle whitespaces in HTML.
-   * @default 'css'
-   */
-  htmlWhitespaceSensitivity: 'css' | 'strict' | 'ignore';
-  /**
-   * Which end of line characters to apply.
-   * @default 'lf'
-   */
-  endOfLine: 'auto' | 'lf' | 'crlf' | 'cr';
-  /**
-   * Change when properties in objects are quoted.
-   * @default 'as-needed'
-   */
-  quoteProps: 'as-needed' | 'consistent' | 'preserve';
-  /**
-   * Whether or not to indent the code inside <script> and <style> tags in Vue files.
-   * @default false
-   */
-  vueIndentScriptAndStyle: boolean;
-}
-```
-
-This is wrapped in a:
-
-```ts
-export interface Options extends Partial<RequiredOptions> {}
-```
-
-Which means they are all optional to supply aka you can overrule just one.
-
-If not supplied or you put an invalid prettier object in it will take the default prettier options in the project:
-
-```ts
-{
-    parser: 'typescript',
-    trailingComma: 'es5',
-    singleQuote: true,
-    bracketSpacing: true,
-    printWidth: 80,
-}
-```
-
-If it's an invalid prettier options object it will emit a error log in the CLI command but still generate the file fine.
-
-Example:
-
-```ts
-$ abi-types-generator ./examples/abi-examples/uniswap-factory-abi.json --prettierOptions={singleQuote: false}
-```
-
-Will generate double quotes in the `.ts` output.
-
-Example:
-
-```ts
-$ abi-types-generator ./examples/abi-examples/uniswap-factory-abi.json
-```
-
-Will fallback to the default prettier options.
 
 ### `--output=PATH_DIRECTORY`
 
@@ -348,6 +171,20 @@ generates the ethers contract typings based on the web3 lib.
 ### `--watch`
 
 This will watch the `<abiFileLocation>` for changes and if anything does change it will regenerate the typings and resave them in the `--output` defined or use the default one if one is not defined.
+
+### Formatting
+
+We use `prettier` to format all files, to make sure it matches your coding style just make sure you have a `.prettierrc` defined anywhere in the project and it will use that. If it can not find any it will take these default prettier:
+
+```ts
+{
+    parser: 'typescript',
+    trailingComma: 'es5',
+    singleQuote: true,
+    bracketSpacing: true,
+    printWidth: 80,
+}
+```
 
 ### Using with web3 and ethers
 

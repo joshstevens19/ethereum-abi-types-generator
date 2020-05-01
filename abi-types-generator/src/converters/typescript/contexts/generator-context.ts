@@ -1,4 +1,3 @@
-import { Options } from 'prettier';
 import { Provider } from '../enums/provider';
 
 export interface GeneratorContext {
@@ -6,6 +5,5 @@ export interface GeneratorContext {
   abiFileLocation: string;
   outputPathDirectory?: string | undefined;
   name?: string | undefined;
-  prettierOptions?: Options | undefined;
   watch?: boolean;
 }

@@ -1,4 +1,3 @@
-import { Options } from 'prettier';
 import Helpers from '../common/helpers';
 import { Logger } from '../common/logger';
 import { IProgramOptions } from '../common/models/iprogram-options';
@@ -28,8 +27,6 @@ export = {
             abiFileLocation: cmd.command,
             outputPathDirectory: cmd.options.output,
             name: cmd.options.name,
-            prettierOptions: (cmd.options
-              .prettierOptions as unknown) as Options,
             watch: cmd.options.watch !== undefined,
           }).generate();
           break;
