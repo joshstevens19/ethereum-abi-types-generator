@@ -125,6 +125,7 @@ class UniswapStronglyTypedExample {
       to: exchangeAddress,
       data,
       value: web3.utils.toWei(ethAmount.toFixed(), 'ether'),
+      gas: web3.utils.numberToHex(21912),
     };
 
     this.logUniswapOutput(
@@ -132,12 +133,19 @@ class UniswapStronglyTypedExample {
     );
     // Uniswap class - Transaction config built up {"from":"0x419D0d8BdD9aF5e606Ae2232ed285Aff190E711b","to":"0x60a87cC7Fca7E53867facB79DA73181B1bB4238B","data":"0xf39b5b9b0000000000000000000000000000000000000000000000000000000000000384000000000000000000000000000000000000000000000000000000005eac075c","value":"10000000000000000"}
 
+    // obviously if your using a wallet provider do your standard
+    // web3.eth.sendTransaction :)
+    const signedTransaction = await web3.eth.accounts.signTransaction(
+      transactionConfig,
+      '0x0123456789012345678901234567890123456789012345678901234567890123'
+    );
+
     // and send it through web3...
     // not actually going to send here as we have no private keys
     // but if you were using metamask or other wallet providers it would trigger a signer
     // this is merely an example
-    const transactionReceipt = (await web3.eth.sendTransaction(
-      transactionConfig
+    const transactionReceipt = (await web3.eth.sendSignedTransaction(
+      signedTransaction.rawTransaction!
     )) as TransactionReceipt;
 
     this.logUniswapOutput(
