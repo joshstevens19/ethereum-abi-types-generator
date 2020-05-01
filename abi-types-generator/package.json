@@ -1,6 +1,6 @@
 {
   "name": "ethereum-abi-types-generator",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Generate types from an ethereum ABI json file.",
   "main": "dist/index.js",
   "scripts": {
@@ -50,6 +50,7 @@
   },
   "files": [
     "dist",
+    "images",
     "package.json",
     "package-lock.json",
     "../README.md",
