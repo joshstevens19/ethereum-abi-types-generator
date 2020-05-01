@@ -190,6 +190,12 @@ We use `prettier` to format all files, to make sure it matches your coding style
 
 #### Web3 - https://www.npmjs.com/package/web3
 
+#### Uniswap full example:
+
+https://github.com/joshstevens19/ethereum-abi-types-generator/blob/master/examples/web3/uniswap-example/uniswap-contract-strongly-typed-example.ts
+
+Below is just a fake contract example just so you can understand how the typings improve your development.
+
 The cli tool will generate all your typings for you and expose them in the generated file. Its super easy to start using strongly typed interfaces for all your ABI calls.
 
 Lets say i run the cli command:
@@ -206,7 +212,7 @@ All you meed to do is cast your `new web3.eth.Contract` code to an `ContractCont
 
 ```ts
 import Web3 from 'web3';
-import { AbiExamples } from '../abi-examples';
+import { AbiExamples } from '../../abi-examples';
 import { ContractContext } from './generated-typings/fake-contract';
 
 const web3 = new Web3(
@@ -229,7 +235,7 @@ Easy as that 🔥🔥
 
 ```ts
 import Web3 from 'web3';
-import { AbiExamples } from '../abi-examples';
+import { AbiExamples } from '../../abi-examples';
 import {
   ContractContext,
   TupleInputOnlyRequest,
@@ -313,6 +319,12 @@ If the ABI changes and I run the CLI command again or have a --watch on the file
 
 ### Ethers - https://www.npmjs.com/package/ethers
 
+#### Uniswap full example:
+
+https://github.com/joshstevens19/ethereum-abi-types-generator/blob/master/examples/ethers/uniswap-example/uniswap-contract-strongly-typed-example.ts
+
+Below is just a fake contract example just so you can understand how the typings improve your development.
+
 The cli tool will generate all your typings for you and expose them in the generated file. Its super easy to start using strongly typed interfaces for all your ABI calls.
 
 Lets say i run the cli command:
@@ -329,7 +341,7 @@ All you meed to do is cast your `new ethers.Contract` code to an `ContractContex
 
 ```ts
 import { ethers } from 'ethers';
-import { AbiExamples } from '../abi-examples';
+import { AbiExamples } from '../../abi-examples';
 import { ContractContext } from './generated-typings/fake-contract';
 
 // Connect to the network
@@ -353,8 +365,8 @@ Easy as that 🔥🔥
 #### Full example:
 
 ```ts
-import { ethers } from 'ethers';
-import { AbiExamples } from '../abi-examples';
+import { ethers, utils } from 'ethers';
+import { AbiExamples } from '../../abi-examples';
 import {
   ContractContext,
   TupleInputOnlyRequest,
@@ -410,7 +422,23 @@ const example = async () => {
     ],
   };
 
-  const tx = await contractWithSigner.tupleInputOnly(tupleExampleRequest);
+  // strongly typed optional overrides as well for both `calls` and `transactions`
+  const tx = await contractWithSigner.tupleInputOnly(tupleExampleRequest, {
+    // The maximum units of gas for the transaction to use
+    gasLimit: 23000,
+
+    // The price (in wei) per unit of gas
+    gasPrice: utils.parseUnits('9.0', 'gwei'),
+
+    // The nonce to use in the transaction
+    nonce: 123,
+
+    // The amount to send with the transaction (i.e. msg.value)
+    value: utils.parseEther('1.0'),
+
+    // The chain ID (or network ID) to use
+    chainId: 1,
+  });
   console.log(tx.hash);
   // "0xaf0068dcf728afa5accd02172867627da4e6f946dfb8174a7be31f01b11d5364"
 
