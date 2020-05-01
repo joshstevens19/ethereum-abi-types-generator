@@ -524,36 +524,41 @@ export default class AbiGenerator {
           abiItem
         );
       } else {
-        const interfaceName = `${Helpers.capitalize(abiItem.name)}Response`;
+        if (abiItem.constant === true) {
+          const interfaceName = `${Helpers.capitalize(abiItem.name)}Response`;
 
-        let ouputProperties = '';
+          let ouputProperties = '';
 
-        for (let i = 0; i < abiItem.outputs.length; i++) {
-          const abiTemOutput = abiItem.outputs[i];
-          ouputProperties += `${
-            abiTemOutput.name
-          }: ${TypeScriptHelpers.getSolidityOutputTsType(
-            abiTemOutput.type,
-            this._context.provider
-          )};`;
-
-          if (this._context.provider === Provider.ethers) {
-            ouputProperties += `${i}: ${TypeScriptHelpers.getSolidityOutputTsType(
+          for (let i = 0; i < abiItem.outputs.length; i++) {
+            const abiTemOutput = abiItem.outputs[i];
+            ouputProperties += `${
+              abiTemOutput.name
+            }: ${TypeScriptHelpers.getSolidityOutputTsType(
               abiTemOutput.type,
               this._context.provider
             )};`;
+
+            if (this._context.provider === Provider.ethers) {
+              ouputProperties += `${i}: ${TypeScriptHelpers.getSolidityOutputTsType(
+                abiTemOutput.type,
+                this._context.provider
+              )};`;
+            }
           }
+
+          if (this._context.provider === Provider.ethers) {
+            ouputProperties += `length: ${abiItem.outputs.length};`;
+          }
+
+          this._parametersAndReturnTypeInterfaces.push(
+            TypeScriptHelpers.buildInterface(interfaceName, ouputProperties)
+          );
+
+          output += this.buildMethodReturnContext(interfaceName, abiItem);
+        } else {
+          // if its not a constant you will have no type so dont build any interfaces
+          output += this.buildMethodReturnContext('', abiItem);
         }
-
-        if (this._context.provider === Provider.ethers) {
-          ouputProperties += `length: ${abiItem.outputs.length};`;
-        }
-
-        this._parametersAndReturnTypeInterfaces.push(
-          TypeScriptHelpers.buildInterface(interfaceName, ouputProperties)
-        );
-
-        output += this.buildMethodReturnContext(interfaceName, abiItem);
       }
     } else {
       output += this.buildMethodReturnContext('void', abiItem);
