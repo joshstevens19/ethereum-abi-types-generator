@@ -1,3 +1,5 @@
+import BigNumber from 'bignumber.js';
+import BN from 'bn.js';
 import { AbiInput, AbiOutput } from '../../../abi-properties';
 
 export interface Web3ContractContext<
@@ -145,13 +147,13 @@ export interface SendOptions {
   from: string;
   gasPrice?: string;
   gas?: number;
-  value?: number | string; // | BN;
+  value?: number | string | BN | BigNumber;
 }
 
 export interface EstimateGasOptions {
   from?: string;
   gas?: number;
-  value?: number | string; // | BN;
+  value?: number | string | BN | BigNumber;
 }
 
 export interface PromiEvent<T> extends Promise<T> {

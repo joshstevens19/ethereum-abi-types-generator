@@ -9,12 +9,11 @@ export class Web3Factory {
    * Build web3 genertic interfaces
    */
   public buildWeb3Interfaces(abiName: string): string {
-    const bnImport = 'import BN from "bn.js";';
+    return `import BN from "bn.js";
+    import BigNumber from 'bignumber.js';
+    import { PromiEvent, TransactionReceipt, EventResponse, EventData, Web3ContractContext } from "ethereum-abi-types-generator";
 
-    const web3Imports =
-      'import { PromiEvent, TransactionReceipt, EventResponse, EventData, Web3ContractContext } from "ethereum-abi-types-generator";';
-
-    const methodReturnContextOptions = `export interface CallOptions {
+    export interface CallOptions {
         from?: string;
         gasPrice?: string;
         gas?: number;
@@ -22,19 +21,18 @@ export class Web3Factory {
 
     export interface SendOptions {
         from: string;
-        value?: number | string | BN;
+        value?: number | string | BN | BigNumber;
         gasPrice?: string;
         gas?: number;
     }
 
     export interface EstimateGasOptions {
         from?: string;
-        value?: number | string | BN;
+        value?: number | string | BN | BigNumber;
         gas?: number;
     }
-    `;
 
-    const methodPayableReturnContext = `export interface MethodPayableReturnContext {
+    export interface MethodPayableReturnContext {
         send(options: SendOptions):PromiEvent<TransactionReceipt>;
         send(
             options: SendOptions,
@@ -46,36 +44,26 @@ export class Web3Factory {
             callback: (error: Error, result: any) => void
         ): Promise<number>;
         encodeABI(): string;
-    }`;
+    }
 
-    const methodConstantReturnContext = `export interface MethodConstantReturnContext<TCallReturn> {
+    export interface MethodConstantReturnContext<TCallReturn> {
         call(): Promise<TCallReturn>;
         call(options: CallOptions): Promise<TCallReturn>;
         call(
         options: CallOptions,
         callback: (error: Error, result: TCallReturn) => void
         ): Promise<TCallReturn>;
-    }`;
+    }
 
-    const methodReturnContext = `export interface MethodReturnContext extends MethodPayableReturnContext {}`;
+    export interface MethodReturnContext extends MethodPayableReturnContext {}
 
-    const web3ContractContextType = `export type ContractContext = Web3ContractContext<
+    export type ContractContext = Web3ContractContext<
       ${abiName},
       ${abiName}MethodNames,
       ${abiName}EventsContext,
       ${abiName}Events
     >;
     `;
-
-    return (
-      bnImport +
-      web3Imports +
-      methodReturnContextOptions +
-      methodPayableReturnContext +
-      methodConstantReturnContext +
-      methodReturnContext +
-      web3ContractContextType
-    );
   }
 
   /**
