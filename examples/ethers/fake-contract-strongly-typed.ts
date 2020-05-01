@@ -19,8 +19,8 @@ const example = async () => {
   // This all work great but the compiler gets confused.
   // Casting to unknown first then the `ContractContext` solves this.
   const contract = (new ethers.Contract(
-    AbiExamples.factoryAddress,
-    AbiExamples.factoryAbi,
+    AbiExamples.YOUR_CONTRACT_ADDRESS,
+    AbiExamples.YOUR_ABI,
     customHttpProvider
   ) as unknown) as ContractContext;
 

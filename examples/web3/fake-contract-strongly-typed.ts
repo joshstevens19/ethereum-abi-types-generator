@@ -18,7 +18,7 @@ const example = async () => {
   // This all work great but the compiler gets confused.
   // Casting to unknown first then the `ContractContext` solves this.
   const contract = (new web3.eth.Contract(
-    AbiExamples.YOUR_ABI as any,
+    AbiExamples.YOUR_ABI,
     AbiExamples.YOUR_CONTRACT_ADDRESS
   ) as unknown) as ContractContext;
 
