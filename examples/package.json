@@ -4,16 +4,19 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build": "tsc",
     "web3-example": "abi-types-generator './abi-examples/fake-contract-abi.json' --output='./web3/fake-contract-example/generated-typings' --name=fake-contract",
     "web3-token-abi": "abi-types-generator './abi-examples/token-abi.json' --output='./web3/uniswap-example/generated-typings' --name=token-contract",
     "web3-uniswap-exchange-abi": "abi-types-generator './abi-examples/uniswap-exchange-abi.json' --output='./web3/uniswap-example/generated-typings' --name=uniswap-exchange-contract",
     "web3-uniswap-factory-abi": "abi-types-generator './abi-examples/uniswap-factory-abi.json' --output='./web3/uniswap-example/generated-typings' --name=uniswap-factory-contract",
     "web3-uniswap": "npm run web3-token-abi && npm run web3-uniswap-exchange-abi && npm run web3-uniswap-factory-abi",
+    "web3-run-uniswap": "node ./dist/web3/uniswap-example/uniswap-contract-strongly-typed-example.js",
     "ethers-example": "abi-types-generator './abi-examples/fake-contract-abi.json' --output='./ethers/fake-contract-example/generated-typings' --name=fake-contract --provider=ethers",
     "ethers-token-abi": "abi-types-generator './abi-examples/token-abi.json' --output='./ethers/uniswap-example/generated-typings' --name=token-contract --provider=ethers",
     "ethers-uniswap-exchange-abi": "abi-types-generator './abi-examples/uniswap-exchange-abi.json' --output='./ethers/uniswap-example/generated-typings' --name=uniswap-exchange-contract --provider=ethers",
     "ethers-uniswap-factory-abi": "abi-types-generator './abi-examples/uniswap-factory-abi.json' --output='./ethers/uniswap-example/generated-typings' --name=uniswap-factory-contract --provider=ethers",
-    "ethers-uniswap": "npm run ethers-token-abi && npm run ethers-uniswap-exchange-abi && npm run ethers-uniswap-factory-abi"
+    "ethers-uniswap": "npm run ethers-token-abi && npm run ethers-uniswap-exchange-abi && npm run ethers-uniswap-factory-abi",
+    "ethers-run-uniswap": "tsc && node ./dist/ethers/uniswap-example/uniswap-contract-strongly-typed-example.js"
   },
   "author": "",
   "license": "ISC",
