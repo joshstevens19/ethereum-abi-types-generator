@@ -1,7 +1,5 @@
 ## ethereum-abi-types-generator
 
-THIS IS NOT DEPLOYED YET ITS STILL WORK IN PROGRESS!!!!!
-
 Dev typings for all your ethereum ABI contract methods and events with 1 liner integrations with `web3` and `ethers` 👏👏👏👏. Never have to have a runtime error again and bring them into compile time errors in 2 minutes.
 
 <img src="./images/gif-demo.gif" />
