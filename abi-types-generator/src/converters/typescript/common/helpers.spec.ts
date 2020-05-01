@@ -323,6 +323,7 @@ describe('TypeScriptHelpers', () => {
       it('should throw an error if solidity type can not be found', () => {
         expect(() => {
           TypeScriptHelpers.getSolidityInputTsType(
+            // tslint:disable-next-line: no-any
             'blah' as any,
             Provider.ethers
           );
@@ -626,6 +627,7 @@ describe('TypeScriptHelpers', () => {
       it('should throw an error if solidity type can not be found', () => {
         expect(() => {
           TypeScriptHelpers.getSolidityInputTsType(
+            // tslint:disable-next-line: no-any
             'blah' as any,
             Provider.web3
           );
@@ -951,6 +953,7 @@ describe('TypeScriptHelpers', () => {
       it('should throw an error if solidity type can not be found', () => {
         expect(() => {
           TypeScriptHelpers.getSolidityOutputTsType(
+            // tslint:disable-next-line: no-any
             'blah' as any,
             Provider.ethers
           );
@@ -1253,6 +1256,7 @@ describe('TypeScriptHelpers', () => {
       it('should throw an error if solidity type can not be found', () => {
         expect(() => {
           TypeScriptHelpers.getSolidityOutputTsType(
+            // tslint:disable-next-line: no-any
             'blah' as any,
             Provider.web3
           );

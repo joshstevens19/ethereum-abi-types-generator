@@ -14,6 +14,7 @@ const programOptions: IProgramOptions = {
 
 class MockAbiGenerator extends AbiGenerator {
   constructor() {
+    // tslint:disable-next-line: no-any
     super(null as any);
   }
 
@@ -40,6 +41,7 @@ describe('Generate', () => {
   it('should log a message if no command are passed in', async () => {
     const logSpy = spyOn(Logger, 'log').and.callThrough();
 
+    // tslint:disable-next-line: no-any
     await command.action({ command: undefined } as any);
 
     expect(logSpy).toHaveBeenCalledTimes(1);
@@ -51,6 +53,7 @@ describe('Generate', () => {
   it('should log a message if command is an empty string', async () => {
     const logSpy = spyOn(Logger, 'log').and.callThrough();
 
+    // tslint:disable-next-line: no-any
     await command.action({ command: '' } as any);
 
     expect(logSpy).toHaveBeenCalledTimes(1);

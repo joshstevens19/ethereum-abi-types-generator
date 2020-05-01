@@ -12,66 +12,76 @@ export default class TypeScriptHelpers {
     provider: Provider
   ): string {
     switch (provider) {
-      case Provider.ethers: {
-        if (type.includes(SolidityType.bytes)) {
-          if (type.includes('[')) {
-            return this.buildUpMultidimensionalArrayTypes(type, 'Arrayish');
-          }
-
-          return 'Arrayish';
-        }
-
-        if (
-          type.includes(SolidityType.uint) ||
-          type.includes(SolidityType.int)
-        ) {
-          if (type.includes('[')) {
-            return this.buildUpMultidimensionalArrayTypes(type, 'BigNumberish');
-          }
-
-          return 'BigNumberish';
-        }
-      }
-      case Provider.web3: {
-        if (type.includes(SolidityType.bytes)) {
-          if (type.includes('[')) {
-            return this.buildUpMultidimensionalArrayTypes(
-              type,
-              'string | number[]'
-            );
-          }
-
-          return 'string | number[]';
-        }
-
-        if (
-          type.includes(SolidityType.uint) ||
-          type.includes(SolidityType.int)
-        ) {
-          if (type.includes(SolidityType.uint)) {
-            const numberType = this.buildWeb3NumberType(
-              type,
-              SolidityType.uint
-            );
-
+      case Provider.ethers:
+        {
+          if (type.includes(SolidityType.bytes)) {
             if (type.includes('[')) {
-              return this.buildUpMultidimensionalArrayTypes(type, numberType);
+              return this.buildUpMultidimensionalArrayTypes(type, 'Arrayish');
             }
 
-            return numberType;
+            return 'Arrayish';
           }
 
-          if (type.includes(SolidityType.int)) {
-            const numberType = this.buildWeb3NumberType(type, SolidityType.int);
-
+          if (
+            type.includes(SolidityType.uint) ||
+            type.includes(SolidityType.int)
+          ) {
             if (type.includes('[')) {
-              return this.buildUpMultidimensionalArrayTypes(type, numberType);
+              return this.buildUpMultidimensionalArrayTypes(
+                type,
+                'BigNumberish'
+              );
             }
 
-            return numberType;
+            return 'BigNumberish';
           }
         }
-      }
+        break;
+      case Provider.web3:
+        {
+          if (type.includes(SolidityType.bytes)) {
+            if (type.includes('[')) {
+              return this.buildUpMultidimensionalArrayTypes(
+                type,
+                'string | number[]'
+              );
+            }
+
+            return 'string | number[]';
+          }
+
+          if (
+            type.includes(SolidityType.uint) ||
+            type.includes(SolidityType.int)
+          ) {
+            if (type.includes(SolidityType.uint)) {
+              const numberType = this.buildWeb3NumberType(
+                type,
+                SolidityType.uint
+              );
+
+              if (type.includes('[')) {
+                return this.buildUpMultidimensionalArrayTypes(type, numberType);
+              }
+
+              return numberType;
+            }
+
+            if (type.includes(SolidityType.int)) {
+              const numberType = this.buildWeb3NumberType(
+                type,
+                SolidityType.int
+              );
+
+              if (type.includes('[')) {
+                return this.buildUpMultidimensionalArrayTypes(type, numberType);
+              }
+
+              return numberType;
+            }
+          }
+        }
+        break;
     }
 
     if (type.includes(SolidityType.bool)) {

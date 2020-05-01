@@ -6,11 +6,14 @@ import Helpers from '../../common/helpers';
 import AbiGenerator from './abi-generator';
 import { GeneratorContext } from './contexts/generator-context';
 import { Provider } from './enums/provider';
+// tslint:disable-next-line: no-var-requires
 const abiJson = require('./mocks/fake-contract-abi.json');
 
 const generatorContext: GeneratorContext = {
   provider: Provider.web3,
+  // tslint:disable-next-line: quotemark
   abiFileLocation: "'abi.json'",
+  // tslint:disable-next-line: quotemark
   outputPathDirectory: "'here'",
 };
 
@@ -172,6 +175,7 @@ describe('AbiGenerator', () => {
 
   it('should throw an error if provider passed in is not valid', () => {
     const generatorContextClone = Helpers.deepClone(generatorContext);
+    // tslint:disable-next-line: no-any
     generatorContextClone.provider = 'blah' as any;
 
     expect(() => {

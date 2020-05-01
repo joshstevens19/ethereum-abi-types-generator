@@ -5,10 +5,10 @@
   "main": "dist/index.js",
   "scripts": {
     "test": "jest",
-    "gen": "node ./dist/bin/generator-cli.js",
-    "hardcoded": "node ./dist/bin/generator-cli.js generate '../examples/abi-examples/uniswap-factory-abi.json' --outputPath='../../examples/etherjs/generated-typings/factory.ts' --provider=ethers",
-    "web3": "node ./dist/bin/generator-cli.js generate '../examples/abi-examples/uniswap-factory-abi.json' --outputPath='../examples/web3/generated-typings/factory.ts' --provider=web3",
-    "ethers": "node ./dist/bin/generator-cli.js generate '../examples/abi-examples/uniswap-factory-abi.json' --outputPath='../examples/ethers/generated-typings/factory.ts' --provider=ethers"
+    "watch": "tsc --watch",
+    "build": "tsc",
+    "lint": "npx tslint -c tslint.json 'src/**/*.ts'",
+    "publish-cli": "tsc && npm publish --access public"
   },
   "keywords": [
     "ethereum",
