@@ -16,25 +16,26 @@ describe('Web3Factory', () => {
       ).toEqual(
         Helpers.removeAllWhiteSpace(`
          import BN from "bn.js";
+         import BigNumber from'bignumber.js';
          import { PromiEvent, TransactionReceipt, EventResponse, EventData, Web3ContractContext } from "ethereum-abi-types-generator";
-         
+
          export interface CallOptions {
           from?: string;
           gasPrice?: string;
           gas?: number;
         }
-    
+
         export interface SendOptions {
           from: string;
-          value?: number | string | BN;
+          value?: number | string | BN | BigNumber;
           gasPrice?: string;
           gas?: number;
         }
 
         export interface EstimateGasOptions {
-            from?: string;
-            value?: number | string | BN;
-            gas?: number;
+          from?: string;
+          value?: number | string | BN | BigNumber;
+          gas?: number;
         }
 
         export interface MethodPayableReturnContext {
