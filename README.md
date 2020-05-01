@@ -1,3 +1,6 @@
+[![npm version](https://badge.fury.io/js/ethereum-abi-types-generator.svg)](https://badge.fury.io/js/ethereum-abi-types-generator)
+![downloads](https://img.shields.io/npm/dw/ethereum-abi-types-generator)
+
 ## ethereum-abi-types-generator
 
 Dev typings for all your ethereum ABI contract methods and events with 1 liner integrations with `web3` and `ethers` 👏👏👏👏. Never have to have a runtime error again and bring them into compile time errors in 2 minutes.
