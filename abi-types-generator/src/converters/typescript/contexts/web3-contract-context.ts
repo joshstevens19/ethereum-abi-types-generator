@@ -18,7 +18,14 @@ export interface Web3ContractContext<
     TEventType
   >;
 
-  deploy(options: DeployOptions): ContractSendMethod;
+  deploy(
+    options: DeployOptions
+  ): ContractSendMethod<
+    TMethodsInterface,
+    TMethodNamesEnum,
+    TEventsInterface,
+    TEventType
+  >;
 
   methods: TMethodsInterface;
 
@@ -97,12 +104,23 @@ export interface DeployOptions {
   arguments?: any[];
 }
 
-export interface ContractSendMethod {
+export interface ContractSendMethod<
+  TMethodsInterface,
+  TMethodNamesEnum,
+  TEventsInterface,
+  TEventType
+> {
   send(
     options: SendOptions,
     callback?: (err: Error, transactionHash: string) => void
-    // tslint:disable-next-line: no-any
-  ): PromiEvent<Web3ContractContext<any, any, any, any>>;
+  ): PromiEvent<
+    Web3ContractContext<
+      TMethodsInterface,
+      TMethodNamesEnum,
+      TEventsInterface,
+      TEventType
+    >
+  >;
 
   estimateGas(
     options: EstimateGasOptions,
@@ -180,7 +198,7 @@ export interface TransactionReceipt {
   logs: Log[];
   logsBloom: string;
   events?: {
-    [eventName: string]: EventLog;
+    [eventName: string]: EventData;
   };
 }
 
@@ -193,20 +211,6 @@ export interface Log {
   transactionHash: string;
   blockHash: string;
   blockNumber: number;
-}
-
-export interface EventLog {
-  event: string;
-  address: string;
-  // tslint:disable-next-line: no-any
-  returnValues: any;
-  logIndex: number;
-  transactionIndex: number;
-  transactionHash: string;
-  blockHash: string;
-  blockNumber: number;
-  // tslint:disable-next-line: no-any
-  raw?: { data: string; topics: any[] };
 }
 
 export interface EventData {
