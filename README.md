@@ -174,7 +174,7 @@ This will watch the `<abiFileLocation>` for changes and if anything does change 
 
 ### Formatting
 
-We use `prettier` to format all files, to make sure it matches your coding style just make sure you have a `.prettierrc` defined anywhere in the project and it will use that. If it can not find any it will take these default prettier:
+We use `prettier` to format all files, to make sure it matches your coding style just make sure you have a `.prettierrc` defined in the root of your project and it will use that. If it can not find any it will take these default prettier:
 
 ```ts
 {
