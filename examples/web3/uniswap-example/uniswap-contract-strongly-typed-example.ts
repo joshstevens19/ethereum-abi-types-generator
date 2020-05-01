@@ -48,7 +48,7 @@ class UniswapStronglyTypedExample {
     // Uniswap class - Got the fun token amount - 1024.65873454
 
     // add some slippage
-    const tokenAmountWithSlippage = new BigNumber(tokenAmount).minus(
+    const tokenAmountWithSlippage = tokenAmount.minus(
       tokenAmount.times(this.SLIPPAGE).toFixed()
     );
 
@@ -73,7 +73,7 @@ class UniswapStronglyTypedExample {
     const tokenReserveRaw = await tokenContract.methods
       .balanceOf(exchangeAddress)
       .call();
-
+    ``;
     this.logUniswapOutput(
       `Got the token reserve raw value - ${tokenReserveRaw}`
     );
@@ -244,7 +244,7 @@ class UniswapStronglyTypedExample {
     // Has to cast to unknown as we have made some typings changes to the
     // contract interfaces which conflicts with `web3` typings.
     // This all work great but the compiler gets confused.
-    // Casting to unknown first then the `UniswapFactoryContractContext` solves this.
+    // Casting to unknown first then the `TokenContractContext` solves this.
     return (new web3.eth.Contract(
       AbiExamples.tokenAbi,
       erc20TokenContract
@@ -261,7 +261,7 @@ class UniswapStronglyTypedExample {
     // Has to cast to unknown as we have made some typings changes to the
     // contract interfaces which conflicts with `web3` typings.
     // This all work great but the compiler gets confused.
-    // Casting to unknown first then the `UniswapFactoryContractContext` solves this.
+    // Casting to unknown first then the `UniswapExchangeContractContext` solves this.
     return (new web3.eth.Contract(
       AbiExamples.uniswapExchangeAbi,
       exchangeAddress

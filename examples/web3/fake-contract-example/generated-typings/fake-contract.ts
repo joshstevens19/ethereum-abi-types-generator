@@ -1,4 +1,5 @@
 import BN from 'bn.js';
+import BigNumber from 'bignumber.js';
 import {
   PromiEvent,
   TransactionReceipt,
@@ -6,6 +7,7 @@ import {
   EventData,
   Web3ContractContext,
 } from 'ethereum-abi-types-generator';
+
 export interface CallOptions {
   from?: string;
   gasPrice?: string;
@@ -14,16 +16,17 @@ export interface CallOptions {
 
 export interface SendOptions {
   from: string;
-  value?: number | string | BN;
+  value?: number | string | BN | BigNumber;
   gasPrice?: string;
   gas?: number;
 }
 
 export interface EstimateGasOptions {
   from?: string;
-  value?: number | string | BN;
+  value?: number | string | BN | BigNumber;
   gas?: number;
 }
+
 export interface MethodPayableReturnContext {
   send(options: SendOptions): PromiEvent<TransactionReceipt>;
   send(
@@ -37,6 +40,7 @@ export interface MethodPayableReturnContext {
   ): Promise<number>;
   encodeABI(): string;
 }
+
 export interface MethodConstantReturnContext<TCallReturn> {
   call(): Promise<TCallReturn>;
   call(options: CallOptions): Promise<TCallReturn>;
@@ -45,7 +49,9 @@ export interface MethodConstantReturnContext<TCallReturn> {
     callback: (error: Error, result: TCallReturn) => void
   ): Promise<TCallReturn>;
 }
+
 export interface MethodReturnContext extends MethodPayableReturnContext {}
+
 export type ContractContext = Web3ContractContext<
   FakeContract,
   FakeContractMethodNames,
