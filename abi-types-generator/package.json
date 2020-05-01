@@ -8,7 +8,7 @@
     "watch": "tsc --watch",
     "build": "tsc",
     "lint": "npx tslint -c tslint.json 'src/**/*.ts'",
-    "publish-cli": "tsc && npm publish --access public"
+    "publish-cli": "node ./copy-readme.js && tsc && npm publish --access public"
   },
   "keywords": [
     "ethereum",
