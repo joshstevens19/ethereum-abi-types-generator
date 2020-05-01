@@ -1,5 +1,5 @@
 import Web3 from 'web3';
-import { AbiExamples } from '../abi-examples';
+import { AbiExamples } from '../../abi-examples';
 import {
   ContractContext,
   TupleInputOnlyRequest,

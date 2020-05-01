@@ -2,91 +2,40 @@ import { AbiItem } from 'ethereum-abi-types-generator';
 
 export class AbiExamples {
   /**
-   * The uniswap factory contract address (mainnet only)
+   * Mainnet fun token contract address
    */
-  public static factoryAddress = '0xc0a47dFe034B400B47bDaD5FecDa2621de6c4d95';
+  public static funContractAddress =
+    '0x419D0d8BdD9aF5e606Ae2232ed285Aff190E711b';
 
   /**
-   * The uniswap factory abi
+   * Fun token decimal places
    */
-  public static factoryAbi = [
-    {
-      name: 'NewExchange',
-      inputs: [
-        { type: 'address', name: 'token', indexed: true },
-        { type: 'address', name: 'exchange', indexed: true },
-      ],
-      anonymous: false,
-      type: 'event',
-    },
-    {
-      name: 'initializeFactory',
-      outputs: [],
-      inputs: [{ type: 'address', name: 'template' }],
-      constant: false,
-      payable: false,
-      type: 'function',
-      gas: 35725,
-    },
-    {
-      name: 'createExchange',
-      outputs: [{ type: 'address', name: 'out' }],
-      inputs: [{ type: 'address', name: 'token' }],
-      constant: false,
-      payable: false,
-      type: 'function',
-      gas: 187911,
-    },
-    {
-      name: 'getExchange',
-      outputs: [{ type: 'address', name: 'out' }],
-      inputs: [{ type: 'address', name: 'token' }],
-      constant: true,
-      payable: false,
-      type: 'function',
-      gas: 715,
-    },
-    {
-      name: 'getToken',
-      outputs: [{ type: 'address', name: 'out' }],
-      inputs: [{ type: 'address', name: 'exchange' }],
-      constant: true,
-      payable: false,
-      type: 'function',
-      gas: 745,
-    },
-    {
-      name: 'getTokenWithId',
-      outputs: [{ type: 'address', name: 'out' }],
-      inputs: [{ type: 'uint256', name: 'token_id' }],
-      constant: true,
-      payable: false,
-      type: 'function',
-      gas: 736,
-    },
-    {
-      name: 'exchangeTemplate',
-      outputs: [{ type: 'address', name: 'out' }],
-      inputs: [],
-      constant: true,
-      payable: false,
-      type: 'function',
-      gas: 633,
-    },
-    {
-      name: 'tokenCount',
-      outputs: [{ type: 'uint256', name: 'out' }],
-      inputs: [],
-      constant: true,
-      payable: false,
-      type: 'function',
-      gas: 663,
-    },
-  ];
+  public static funDecimalPlaces = 8;
 
-  // used for giffs
+  /**
+   * The token abi (when it compiled it lives in the dist so map it back to root)
+   */
+  public static tokenAbi = require('../../abi-examples/token-abi');
+
+  /**
+   * The uniswap factory contract address (mainnet only)
+   */
+  public static uniswapFactoryAddress =
+    '0xc0a47dFe034B400B47bDaD5FecDa2621de6c4d95';
+
+  /**
+   * The uniswap factory abi (when it compiled it lives in the dist so map it back to root)
+   */
+  public static uniswapFactoryAbi = require('../../abi-examples/uniswap-factory-abi');
+
+  /**
+   * The uniswap exchange abi (when it compiled it lives in the dist so map it back to root)
+   */
+  public static uniswapExchangeAbi = require('../../abi-examples/uniswap-exchange-abi');
+
+  // used for giffs and fake contract example
   public static YOUR_ABI = ('' as unknown) as AbiItem[];
 
-  // used for giffs
-  public static YOUR_CONTRACT_ADDRESS = AbiExamples.factoryAddress;
+  // used for giffs and fake contract example
+  public static YOUR_CONTRACT_ADDRESS = AbiExamples.funContractAddress;
 }
