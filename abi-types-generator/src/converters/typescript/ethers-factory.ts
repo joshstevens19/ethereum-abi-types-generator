@@ -49,7 +49,7 @@ export class EthersFactory {
    * @param type The type it returns
    * @param abiItem The abi item
    */
-  public buildMethodReturnContext(type: any, abiItem: AbiItem) {
+  public buildMethodReturnContext(type: string, abiItem: AbiItem): string {
     if (abiItem.constant === true) {
       return `: Promise<${type}>`;
     }

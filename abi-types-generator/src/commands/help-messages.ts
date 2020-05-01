@@ -1,6 +1,6 @@
-import { IHelpMessage } from './models/ihelp-message';
+import { HelpMessage } from './models/help-message';
 
-export const generateHelpMessages: IHelpMessage = {
+export const generateHelpMessages: HelpMessage = {
   commands: [],
   examples: [
     'ethereum-abi-types-generator <abiFileLocation>',

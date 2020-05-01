@@ -19,7 +19,7 @@ export class Web3Factory {
         gasPrice?: string;
         gas?: number;
     }
-    
+
     export interface SendOptions {
         from: string;
         value?: number | string | BN;
@@ -101,7 +101,7 @@ export class Web3Factory {
 
         filtersProperties += '}';
 
-        let parameters = `
+        const parameters = `
          {
              filter?: ${filtersProperties};
              fromBlock?: number;
@@ -122,7 +122,7 @@ export class Web3Factory {
    * @param type The type it returns
    * @param abiItem The abi item
    */
-  public buildMethodReturnContext(type: any, abiItem: AbiItem) {
+  public buildMethodReturnContext(type: string, abiItem: AbiItem): string {
     if (abiItem.constant === true) {
       return `: MethodConstantReturnContext<${type}>`;
     }

@@ -5,6 +5,7 @@ import Helpers from './helpers';
 describe('Helpers', () => {
   describe('capitalize', () => {
     it('should return null if null is sent to the value', () => {
+      // tslint:disable-next-line: no-any
       expect(Helpers.capitalize(null as any)).toEqual(null);
     });
 
@@ -24,6 +25,7 @@ describe('Helpers', () => {
   describe('getHelpMessageByCommandType', () => {
     it('should throw a error if command is not a type', () => {
       expect(() => {
+        // tslint:disable-next-line: no-any
         Helpers.getHelpMessageByCommandType('incorrect' as any);
       }).toThrow(Error);
     });

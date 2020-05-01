@@ -82,7 +82,7 @@ export default class AbiGenerator {
   /**
    * Clear all quotes from the context file info
    */
-  private clearAllQuotesFromContextInfo() {
+  private clearAllQuotesFromContextInfo(): void {
     this._context.abiFileLocation = this._context.abiFileLocation.replace(
       /\'/g,
       ''
@@ -278,7 +278,7 @@ export default class AbiGenerator {
    * Check is a path is a directory
    * @param pathValue The path value
    */
-  private isDirectory(pathValue: string) {
+  private isDirectory(pathValue: string): boolean {
     return fs.existsSync(pathValue) && fs.lstatSync(pathValue).isDirectory();
   }
 
@@ -325,9 +325,9 @@ export default class AbiGenerator {
 
   /**
    * Formats the abi name
-   * @param name
+   * @param name The abi name
    */
-  private formatAbiName(name: string) {
+  private formatAbiName(name: string): string {
     return name
       .split('-')
       .map((value) => Helpers.capitalize(value))
@@ -439,7 +439,7 @@ export default class AbiGenerator {
    * @param abiItem The abi json
    */
   private buildParametersAndReturnTypes(abiItem: AbiItem): string {
-    let parameters = this.buildParameters(abiItem);
+    const parameters = this.buildParameters(abiItem);
     return `${parameters}${this.buildPropertyReturnTypeInterface(abiItem)}`;
   }
 
@@ -529,17 +529,17 @@ export default class AbiGenerator {
         let ouputProperties = '';
 
         for (let i = 0; i < abiItem.outputs.length; i++) {
-          const output = abiItem.outputs[i];
+          const abiTemOutput = abiItem.outputs[i];
           ouputProperties += `${
-            output.name
+            abiTemOutput.name
           }: ${TypeScriptHelpers.getSolidityOutputTsType(
-            output.type,
+            abiTemOutput.type,
             this._context.provider
           )};`;
 
           if (this._context.provider === Provider.ethers) {
             ouputProperties += `${i}: ${TypeScriptHelpers.getSolidityOutputTsType(
-              output.type,
+              abiTemOutput.type,
               this._context.provider
             )};`;
           }
@@ -567,7 +567,7 @@ export default class AbiGenerator {
    * @param type The type it returns
    * @param abiItem The abi item
    */
-  private buildMethodReturnContext(type: any, abiItem: AbiItem) {
+  private buildMethodReturnContext(type: string, abiItem: AbiItem): string {
     switch (this._context.provider) {
       case Provider.web3:
         return this._web3Factory.buildMethodReturnContext(type, abiItem);

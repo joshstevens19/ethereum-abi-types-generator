@@ -1,7 +1,5 @@
 #!/usr/bin/env node
 
-// import dotenv = require('dotenv');
-// import path = require('path');
 import 'reflect-metadata';
 import { Logger } from '../common/logger';
 import { execute } from './execute';

@@ -1,5 +1,6 @@
 import colors = require('colors');
 
+// tslint:disable-next-line: typedef
 const { error: consoleErrorNative, log: consoleLogNative } = console;
 
 export class Logger {
@@ -8,6 +9,7 @@ export class Logger {
    * @param msg The message
    * @param objects Any additional logs
    */
+  // tslint:disable-next-line: no-any
   public static error(msg: string, ...objects: any[]): void {
     this.consoleError(colors.red(msg), objects);
   }
@@ -17,6 +19,7 @@ export class Logger {
    * @param msg The message
    * @param objects Any additional logs
    */
+  // tslint:disable-next-line: no-any
   public static log(msg: string, ...objects: any[]): void {
     this.consoleLog(msg, objects);
   }
@@ -26,6 +29,7 @@ export class Logger {
    * @param msg The message
    * @param objects Any additional logs
    */
+  // tslint:disable-next-line: no-any
   public static consoleLog(msg: string, ...objects: any[]): void {
     if (objects.length > 0 && objects[0].length > 0) {
       consoleLogNative.call(console, msg);
@@ -39,6 +43,7 @@ export class Logger {
    * @param msg The message
    * @param objects Any additional logs
    */
+  // tslint:disable-next-line: no-any
   private static consoleError(msg: string, ...objects: any[]): void {
     if (objects.length > 0 && objects[0].length > 0) {
       consoleErrorNative.call(console, msg, objects);

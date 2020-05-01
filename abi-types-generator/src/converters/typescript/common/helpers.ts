@@ -7,7 +7,10 @@ export default class TypeScriptHelpers {
    * Get the solidity ouput type mapped to typescript type
    * @param type The solidity type
    */
-  public static getSolidityInputTsType(type: string, provider: Provider) {
+  public static getSolidityInputTsType(
+    type: string,
+    provider: Provider
+  ): string {
     switch (provider) {
       case Provider.ethers: {
         if (type.includes(SolidityType.bytes)) {
@@ -101,7 +104,10 @@ export default class TypeScriptHelpers {
    * Get the solidity type mapped to typescript type
    * @param type The solidity type
    */
-  public static getSolidityOutputTsType(type: string, provider: Provider) {
+  public static getSolidityOutputTsType(
+    type: string,
+    provider: Provider
+  ): string {
     // any bespoke provider output type logic
     switch (provider) {
       case Provider.ethers: {
@@ -170,7 +176,7 @@ export default class TypeScriptHelpers {
   private static buildEtherjsNumberType(
     type: string,
     solidityType: SolidityType.uint | SolidityType.int
-  ) {
+  ): 'number' | 'BigNumber' {
     const clonedType = Helpers.deepClone(type);
 
     const bits = clonedType.replace(solidityType, '').split('[')[0];
@@ -190,7 +196,7 @@ export default class TypeScriptHelpers {
   private static buildWeb3NumberType(
     type: string,
     solidityType: SolidityType.uint | SolidityType.int
-  ) {
+  ): 'string | number' | 'string' {
     const clonedType = Helpers.deepClone(type);
 
     const bits = clonedType.replace(solidityType, '').split('[')[0];
@@ -215,7 +221,7 @@ export default class TypeScriptHelpers {
   public static buildUpMultidimensionalArrayTypes(
     abiType: string,
     tsType: string
-  ) {
+  ): string {
     const split = abiType.split('[');
     split.shift();
     let buildType = '';
@@ -266,7 +272,7 @@ export default class TypeScriptHelpers {
    * @param typeName The type name
    * @param types The types
    */
-  public static buildType(typeName: string, types: any[]): string {
+  public static buildType(typeName: string, types: string[]): string {
     let result = '';
 
     types.map((type) => {

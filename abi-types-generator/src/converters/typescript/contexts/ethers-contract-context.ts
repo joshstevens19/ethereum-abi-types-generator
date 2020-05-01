@@ -10,7 +10,7 @@ import { Interface } from 'ethers/utils';
 
 export declare type EventFilter = {
   address?: string;
-  topics?: Array<string>;
+  topics?: string[];
   fromBlock?: BlockTag;
   toBlock?: BlockTag;
 };
@@ -20,6 +20,22 @@ export type EthersContractContext<
   TEventsContext,
   TEventType
 > = EthersContract<TMethods, TEventsContext, TEventType> & TMethods;
+
+interface Contract {
+  readonly address: string;
+  readonly interface: Interface;
+  readonly signer: Signer;
+  readonly provider: Provider;
+  // readonly [name: string]: ContractFunction | any;
+  readonly addressPromise: Promise<string>;
+  readonly deployTransaction: TransactionResponse;
+  fallback(overrides?: TransactionRequest): Promise<TransactionResponse>;
+  // static isIndexed(value: any): value is Indexed;
+  // tslint:disable-next-line: no-any
+  emit(eventName: EventFilter | string, ...args: any[]): boolean;
+  listenerCount(eventName?: EventFilter | string): number;
+  listeners(eventName: EventFilter | string): Listener[];
+}
 
 interface EthersContract<TMethods, TEventsContext, TEventType>
   extends Contract {
@@ -59,19 +75,4 @@ interface EthersContract<TMethods, TEventsContext, TEventType>
     eventName: TEventType,
     listener: Listener
   ): EthersContractContext<TMethods, TEventsContext, TEventType>;
-}
-
-interface Contract {
-  readonly address: string;
-  readonly interface: Interface;
-  readonly signer: Signer;
-  readonly provider: Provider;
-  // readonly [name: string]: ContractFunction | any;
-  readonly addressPromise: Promise<string>;
-  readonly deployTransaction: TransactionResponse;
-  fallback(overrides?: TransactionRequest): Promise<TransactionResponse>;
-  // static isIndexed(value: any): value is Indexed;
-  emit(eventName: EventFilter | string, ...args: Array<any>): boolean;
-  listenerCount(eventName?: EventFilter | string): number;
-  listeners(eventName: EventFilter | string): Array<Listener>;
 }

@@ -93,6 +93,7 @@ export interface Options {
 
 export interface DeployOptions {
   data: string;
+  // tslint:disable-next-line: no-any
   arguments?: any[];
 }
 
@@ -100,6 +101,7 @@ export interface ContractSendMethod {
   send(
     options: SendOptions,
     callback?: (err: Error, transactionHash: string) => void
+    // tslint:disable-next-line: no-any
   ): PromiEvent<Web3ContractContext<any, any, any, any>>;
 
   estimateGas(
@@ -185,7 +187,7 @@ export interface TransactionReceipt {
 export interface Log {
   address: string;
   data: string;
-  topics: Array<string | string[]>;
+  topics: (string | string[])[];
   logIndex: number;
   transactionIndex: number;
   transactionHash: string;
@@ -196,17 +198,20 @@ export interface Log {
 export interface EventLog {
   event: string;
   address: string;
+  // tslint:disable-next-line: no-any
   returnValues: any;
   logIndex: number;
   transactionIndex: number;
   transactionHash: string;
   blockHash: string;
   blockNumber: number;
+  // tslint:disable-next-line: no-any
   raw?: { data: string; topics: any[] };
 }
 
 export interface EventData {
   returnValues: {
+    // tslint:disable-next-line: no-any
     [key: string]: any;
   };
   raw: {
@@ -224,9 +229,11 @@ export interface EventData {
 }
 
 export interface EventOptions {
+  // tslint:disable-next-line: no-any
   filter?: any;
   fromBlock?: number;
   toBlock?: 'latest' | number;
+  // tslint:disable-next-line: no-any
   topics?: any[];
 }
 

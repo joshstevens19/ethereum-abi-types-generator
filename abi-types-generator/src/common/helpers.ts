@@ -1,7 +1,7 @@
 import { CommandTypes } from '../commands/enums/command-types';
 import { generateHelpMessages } from '../commands/help-messages';
-import { IHelpMessage } from '../commands/models/ihelp-message';
-import { IProgramOptions } from './models/iprogram-options';
+import { HelpMessage } from '../commands/models/help-message';
+import { ProgramOptions } from './models/program-options';
 import yargs = require('yargs');
 
 export default class Helpers {
@@ -20,7 +20,8 @@ export default class Helpers {
   /**
    * This will get all the program arguments
    */
-  public static getProgramArguments(): IProgramOptions {
+  public static getProgramArguments(): ProgramOptions {
+    // tslint:disable-next-line: typedef
     const {
       _: [command, ...subcommands],
       ...options
@@ -53,7 +54,7 @@ export default class Helpers {
    * Builds the help message up
    * @param helpMessage The help message object
    */
-  public static buildUpHelpMessage(helpMessage: IHelpMessage): string {
+  public static buildUpHelpMessage(helpMessage: HelpMessage): string {
     let message = `Usage: ${helpMessage.usage}`;
 
     if (helpMessage.commands.length > 0) {

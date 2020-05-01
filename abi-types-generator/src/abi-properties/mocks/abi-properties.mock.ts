@@ -1,7 +1,7 @@
 import { AbiItem } from '../abi-item';
 
 export class AbiPropertiesMock {
-  public static get AbiItemsMock() {
+  public static get AbiItemsMock(): AbiItem[] {
     return [
       {
         name: 'NewExchange',
@@ -78,7 +78,7 @@ export class AbiPropertiesMock {
     ] as AbiItem[];
   }
 
-  public static get AbiItemsV2Mock() {
+  public static get AbiItemsV2Mock(): AbiItem[] {
     return [
       {
         constant: false,
@@ -360,7 +360,7 @@ export class AbiPropertiesMock {
     ] as AbiItem[];
   }
 
-  public static get AbiTokenMock() {
+  public static get AbiTokenMock(): AbiItem[] {
     return [
       {
         name: 'Transfer',

@@ -1,6 +1,6 @@
 import Helpers from '../common/helpers';
 import { Logger } from '../common/logger';
-import { IProgramOptions } from '../common/models/iprogram-options';
+import { ProgramOptions } from '../common/models/program-options';
 import { ConverterType } from '../converters/enums/converter-type';
 import AbiGenerator from '../converters/typescript/abi-generator';
 import { Provider } from '../converters/typescript/enums/provider';
@@ -10,7 +10,7 @@ import { CommandTypes } from './enums/command-types';
 const help = Helpers.getHelpMessageByCommandType(CommandTypes.generate);
 
 export = {
-  async action(cmd: IProgramOptions): Promise<void> {
+  async action(cmd: ProgramOptions): Promise<void> {
     if (!cmd.command || cmd.command.length === 0) {
       return Logger.log(help);
     }
