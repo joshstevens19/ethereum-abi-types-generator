@@ -7,7 +7,6 @@ fs.readFile('../README.md', function (err, buf) {
     '<img src="./images/gif-demo.gif" />',
     'Demo gif can be seen on the github readme'
   );
-  console.log(data);
 
   fs.writeFile('./README.md', data, (err) => {
     if (err) console.log(err);
