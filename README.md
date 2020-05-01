@@ -194,6 +194,10 @@ We use `prettier` to format all files, to make sure it matches your coding style
 }
 ```
 
+##### Running tslint as well
+
+Right now the package does not try to find any of your `tslint.json` settings. It will support this soon. For now if you get any `tslint` errors when running the linter it's best to ignore any generated file in the `linterOptions` > `exclude` of the `tslint.json`. I tend to put all my generated files in 1 place so I can ignore the entire folder.
+
 ### Using with web3 and ethers
 
 #### Web3 - https://www.npmjs.com/package/web3
