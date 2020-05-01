@@ -1,3 +1,4 @@
+import { BigNumber as BigNumberJs } from 'bignumber.js';
 import { ethers, utils } from 'ethers';
 import { BigNumber } from 'ethers/utils';
 import { AbiExamples } from '../../abi-examples';
@@ -28,7 +29,7 @@ class UniswapStronglyTypedExample {
    */
   public async getTokenTradeAmountEthToErc20(
     ethAmount: BigNumber
-  ): Promise<BigNumber> {
+  ): Promise<string> {
     const exchangeContract = await this.getExchangeContractForToken(
       AbiExamples.funContractAddress
     );
@@ -38,20 +39,20 @@ class UniswapStronglyTypedExample {
     this.logUniswapOutput(`Got the eth to token input price - ${price}`);
     // Uniswap class - Got the eth to token input price - 102465873454
 
-    // const tokenAmount = new BigNumber(
-    //   new bigNumberJs(price.toString())
-    //     .shiftedBy(AbiExamples.funDecimalPlaces * -1)
-    //     .toString()
-    // );
+    // big number ethers didnt have any shift by stuff so use
+    // this instead for this example
+    const tokenAmount = new BigNumberJs(price.toString()).shiftedBy(
+      AbiExamples.funDecimalPlaces * -1
+    );
 
-    const tokenAmount = price;
-
-    this.logUniswapOutput(`Got the fun token amount - ${tokenAmount}`);
+    this.logUniswapOutput(
+      `Got the fun token amount - ${tokenAmount.toString()}`
+    );
     // Uniswap class - Got the fun token amount - 1024.65873454
 
     // add some slippage
-    const tokenAmountWithSlippage = tokenAmount.sub(
-      tokenAmount.mul(utils.hexlify(this.SLIPPAGE)).toString()
+    const tokenAmountWithSlippage = tokenAmount.minus(
+      tokenAmount.times(this.SLIPPAGE).toFixed()
     );
 
     this.logUniswapOutput(
@@ -59,38 +60,36 @@ class UniswapStronglyTypedExample {
     );
     // Uniswap class - Fun token amount with the slippage taken off - 973.425797813
 
-    return tokenAmountWithSlippage;
+    return tokenAmountWithSlippage.toString();
   }
 
   /**
    * Get max amount of fun tokens you can buy
    */
-  public async maxAmountOfTokensToBuy(): Promise<BigNumber> {
+  public async maxAmountOfTokensToBuy(): Promise<string> {
     const exchangeAddress = await this.getExchangeAddress(
       AbiExamples.funContractAddress
     );
 
     const tokenContract = this.getTokenContract(AbiExamples.funContractAddress);
 
-    const tokenReserve = await tokenContract.balanceOf(exchangeAddress);
+    const tokenReserveRaw = await tokenContract.balanceOf(exchangeAddress);
 
     this.logUniswapOutput(
-      `Got the token reserve raw value - ${tokenReserve.toString()}`
+      `Got the token reserve raw value - ${tokenReserveRaw.toString()}`
     );
     // Uniswap class - Got the token reserve raw value - 1868161858283796
 
-    return tokenReserve;
+    const tokenReserve = new BigNumberJs(tokenReserveRaw.toString()).shiftedBy(
+      AbiExamples.funDecimalPlaces * -1
+    );
 
-    // const tokenReserve = new BigNumber(tokenReserveRaw).shiftedBy(
-    //   AbiExamples.funDecimalPlaces * -1
-    // );
+    this.logUniswapOutput(
+      `Token reserve raw value formatted to fun decimal places - ${tokenReserve}`
+    );
+    // Uniswap class - Token reserve raw value formatted to fun decimal places - 18681618.58283796
 
-    // this.logUniswapOutput(
-    //   `Token reserve raw value formatted to fun decimal places - ${tokenReserve}`
-    // );
-    // // Uniswap class - Token reserve raw value formatted to fun decimal places - 18681618.58283796
-
-    return tokenReserve;
+    return tokenReserve.toString();
   }
 
   /**
@@ -240,19 +239,19 @@ const example = async () => {
 
   // get the max tokens
   const maxTokens = await uniswap.maxAmountOfTokensToBuy();
-  console.log(maxTokens.toString());
+  console.log(maxTokens);
   // 18681618.58283796
 
   const getTokenTrade = await uniswap.getTokenTradeAmountEthToErc20(ethAmount);
-  console.log(getTokenTrade.toString());
+  console.log(getTokenTrade);
   // 973.425797813
 
   /**
    * PLEASE NOTE:
    *
    * The below code is an example in how you would sign the transaction with the typings.
-   * If you run this script just using `node ./dist/web3/uniswap-example/uniswap-contract-strongly-typed-example.js
-   * it will not work and throw errors in the trade calls as you don't have a wallet connected to it aka no private key :)
+   * If you run this script just using `node ./dist/ethers/uniswap-example/uniswap-contract-strongly-typed-example.js
+   * it will not work and throw errors in the trade calls as we dont have enough fun
    *
    */
 
