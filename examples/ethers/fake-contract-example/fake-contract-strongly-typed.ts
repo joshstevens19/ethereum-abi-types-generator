@@ -1,5 +1,5 @@
-import { ethers } from 'ethers';
-import { AbiExamples } from '../abi-examples';
+import { ethers, utils } from 'ethers';
+import { AbiExamples } from '../../abi-examples';
 import {
   ContractContext,
   TupleInputOnlyRequest,
@@ -55,7 +55,23 @@ const example = async () => {
     ],
   };
 
-  const tx = await contractWithSigner.tupleInputOnly(tupleExampleRequest);
+  // strongly typed optional overrides as well for both `calls` and `transactions`
+  const tx = await contractWithSigner.tupleInputOnly(tupleExampleRequest, {
+    // The maximum units of gas for the transaction to use
+    gasLimit: 23000,
+
+    // The price (in wei) per unit of gas
+    gasPrice: utils.parseUnits('9.0', 'gwei'),
+
+    // The nonce to use in the transaction
+    nonce: 123,
+
+    // The amount to send with the transaction (i.e. msg.value)
+    value: utils.parseEther('1.0'),
+
+    // The chain ID (or network ID) to use
+    chainId: 1,
+  });
   console.log(tx.hash);
   // "0xaf0068dcf728afa5accd02172867627da4e6f946dfb8174a7be31f01b11d5364"
 

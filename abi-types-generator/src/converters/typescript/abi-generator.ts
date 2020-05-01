@@ -359,13 +359,13 @@ export default class AbiGenerator {
    * Build the parameters and return type interface if they accept an object of some form
    */
   private buildParametersAndReturnTypeInterfaces(): string {
-    let objectOutputReturnType = '';
+    let parametersAndReturnTypes = '';
 
     this._parametersAndReturnTypeInterfaces.map((typeInterface) => {
-      objectOutputReturnType += typeInterface;
+      parametersAndReturnTypes += typeInterface;
     });
 
-    return objectOutputReturnType;
+    return parametersAndReturnTypes;
   }
 
   /**
@@ -473,6 +473,11 @@ export default class AbiGenerator {
           )}`;
         }
       }
+    }
+
+    // ethers allows you to pass in overrides in methods so add that in here
+    if (this._context.provider === Provider.ethers) {
+      input = this._ethersFactory.addOverridesToParameters(input, abiItem);
     }
 
     return (input += ')');
