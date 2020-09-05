@@ -529,7 +529,7 @@ export default class AbiGenerator {
           abiItem
         );
       } else {
-        if (abiItem.constant === true) {
+        if (abiItem.constant === true || abiItem.stateMutability === 'view' || abiItem.stateMutability === 'pure') {
           const interfaceName = `${Helpers.capitalize(abiItem.name)}Response`;
 
           let ouputProperties = '';
