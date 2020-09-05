@@ -111,7 +111,7 @@ export class Web3Factory {
    * @param abiItem The abi item
    */
   public buildMethodReturnContext(type: string, abiItem: AbiItem): string {
-    if (abiItem.constant === true) {
+    if (abiItem.constant === true || abiItem.stateMutability === 'view' || abiItem.stateMutability === 'pure') {
       return `: MethodConstantReturnContext<${type}>`;
     }
 

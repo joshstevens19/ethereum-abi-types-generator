@@ -102,11 +102,11 @@ describe('Web3Factory', () => {
   });
 
   describe('buildMethodReturnContext', () => {
-    it('should return `MethodConstantReturnContext<void>` if abiItem.constant === true', () => {
+    it('should return `MethodConstantReturnContext<void>` if abiItem.constant === true  || abiItem.stateMutability === \'view\' || abiItem.stateMutability === \'pure\'', () => {
       expect(
         web3Factory.buildMethodReturnContext(
           'void',
-          AbiPropertiesMock.AbiItemsMock.find((m) => m.constant)!
+          AbiPropertiesMock.AbiItemsMock.find((m) => m.constant  || m.stateMutability === 'view' || m.stateMutability === 'pure')!
         )
       ).toEqual(': MethodConstantReturnContext<void>');
     });

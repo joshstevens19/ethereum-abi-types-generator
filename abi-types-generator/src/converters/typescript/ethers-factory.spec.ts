@@ -87,11 +87,11 @@ describe('EthersFactory', () => {
   });
 
   describe('buildMethodReturnContext', () => {
-    it('should return `Promise<void>` if abiItem.constant === true', () => {
+    it('should return `Promise<void>` if abiItem.constant === true || abiItem.stateMutability === \'view\' || abiItem.stateMutability === \'pure\'', () => {
       expect(
         ethersFactory.buildMethodReturnContext(
           'void',
-          AbiPropertiesMock.AbiItemsMock.find((m) => m.constant)!
+          AbiPropertiesMock.AbiItemsMock.find((m) => m.constant || m.stateMutability === 'view' || m.stateMutability === 'pure')!
         )
       ).toEqual(': Promise<void>');
     });

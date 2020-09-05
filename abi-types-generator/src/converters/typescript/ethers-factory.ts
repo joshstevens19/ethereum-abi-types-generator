@@ -84,7 +84,7 @@ export class EthersFactory {
    * @param abiItem The abi item
    */
   public buildMethodReturnContext(type: string, abiItem: AbiItem): string {
-    if (abiItem.constant === true) {
+    if (abiItem.constant === true || abiItem.stateMutability === 'view' || abiItem.stateMutability === 'pure') {
       return `: Promise<${type}>`;
     }
 
@@ -105,7 +105,7 @@ export class EthersFactory {
       parameters += ', ';
     }
 
-    if (abiItem.constant === true) {
+    if (abiItem.constant === true || abiItem.stateMutability === 'view' || abiItem.stateMutability === 'pure') {
       return (parameters += 'overrides?: ContractCallOverrides');
     }
 
