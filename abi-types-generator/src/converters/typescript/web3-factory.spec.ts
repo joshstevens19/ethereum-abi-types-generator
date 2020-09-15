@@ -115,7 +115,7 @@ describe('Web3Factory', () => {
       expect(
           web3Factory.buildMethodReturnContext(
               'void',
-              AbiPropertiesMock.AbiItemsMock.find((m) => m.stateMutability === 'view')!
+              AbiPropertiesMock.AbiTokenV2Mock.find((m) => m.stateMutability === 'view')!
           )
       ).toEqual(': MethodConstantReturnContext<void>');
     });
@@ -124,7 +124,7 @@ describe('Web3Factory', () => {
       expect(
           web3Factory.buildMethodReturnContext(
               'void',
-              AbiPropertiesMock.AbiItemsMock.find((m) => m.stateMutability === 'pure')!
+              AbiPropertiesMock.AbiItemsV2Mock.find((m) => m.stateMutability === 'pure')!
           )
       ).toEqual(': MethodConstantReturnContext<void>');
     });
@@ -142,7 +142,7 @@ describe('Web3Factory', () => {
       expect(
           web3Factory.buildMethodReturnContext(
               'void',
-              AbiPropertiesMock.AbiTokenMock.find((m) => !m.constant && m.stateMutability === 'payable')!
+              AbiPropertiesMock.AbiItemsV2Mock.find((m) => !m.constant && m.stateMutability === 'payable')!
           )
       ).toEqual(': MethodPayableReturnContext');
     });

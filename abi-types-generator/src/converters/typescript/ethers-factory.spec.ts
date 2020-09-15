@@ -100,7 +100,7 @@ describe('EthersFactory', () => {
       expect(
           ethersFactory.buildMethodReturnContext(
               'void',
-              AbiPropertiesMock.AbiItemsMock.find((m) => m.stateMutability === `view`)!
+              AbiPropertiesMock.AbiTokenV2Mock.find((m) => m.stateMutability === `view`)!
           )
       ).toEqual(': Promise<void>');
     });
@@ -109,7 +109,7 @@ describe('EthersFactory', () => {
       expect(
           ethersFactory.buildMethodReturnContext(
               'void',
-              AbiPropertiesMock.AbiItemsMock.find((m) => m.stateMutability === `pure`)!
+              AbiPropertiesMock.AbiItemsV2Mock.find((m) => m.stateMutability === `pure`)!
           )
       ).toEqual(': Promise<void>');
     });
@@ -127,7 +127,7 @@ describe('EthersFactory', () => {
       expect(
           ethersFactory.buildMethodReturnContext(
               'void',
-              AbiPropertiesMock.AbiTokenMock.find((m) => !m.constant && m.stateMutability === 'payable')!
+              AbiPropertiesMock.AbiItemsV2Mock.find((m) => !m.constant && m.stateMutability === 'payable')!
           )
       ).toEqual(': Promise<ContractTransaction>');
     });
