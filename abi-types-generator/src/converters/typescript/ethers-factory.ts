@@ -1,4 +1,5 @@
 import { AbiItem, AbiItemType } from '../../abi-properties';
+import Helpers from "../../common/helpers";
 
 export class EthersFactory {
   constructor() {}
@@ -84,7 +85,7 @@ export class EthersFactory {
    * @param abiItem The abi item
    */
   public buildMethodReturnContext(type: string, abiItem: AbiItem): string {
-    if (abiItem.constant === true || abiItem.stateMutability === 'view' || abiItem.stateMutability === 'pure') {
+    if (Helpers.isNeverModifyBlockchainState(abiItem)) {
       return `: Promise<${type}>`;
     }
 
@@ -105,7 +106,7 @@ export class EthersFactory {
       parameters += ', ';
     }
 
-    if (abiItem.constant === true || abiItem.stateMutability === 'view' || abiItem.stateMutability === 'pure') {
+    if (Helpers.isNeverModifyBlockchainState(abiItem)) {
       return (parameters += 'overrides?: ContractCallOverrides');
     }
 

@@ -426,8 +426,8 @@ export default class AbiGenerator {
 
     return `
          /**
-            * Payable: ${abiItem.payable}
-            * Constant: ${abiItem.constant}
+            * Payable: ${Helpers.isAcceptsEther(abiItem)}
+            * Constant: ${Helpers.isNeverModifyBlockchainState(abiItem)}
             * StateMutability: ${abiItem.stateMutability}
             * Type: ${abiItem.type} ${paramsDocs}
           */

@@ -1,6 +1,7 @@
 import { AbiItem, AbiItemType } from '../../abi-properties';
 import TypeScriptHelpers from './common/helpers';
 import { Provider } from './enums/provider';
+import Helpers from '../../common/helpers';
 
 export class Web3Factory {
   constructor() {}
@@ -111,11 +112,11 @@ export class Web3Factory {
    * @param abiItem The abi item
    */
   public buildMethodReturnContext(type: string, abiItem: AbiItem): string {
-    if (abiItem.constant === true || abiItem.stateMutability === 'view' || abiItem.stateMutability === 'pure') {
+    if (Helpers.isNeverModifyBlockchainState(abiItem)) {
       return `: MethodConstantReturnContext<${type}>`;
     }
 
-    if (abiItem.payable === true) {
+    if (Helpers.isAcceptsEther(abiItem)) {
       return `: MethodPayableReturnContext`;
     }
 

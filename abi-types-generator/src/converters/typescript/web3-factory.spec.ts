@@ -102,29 +102,56 @@ describe('Web3Factory', () => {
   });
 
   describe('buildMethodReturnContext', () => {
-    it('should return `MethodConstantReturnContext<void>` if abiItem.constant === true  || abiItem.stateMutability === \'view\' || abiItem.stateMutability === \'pure\'', () => {
+    it('should return `MethodConstantReturnContext<void>` if abiItem.constant === true', () => {
       expect(
         web3Factory.buildMethodReturnContext(
           'void',
-          AbiPropertiesMock.AbiItemsMock.find((m) => m.constant  || m.stateMutability === 'view' || m.stateMutability === 'pure')!
+          AbiPropertiesMock.AbiItemsMock.find((m) => m.constant)!
         )
       ).toEqual(': MethodConstantReturnContext<void>');
     });
 
-    it('should return `MethodPayableReturnContext` if abiItem.payable === true', () => {
+    it('should return `MethodConstantReturnContext<void>` if abiItem.stateMutability === `view`', () => {
+      expect(
+          web3Factory.buildMethodReturnContext(
+              'void',
+              AbiPropertiesMock.AbiItemsMock.find((m) => m.stateMutability === 'view')!
+          )
+      ).toEqual(': MethodConstantReturnContext<void>');
+    });
+
+    it('should return `MethodConstantReturnContext<void>` if abiItem.stateMutability === `pure`', () => {
+      expect(
+          web3Factory.buildMethodReturnContext(
+              'void',
+              AbiPropertiesMock.AbiItemsMock.find((m) => m.stateMutability === 'pure')!
+          )
+      ).toEqual(': MethodConstantReturnContext<void>');
+    });
+
+    it('should return `MethodPayableReturnContext` abiItem.payable === true', () => {
       expect(
         web3Factory.buildMethodReturnContext(
           'void',
-          AbiPropertiesMock.AbiTokenMock.find((m) => !m.constant && m.payable)!
+          AbiPropertiesMock.AbiTokenMock.find((m) => !Helpers.isNeverModifyBlockchainState(m) && m.payable)!
         )
       ).toEqual(': MethodPayableReturnContext');
     });
 
-    it('should return `MethodReturnContext` if abiItem.constant === false and payable === false', () => {
+    it('should return `MethodPayableReturnContext` abiItem.stateMutability === `payable`', () => {
+      expect(
+          web3Factory.buildMethodReturnContext(
+              'void',
+              AbiPropertiesMock.AbiTokenMock.find((m) => !m.constant && m.stateMutability === 'payable')!
+          )
+      ).toEqual(': MethodPayableReturnContext');
+    });
+
+    it('should return `MethodReturnContext` if not accepts ether and cannot modify blockchain state', () => {
       expect(
         web3Factory.buildMethodReturnContext(
           'void',
-          AbiPropertiesMock.AbiTokenMock.find((m) => !m.constant && !m.payable)!
+          AbiPropertiesMock.AbiTokenMock.find((m) => !Helpers.isNeverModifyBlockchainState(m) && !Helpers.isAcceptsEther(m))!
         )
       ).toEqual(': MethodReturnContext');
     });
