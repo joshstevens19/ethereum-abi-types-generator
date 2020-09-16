@@ -426,8 +426,8 @@ export default class AbiGenerator {
 
     return `
          /**
-            * Payable: ${abiItem.payable}
-            * Constant: ${abiItem.constant}
+            * Payable: ${Helpers.isAcceptsEther(abiItem)}
+            * Constant: ${Helpers.isNeverModifyBlockchainState(abiItem)}
             * StateMutability: ${abiItem.stateMutability}
             * Type: ${abiItem.type} ${paramsDocs}
           */
@@ -529,7 +529,7 @@ export default class AbiGenerator {
           abiItem
         );
       } else {
-        if (abiItem.constant === true) {
+        if (abiItem.constant === true || abiItem.stateMutability === 'view' || abiItem.stateMutability === 'pure') {
           const interfaceName = `${Helpers.capitalize(abiItem.name)}Response`;
 
           let ouputProperties = '';

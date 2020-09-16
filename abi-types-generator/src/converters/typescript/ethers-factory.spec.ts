@@ -96,20 +96,47 @@ describe('EthersFactory', () => {
       ).toEqual(': Promise<void>');
     });
 
+    it('should return `Promise<void>` if abiItem.stateMutability === `view`', () => {
+      expect(
+          ethersFactory.buildMethodReturnContext(
+              'void',
+              AbiPropertiesMock.AbiTokenV2Mock.find((m) => m.stateMutability === `view`)!
+          )
+      ).toEqual(': Promise<void>');
+    });
+
+    it('should return `Promise<void>` if abiItem.stateMutability === `pure`', () => {
+      expect(
+          ethersFactory.buildMethodReturnContext(
+              'void',
+              AbiPropertiesMock.AbiItemsV2Mock.find((m) => m.stateMutability === `pure`)!
+          )
+      ).toEqual(': Promise<void>');
+    });
+
     it('should return `Promise<ContractTransaction>` if abiItem.payable === true', () => {
       expect(
         ethersFactory.buildMethodReturnContext(
           'void',
-          AbiPropertiesMock.AbiTokenMock.find((m) => !m.constant && m.payable)!
+          AbiPropertiesMock.AbiTokenMock.find((m) => !Helpers.isNeverModifyBlockchainState(m) && m.payable)!
         )
       ).toEqual(': Promise<ContractTransaction>');
     });
 
-    it('should return `Promise<ContractTransaction>` if abiItem.constant === false and payable === false', () => {
+    it('should return `Promise<ContractTransaction>` if abiItem.stateMutability === `payable`', () => {
+      expect(
+          ethersFactory.buildMethodReturnContext(
+              'void',
+              AbiPropertiesMock.AbiItemsV2Mock.find((m) => !m.constant && m.stateMutability === 'payable')!
+          )
+      ).toEqual(': Promise<ContractTransaction>');
+    });
+
+    it('should return `Promise<ContractTransaction>` if not accepts ether and cannot modify blockchain state', () => {
       expect(
         ethersFactory.buildMethodReturnContext(
           'void',
-          AbiPropertiesMock.AbiTokenMock.find((m) => !m.constant && !m.payable)!
+          AbiPropertiesMock.AbiTokenMock.find((m) => !Helpers.isNeverModifyBlockchainState(m) && !Helpers.isAcceptsEther(m))!
         )
       ).toEqual(': Promise<ContractTransaction>');
     });

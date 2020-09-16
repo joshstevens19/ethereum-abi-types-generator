@@ -81,282 +81,30 @@ export class AbiPropertiesMock {
   public static get AbiItemsV2Mock(): AbiItem[] {
     return [
       {
-        constant: false,
+        name: 'payableMock',
+        outputs: [],
         inputs: [],
-        name: 'acceptOwnership',
-        outputs: [],
-        payable: false,
-        stateMutability: 'nonpayable',
+        stateMutability: 'payable',
         type: 'function',
       },
       {
-        constant: false,
+        name: 'pureMock',
+        outputs: [{ type: 'uint256', name: 'aPlusB' }],
         inputs: [
           {
-            name: '_newOwner',
-            type: 'address',
-          },
-        ],
-        name: 'changeOwner',
-        outputs: [],
-        payable: false,
-        stateMutability: 'nonpayable',
-        type: 'function',
-      },
-      {
-        constant: false,
-        inputs: [
-          {
-            components: [
-              {
-                name: 'ID',
-                type: 'bytes32',
-              },
-              {
-                name: 'percentage',
-                type: 'uint256',
-              },
-              {
-                name: 'duration',
-                type: 'uint256',
-              },
-              {
-                name: 'revenueCalculationMethod',
-                type: 'uint256',
-              },
-            ],
-            name: 'o',
-            type: 'tuple',
-          },
-        ],
-        name: 'createOffer',
-        outputs: [],
-        payable: false,
-        stateMutability: 'nonpayable',
-        type: 'function',
-      },
-      {
-        constant: false,
-        inputs: [
-          {
-            name: 'offerID',
-            type: 'bytes32',
-          },
-          {
-            name: 'affiliate',
-            type: 'address',
-          },
-          {
-            name: 'validation',
-            type: 'bool',
-          },
-        ],
-        name: 'setAffiliateValidation',
-        outputs: [],
-        payable: false,
-        stateMutability: 'nonpayable',
-        type: 'function',
-      },
-      {
-        constant: false,
-        inputs: [
-          {
-            name: 'player',
-            type: 'address',
-          },
-          {
-            name: 'affiliate',
-            type: 'address',
-          },
-          {
-            name: 'offerID',
-            type: 'bytes32',
-          },
-          {
-            name: 'campaignID',
-            type: 'bytes32',
-          },
-        ],
-        name: 'setAffiliation',
-        outputs: [],
-        payable: false,
-        stateMutability: 'nonpayable',
-        type: 'function',
-      },
-      {
-        constant: false,
-        inputs: [
-          {
+            internalType: 'uint256',
             name: 'a',
-            type: 'address',
+            type: 'uint256'
           },
+          {
+            internalType: 'uint256',
+            name: 'b',
+            type: 'uint256'
+          }
         ],
-        name: 'setApprovedOperatorsListAddress',
-        outputs: [],
-        payable: false,
-        stateMutability: 'nonpayable',
+        stateMutability: 'pure',
         type: 'function',
-      },
-      {
-        constant: true,
-        inputs: [
-          {
-            name: '',
-            type: 'address',
-          },
-          {
-            name: '',
-            type: 'address',
-          },
-        ],
-        name: 'affiliations',
-        outputs: [
-          {
-            name: 'affiliate',
-            type: 'address',
-          },
-          {
-            name: 'offerID',
-            type: 'bytes32',
-          },
-          {
-            name: 'creationTime',
-            type: 'uint256',
-          },
-          {
-            name: 'campaignID',
-            type: 'bytes32',
-          },
-        ],
-        payable: false,
-        stateMutability: 'view',
-        type: 'function',
-      },
-      {
-        constant: true,
-        inputs: [
-          {
-            name: '',
-            type: 'address',
-          },
-          {
-            name: '',
-            type: 'bytes32',
-          },
-          {
-            name: '',
-            type: 'address',
-          },
-        ],
-        name: 'affiliationValidations',
-        outputs: [
-          {
-            name: '',
-            type: 'bool',
-          },
-        ],
-        payable: false,
-        stateMutability: 'view',
-        type: 'function',
-      },
-      {
-        constant: true,
-        inputs: [],
-        name: 'approvedOperatorsListAddress',
-        outputs: [
-          {
-            name: '',
-            type: 'address',
-          },
-        ],
-        payable: false,
-        stateMutability: 'view',
-        type: 'function',
-      },
-      {
-        constant: true,
-        inputs: [
-          {
-            name: 'player',
-            type: 'address',
-          },
-          {
-            name: 'operator',
-            type: 'address',
-          },
-        ],
-        name: 'getAffiliation',
-        outputs: [
-          {
-            name: 'affiliate',
-            type: 'address',
-          },
-          {
-            name: 'percentage',
-            type: 'uint256',
-          },
-          {
-            name: 'revenueCalculationMethod',
-            type: 'uint256',
-          },
-          {
-            name: 'campaignID',
-            type: 'bytes32',
-          },
-          {
-            name: 'offerID',
-            type: 'bytes32',
-          },
-        ],
-        payable: false,
-        stateMutability: 'view',
-        type: 'function',
-      },
-      {
-        constant: true,
-        inputs: [
-          {
-            name: '',
-            type: 'bytes32',
-          },
-        ],
-        name: 'offers',
-        outputs: [
-          {
-            name: 'ID',
-            type: 'bytes32',
-          },
-          {
-            name: 'percentage',
-            type: 'uint256',
-          },
-          {
-            name: 'duration',
-            type: 'uint256',
-          },
-          {
-            name: 'revenueCalculationMethod',
-            type: 'uint256',
-          },
-        ],
-        payable: false,
-        stateMutability: 'view',
-        type: 'function',
-      },
-      {
-        constant: true,
-        inputs: [],
-        name: 'owner',
-        outputs: [
-          {
-            name: '',
-            type: 'address',
-          },
-        ],
-        payable: false,
-        stateMutability: 'view',
-        type: 'function',
-      },
+      }
     ] as AbiItem[];
   }
 
@@ -507,6 +255,298 @@ export class AbiPropertiesMock {
         type: 'function',
         gas: 783,
       },
+    ] as AbiItem[];
+  }
+
+  public static get AbiTokenV2Mock(): AbiItem[] {
+    return [
+      {
+        name: '__init__',
+        inputs: [
+          {
+            internalType: 'string',
+            name: 'name',
+            type: 'string'
+          },
+          {
+            internalType: 'string',
+            name: 'symbol',
+            type: 'string'
+          }
+        ],
+        stateMutability: 'nonpayable',
+        type: 'constructor'
+      },
+      {
+        anonymous: false,
+        inputs: [
+          {
+            indexed: true,
+            internalType: 'address',
+            name: 'owner',
+            type: 'address'
+          },
+          {
+            indexed: true,
+            internalType: 'address',
+            name: 'spender',
+            type: 'address'
+          },
+          {
+            indexed: false,
+            internalType: 'uint256',
+            name: 'value',
+            type: 'uint256'
+          }
+        ],
+        name: 'Approval',
+        type: 'event'
+      },
+      {
+        anonymous: false,
+        inputs: [
+          {
+            indexed: true,
+            internalType: 'address',
+            name: 'from',
+            type: 'address'
+          },
+          {
+            indexed: true,
+            internalType: 'address',
+            name: 'to',
+            type: 'address'
+          },
+          {
+            indexed: false,
+            internalType: 'uint256',
+            name: 'value',
+            type: 'uint256'
+          }
+        ],
+        name: 'Transfer',
+        type: 'event'
+      },
+      {
+        inputs: [],
+        name: 'name',
+        outputs: [
+          {
+            internalType: 'string',
+            name: '',
+            type: 'string'
+          }
+        ],
+        stateMutability: 'view',
+        type: 'function'
+      },
+      {
+        inputs: [],
+        name: 'symbol',
+        outputs: [
+          {
+            internalType: 'string',
+            name: '',
+            type: 'string'
+          }
+        ],
+        stateMutability: 'view',
+        type: 'function'
+      },
+      {
+        inputs: [],
+        name: 'decimals',
+        outputs: [
+          {
+            internalType: 'uint8',
+            name: '',
+            type: 'uint8'
+          }
+        ],
+        stateMutability: 'view',
+        type: 'function'
+      },
+      {
+        inputs: [],
+        name: 'totalSupply',
+        outputs: [
+          {
+            internalType: 'uint256',
+            name: '',
+            type: 'uint256'
+          }
+        ],
+        stateMutability: 'view',
+        type: 'function'
+      },
+      {
+        inputs: [
+          {
+            internalType: 'address',
+            name: 'account',
+            type: 'address'
+          }
+        ],
+        name: 'balanceOf',
+        outputs: [
+          {
+            internalType: 'uint256',
+            name: '',
+            type: 'uint256'
+          }
+        ],
+        stateMutability: 'view',
+        type: 'function'
+      },
+      {
+        inputs: [
+          {
+            internalType: 'address',
+            name: 'recipient',
+            type: 'address'
+          },
+          {
+            internalType: 'uint256',
+            name: 'amount',
+            type: 'uint256'
+          }
+        ],
+        name: 'transfer',
+        outputs: [
+          {
+            internalType: 'bool',
+            name: '',
+            type: 'bool'
+          }
+        ],
+        stateMutability: 'nonpayable',
+        type: 'function'
+      },
+      {
+        inputs: [
+          {
+            internalType: 'address',
+            name: 'owner',
+            type: 'address'
+          },
+          {
+            internalType: 'address',
+            name: 'spender',
+            type: 'address'
+          }
+        ],
+        name: 'allowance',
+        outputs: [
+          {
+            internalType: 'uint256',
+            name: '',
+            type: 'uint256'
+          }
+        ],
+        stateMutability: 'view',
+        type: 'function'
+      },
+      {
+        inputs: [
+          {
+            internalType: 'address',
+            name: 'spender',
+            type: 'address'
+          },
+          {
+            internalType: 'uint256',
+            name: 'amount',
+            type: 'uint256'
+          }
+        ],
+        name: 'approve',
+        outputs: [
+          {
+            internalType: 'bool',
+            name: '',
+            type: 'bool'
+          }
+        ],
+        stateMutability: 'nonpayable',
+        type: 'function'
+      },
+      {
+        inputs: [
+          {
+            internalType: 'address',
+            name: 'sender',
+            type: 'address'
+          },
+          {
+            internalType: 'address',
+            name: 'recipient',
+            type: 'address'
+          },
+          {
+            internalType: 'uint256',
+            name: 'amount',
+            type: 'uint256'
+          }
+        ],
+        name: 'transferFrom',
+        outputs: [
+          {
+            internalType: 'bool',
+            name: '',
+            type: 'bool'
+          }
+        ],
+        stateMutability: 'nonpayable',
+        type: 'function'
+      },
+      {
+        inputs: [
+          {
+            internalType: 'address',
+            name: 'spender',
+            type: 'address'
+          },
+          {
+            internalType: 'uint256',
+            name: 'addedValue',
+            type: 'uint256'
+          }
+        ],
+        name: 'increaseAllowance',
+        outputs: [
+          {
+            internalType: 'bool',
+            name: '',
+            type: 'bool'
+          }
+        ],
+        stateMutability: 'nonpayable',
+        type: 'function'
+      },
+      {
+        inputs: [
+          {
+            internalType: 'address',
+            name: 'spender',
+            type: 'address'
+          },
+          {
+            internalType: 'uint256',
+            name: 'subtractedValue',
+            type: 'uint256'
+          }
+        ],
+        name: 'decreaseAllowance',
+        outputs: [
+          {
+            internalType: 'bool',
+            name: '',
+            type: 'bool'
+          }
+        ],
+        stateMutability: 'nonpayable',
+        type: 'function'
+      }
     ] as AbiItem[];
   }
 }
