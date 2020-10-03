@@ -48,6 +48,7 @@ export interface MethodConstantReturnContext<TCallReturn> {
     options: CallOptions,
     callback: (error: Error, result: TCallReturn) => void
   ): Promise<TCallReturn>;
+  encodeABI(): string;
 }
 
 export interface MethodReturnContext extends MethodPayableReturnContext {}
@@ -120,13 +121,13 @@ export interface TupleWithParametersNamesResponse {
 }
 export interface FakeContract {
   /**
-   * Payable: false
+   * Payable: true
    * Constant: false
-   * StateMutability: nonpayable
+   * StateMutability: payable
    * Type: function
    * @param o Type: tuple, Indexed: false
    */
-  tupleInputOnly(o: TupleInputOnlyRequest): MethodReturnContext;
+  tupleInputOnly(o: TupleInputOnlyRequest): MethodPayableReturnContext;
   /**
    * Payable: false
    * Constant: true

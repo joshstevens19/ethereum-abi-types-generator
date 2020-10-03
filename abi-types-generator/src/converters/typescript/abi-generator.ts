@@ -461,7 +461,7 @@ export default class AbiGenerator {
           inputName = `parameter${i}`;
         }
 
-        if (abiItem.inputs[i].type === SolidityType.tuple) {
+        if (abiItem.inputs[i].type.includes(SolidityType.tuple)) {
           input += `${inputName}: ${this.buildTupleParametersInterface(
             abiItem.name,
             abiItem.inputs[i]
@@ -509,6 +509,10 @@ export default class AbiGenerator {
       TypeScriptHelpers.buildInterface(interfaceName, properties)
     );
 
+    if (abiInput.type.includes('[')) {
+      return `${interfaceName}[]`;
+    }
+
     return `${interfaceName}`;
   }
 
@@ -529,7 +533,7 @@ export default class AbiGenerator {
           abiItem
         );
       } else {
-        if (abiItem.constant === true || abiItem.stateMutability === 'view' || abiItem.stateMutability === 'pure') {
+        if (Helpers.isNeverModifyBlockchainState(abiItem)) {
           const interfaceName = `${Helpers.capitalize(abiItem.name)}Response`;
 
           let ouputProperties = '';

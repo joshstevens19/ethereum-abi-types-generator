@@ -73,7 +73,7 @@ class UniswapStronglyTypedExample {
     const tokenReserveRaw = await tokenContract.methods
       .balanceOf(exchangeAddress)
       .call();
-    ``;
+      
     this.logUniswapOutput(
       `Got the token reserve raw value - ${tokenReserveRaw}`
     );

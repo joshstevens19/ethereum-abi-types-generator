@@ -108,9 +108,9 @@ export interface TupleWithParametersNamesResponse {
 }
 export interface FakeContract {
   /**
-   * Payable: false
+   * Payable: true
    * Constant: false
-   * StateMutability: nonpayable
+   * StateMutability: payable
    * Type: function
    * @param o Type: tuple, Indexed: false
    */

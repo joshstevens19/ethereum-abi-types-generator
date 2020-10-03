@@ -4,7 +4,7 @@ import { Provider } from '../enums/provider';
 
 export default class TypeScriptHelpers {
   /**
-   * Get the solidity ouput type mapped to typescript type
+   * Get the solidity input type mapped to typescript type
    * @param type The solidity type
    */
   public static getSolidityInputTsType(
