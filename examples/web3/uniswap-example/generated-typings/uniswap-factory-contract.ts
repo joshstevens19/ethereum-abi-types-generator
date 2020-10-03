@@ -48,6 +48,7 @@ export interface MethodConstantReturnContext<TCallReturn> {
     options: CallOptions,
     callback: (error: Error, result: TCallReturn) => void
   ): Promise<TCallReturn>;
+  encodeABI(): string;
 }
 
 export interface MethodReturnContext extends MethodPayableReturnContext {}

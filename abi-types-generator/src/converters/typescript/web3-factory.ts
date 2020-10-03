@@ -1,7 +1,7 @@
 import { AbiItem, AbiItemType } from '../../abi-properties';
+import Helpers from '../../common/helpers';
 import TypeScriptHelpers from './common/helpers';
 import { Provider } from './enums/provider';
-import Helpers from '../../common/helpers';
 
 export class Web3Factory {
   constructor() {}
@@ -54,6 +54,7 @@ export class Web3Factory {
         options: CallOptions,
         callback: (error: Error, result: TCallReturn) => void
         ): Promise<TCallReturn>;
+        encodeABI(): string;
     }
 
     export interface MethodReturnContext extends MethodPayableReturnContext {}

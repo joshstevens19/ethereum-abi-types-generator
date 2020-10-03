@@ -59,6 +59,7 @@ describe('Web3Factory', () => {
           options: CallOptions,
           callback: (error: Error, result: TCallReturn) => void
           ): Promise<TCallReturn>;
+          encodeABI():string;
         }
 
         export interface MethodReturnContext extends MethodPayableReturnContext {}
@@ -113,19 +114,23 @@ describe('Web3Factory', () => {
 
     it('should return `MethodConstantReturnContext<void>` if abiItem.stateMutability === `view`', () => {
       expect(
-          web3Factory.buildMethodReturnContext(
-              'void',
-              AbiPropertiesMock.AbiTokenV2Mock.find((m) => m.stateMutability === 'view')!
-          )
+        web3Factory.buildMethodReturnContext(
+          'void',
+          AbiPropertiesMock.AbiTokenV2Mock.find(
+            (m) => m.stateMutability === 'view'
+          )!
+        )
       ).toEqual(': MethodConstantReturnContext<void>');
     });
 
     it('should return `MethodConstantReturnContext<void>` if abiItem.stateMutability === `pure`', () => {
       expect(
-          web3Factory.buildMethodReturnContext(
-              'void',
-              AbiPropertiesMock.AbiItemsV2Mock.find((m) => m.stateMutability === 'pure')!
-          )
+        web3Factory.buildMethodReturnContext(
+          'void',
+          AbiPropertiesMock.AbiItemsV2Mock.find(
+            (m) => m.stateMutability === 'pure'
+          )!
+        )
       ).toEqual(': MethodConstantReturnContext<void>');
     });
 
@@ -133,17 +138,21 @@ describe('Web3Factory', () => {
       expect(
         web3Factory.buildMethodReturnContext(
           'void',
-          AbiPropertiesMock.AbiTokenMock.find((m) => !Helpers.isNeverModifyBlockchainState(m) && m.payable)!
+          AbiPropertiesMock.AbiTokenMock.find(
+            (m) => !Helpers.isNeverModifyBlockchainState(m) && m.payable
+          )!
         )
       ).toEqual(': MethodPayableReturnContext');
     });
 
     it('should return `MethodPayableReturnContext` abiItem.stateMutability === `payable`', () => {
       expect(
-          web3Factory.buildMethodReturnContext(
-              'void',
-              AbiPropertiesMock.AbiItemsV2Mock.find((m) => !m.constant && m.stateMutability === 'payable')!
-          )
+        web3Factory.buildMethodReturnContext(
+          'void',
+          AbiPropertiesMock.AbiItemsV2Mock.find(
+            (m) => !m.constant && m.stateMutability === 'payable'
+          )!
+        )
       ).toEqual(': MethodPayableReturnContext');
     });
 
@@ -151,7 +160,11 @@ describe('Web3Factory', () => {
       expect(
         web3Factory.buildMethodReturnContext(
           'void',
-          AbiPropertiesMock.AbiTokenMock.find((m) => !Helpers.isNeverModifyBlockchainState(m) && !Helpers.isAcceptsEther(m))!
+          AbiPropertiesMock.AbiTokenMock.find(
+            (m) =>
+              !Helpers.isNeverModifyBlockchainState(m) &&
+              !Helpers.isAcceptsEther(m)
+          )!
         )
       ).toEqual(': MethodReturnContext');
     });

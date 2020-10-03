@@ -264,6 +264,7 @@ describe('AbiGenerator', () => {
         options: CallOptions,
         callback: (error: Error, result: TCallReturn) => void
       ): Promise<TCallReturn>;
+      encodeABI():string;
     }
     export interface MethodReturnContext extends MethodPayableReturnContext {}
     export type ContractContext = Web3ContractContext<
@@ -335,12 +336,12 @@ describe('AbiGenerator', () => {
     export interface Abi {
       /**
        * Payable: false
-       * Constant: false
+       * Constant: true
        * StateMutability: nonpayable
        * Type: function
        * @param o Type: tuple, Indexed: false
        */
-      tupleInputOnly(o: TupleInputOnlyRequest): MethodReturnContext;
+      tupleInputOnly(o: TupleInputOnlyRequest): MethodConstantReturnContext<void>;
       /**
        * Payable: false
        * Constant: true
@@ -786,15 +787,15 @@ describe('AbiGenerator', () => {
             export interface Abi {
               /**
                * Payable: false
-               * Constant: false
+               * Constant: true
                * StateMutability: nonpayable
                * Type: function
                * @param o Type: tuple, Indexed: false
                */
               tupleInputOnly(
                 o: TupleInputOnlyRequest,
-                overrides?: ContractTransactionOverrides
-              ): Promise<ContractTransaction>;
+                overrides?: ContractCallOverrides
+              ): Promise<void>;
               /**
                * Payable: false
                * Constant: true
