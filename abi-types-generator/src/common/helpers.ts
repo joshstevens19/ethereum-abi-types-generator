@@ -1,9 +1,9 @@
+import { AbiItem } from '../abi-properties';
 import { CommandTypes } from '../commands/enums/command-types';
 import { generateHelpMessages } from '../commands/help-messages';
 import { HelpMessage } from '../commands/models/help-message';
 import { ProgramOptions } from './models/program-options';
 import yargs = require('yargs');
-import {AbiItem} from '../abi-properties';
 
 export default class Helpers {
   /**
@@ -97,7 +97,12 @@ export default class Helpers {
    * @param abiItem The AbiItem
    */
   public static isNeverModifyBlockchainState(abiItem: AbiItem): boolean {
-    return abiItem.constant || abiItem.stateMutability === 'view' || abiItem.stateMutability === 'pure';
+    return (
+      abiItem.constant ||
+      abiItem.stateMutability === 'view' ||
+      abiItem.stateMutability === 'pure' ||
+      abiItem.stateMutability === 'nonpayable'
+    );
   }
 
   /**
@@ -105,6 +110,9 @@ export default class Helpers {
    * @param abiItem The AbiItem
    */
   public static isAcceptsEther(abiItem: AbiItem): boolean {
-    return !this.isNeverModifyBlockchainState(abiItem) && (abiItem.payable || abiItem.stateMutability === 'payable');
+    return (
+      !this.isNeverModifyBlockchainState(abiItem) &&
+      (abiItem.payable || abiItem.stateMutability === 'payable')
+    );
   }
 }
