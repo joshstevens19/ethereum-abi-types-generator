@@ -336,12 +336,12 @@ describe('AbiGenerator', () => {
     export interface Abi {
       /**
        * Payable: false
-       * Constant: true
+       * Constant: false
        * StateMutability: nonpayable
        * Type: function
        * @param o Type: tuple, Indexed: false
        */
-      tupleInputOnly(o: TupleInputOnlyRequest): MethodConstantReturnContext<void>;
+      tupleInputOnly(o: TupleInputOnlyRequest): MethodReturnContext;
       /**
        * Payable: false
        * Constant: true
@@ -787,15 +787,15 @@ describe('AbiGenerator', () => {
             export interface Abi {
               /**
                * Payable: false
-               * Constant: true
+               * Constant: false
                * StateMutability: nonpayable
                * Type: function
                * @param o Type: tuple, Indexed: false
                */
               tupleInputOnly(
                 o: TupleInputOnlyRequest,
-                overrides?: ContractCallOverrides
-              ): Promise<void>;
+                overrides?: ContractTransactionOverrides
+              ): Promise<ContractTransaction>;
               /**
                * Payable: false
                * Constant: true
