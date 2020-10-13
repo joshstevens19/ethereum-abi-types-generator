@@ -100,8 +100,7 @@ export default class Helpers {
     return (
       abiItem.constant ||
       abiItem.stateMutability === 'view' ||
-      abiItem.stateMutability === 'pure' ||
-      abiItem.stateMutability === 'nonpayable'
+      abiItem.stateMutability === 'pure'
     );
   }
 
