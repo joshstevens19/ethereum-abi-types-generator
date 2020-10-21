@@ -5,6 +5,7 @@ import prettier from 'prettier/standalone';
 import Helpers from '../../common/helpers';
 import AbiGenerator from './abi-generator';
 import { GeneratorContext } from './contexts/generator-context';
+import { EthersVersion } from './enums/ethers-version';
 import { Provider } from './enums/provider';
 // tslint:disable-next-line: no-var-requires
 const abiJson = require('./mocks/fake-contract-abi.json');
@@ -665,7 +666,7 @@ describe('AbiGenerator', () => {
     });
   });
 
-  describe('Ethers', () => {
+  describe('Ethers v4 or below', () => {
     it('round trip', () => {
       const generatorContextClone = Helpers.deepClone(generatorContext);
       generatorContextClone.provider = Provider.ethers;
@@ -928,7 +929,10 @@ describe('AbiGenerator', () => {
       instance.generate();
 
       expect(buildEthersInterfacesSpy).toHaveBeenCalledTimes(1);
-      expect(buildEthersInterfacesSpy).toHaveBeenCalledWith('Abi');
+      expect(buildEthersInterfacesSpy).toHaveBeenCalledWith(
+        'Abi',
+        EthersVersion.four_or_below
+      );
 
       expect(buildWeb3InterfacesSpy).toHaveBeenCalledTimes(0);
     });
@@ -1118,6 +1122,491 @@ describe('AbiGenerator', () => {
 
       const generatorContextClone = Helpers.deepClone(generatorContext);
       generatorContextClone.provider = Provider.ethers;
+
+      const instance = callSuccessAbiGeneratorInstance(
+        abiGenertorOptionsClone,
+        generatorContextClone
+      );
+
+      const ethersBuildMethodReturnContextSpy = spyOn(
+        // @ts-ignore
+        instance._ethersFactory,
+        'buildMethodReturnContext'
+      ).and.callThrough();
+
+      const web3BuildMethodReturnContextSpy = spyOn(
+        // @ts-ignore
+        instance._web3Factory,
+        'buildMethodReturnContext'
+      ).and.callThrough();
+
+      instance.generate();
+
+      expect(ethersBuildMethodReturnContextSpy).toHaveBeenCalledTimes(9);
+      expect(web3BuildMethodReturnContextSpy).toHaveBeenCalledTimes(0);
+    });
+  });
+
+  describe('Ethers v5', () => {
+    it('round trip', () => {
+      const generatorContextClone = Helpers.deepClone(generatorContext);
+      generatorContextClone.provider = Provider.ethers_v5;
+
+      callSuccessAbiGeneratorInstance(
+        abiGenertorOptions,
+        generatorContextClone
+      );
+
+      expect(writeFileSyncSpy.calls.mostRecent().args[0]).not.toBeUndefined();
+      expect(
+        Helpers.removeAllWhiteSpace(writeFileSyncSpy.calls.mostRecent().args[1])
+      ).toEqual(
+        Helpers.removeAllWhiteSpace(
+          prettierFormat(`import { ContractTransaction,
+                    ContractInterface,
+                    BytesLike as Arrayish,
+                    BigNumber,
+                    BigNumberish } from "ethers"
+            import { EthersContractContextV5 } from "ethereum-abi-types-generator";
+            export type ContractContext = EthersContractContextV5<
+              Abi,
+              AbiMethodNames,
+              AbiEventsContext,
+              AbiEvents
+            >;
+            export declare type EventFilter = {
+              address?: string;
+              topics?: Array<string>;
+              fromBlock?: string | number;
+              toBlock?: string | number;
+            };
+            export interface ContractTransactionOverrides {
+              /**
+               * The maximum units of gas for the transaction to use
+               */
+              gasLimit?: number;
+              /**
+               * The price (in wei) per unit of gas
+               */
+              gasPrice?: BigNumber | string | number | Promise<any>;
+              /**
+               * The nonce to use in the transaction
+               */
+              nonce?: number;
+              /**
+               * The amount to send with the transaction (i.e. msg.value)
+               */
+              value?: BigNumber | string | number | Promise<any>;
+              /**
+               * The chain ID (or network ID) to use
+               */
+              chainId?: number;
+            }
+            export interface ContractCallOverrides {
+              /**
+               * The address to execute the call as
+               */
+              from?: string;
+              /**
+               * The maximum units of gas for the transaction to use
+               */
+              gasLimit?: number;
+            }
+            export type AbiEvents = 'Event1' | 'Event2';
+            export interface AbiEventsContext {
+              Event1(...parameters: any): EventFilter;
+              Event2(...parameters: any): EventFilter;
+            }
+            export type AbiMethodNames =
+              | 'tupleInputOnly'
+              | 'tupleInputAndOutput'
+              | 'tupleNoInputNames'
+              | 'tupleWithParametersNames'
+              | 'byteArrayInputExample'
+              | 'int8ReturnExample'
+              | 'int256ReturnExample'
+              | 'easyExample'
+              | 'new';
+            export interface TupleInputOnlyRequest {
+              address: string;
+              timestamps: [BigNumberish, BigNumberish, BigNumberish];
+            }
+            export interface TupleInputAndOutputResponse {
+              affiliate: string;
+              0: string;
+              offerID: string;
+              1: string;
+              creationTime: BigNumber;
+              2: BigNumber;
+              timestamp: number;
+              3: number;
+              timestamps: [number, number, number, number, number, number];
+              4: [number, number, number, number, number, number];
+              length: 5;
+            }
+            export interface TupleNoInputNamesResponse {
+              affiliate: string;
+              0: string;
+              offerID: string;
+              1: string;
+              creationTime: BigNumber;
+              2: BigNumber;
+              timestamp: number;
+              3: number;
+              timestamps: [number, number, number, number, number, number];
+              4: [number, number, number, number, number, number];
+              length: 5;
+            }
+            export interface TupleWithParametersNamesResponse {
+              affiliate: string;
+              0: string;
+              offerID: string;
+              1: string;
+              creationTime: BigNumber;
+              2: BigNumber;
+              timestamp: number;
+              3: number;
+              timestamps: [number, number, number, number, number, number];
+              4: [number, number, number, number, number, number];
+              length: 5;
+            }
+            export interface Abi {
+              /**
+               * Payable: false
+               * Constant: false
+               * StateMutability: nonpayable
+               * Type: function
+               * @param o Type: tuple, Indexed: false
+               */
+              tupleInputOnly(
+                o: TupleInputOnlyRequest,
+                overrides?: ContractTransactionOverrides
+              ): Promise<ContractTransaction>;
+              /**
+               * Payable: false
+               * Constant: true
+               * StateMutability: view
+               * Type: function
+               * @param exchangeAddress Type: address, Indexed: false
+               * @param internalAddress Type: address, Indexed: false
+               */
+              tupleInputAndOutput(
+                exchangeAddress: string,
+                internalAddress: string,
+                overrides?: ContractCallOverrides
+              ): Promise<TupleInputAndOutputResponse>;
+              /**
+               * Payable: false
+               * Constant: true
+               * StateMutability: view
+               * Type: function
+               * @param parameter0 Type: address, Indexed: false
+               * @param parameter1 Type: address, Indexed: false
+               */
+              tupleNoInputNames(
+                parameter0: string,
+                parameter1: string,
+                overrides?: ContractCallOverrides
+              ): Promise<TupleNoInputNamesResponse>;
+              /**
+               * Payable: false
+               * Constant: true
+               * StateMutability: view
+               * Type: function
+               * @param address1 Type: address, Indexed: false
+               * @param address2 Type: address, Indexed: false
+               */
+              tupleWithParametersNames(
+                address1: string,
+                address2: string,
+                overrides?: ContractCallOverrides
+              ): Promise<TupleWithParametersNamesResponse>;
+              /**
+               * Payable: true
+               * Constant: false
+               * StateMutability: payable
+               * Type: function
+               * @param inputData Type: bytes32[2], Indexed: false
+               */
+              byteArrayInputExample(
+                inputData: [Arrayish, Arrayish, Arrayish],
+                overrides?: ContractTransactionOverrides
+              ): Promise<ContractTransaction>;
+              /**
+               * Payable: false
+               * Constant: true
+               * StateMutability: undefined
+               * Type: function
+               */
+              int8ReturnExample(overrides?: ContractCallOverrides): Promise<number>;
+              /**
+               * Payable: false
+               * Constant: true
+               * StateMutability: undefined
+               * Type: function
+               */
+              int256ReturnExample(overrides?: ContractCallOverrides): Promise<BigNumber>;
+              /**
+               * Payable: false
+               * Constant: true
+               * StateMutability: undefined
+               * Type: function
+               * @param valid Type: boolean, Indexed: false
+               * @param exchangeAddress Type: address, Indexed: false
+               * @param timestamp Type: uint8, Indexed: false
+               */
+              easyExample(
+                valid: boolean,
+                exchangeAddress: string,
+                timestamp: BigNumberish,
+                overrides?: ContractCallOverrides
+              ): Promise<BigNumber>;
+              /**
+               * Payable: false
+               * Constant: false
+               * StateMutability: undefined
+               * Type: constructor
+               * @param _name Type: bytes32, Indexed: false
+               * @param _symbol Type: bytes32, Indexed: false
+               * @param _decimals Type: uint256, Indexed: false
+               * @param _supply Type: uint256, Indexed: false
+               */
+              'new'(
+                _name: Arrayish,
+                _symbol: Arrayish,
+                _decimals: BigNumberish,
+                _supply: BigNumberish,
+                overrides?: ContractTransactionOverrides
+              ): Promise<ContractTransaction>;
+            }
+    `)
+        )
+      );
+      expect(writeFileSyncSpy.calls.mostRecent().args[2]).toEqual({
+        mode: 493,
+      });
+    });
+
+    it('should call _ethersFactory.buildEthersInterfaces once', () => {
+      const abiGenertorOptionsClone = Helpers.deepClone(abiGenertorOptions);
+      abiGenertorOptionsClone.callGenerate = false;
+
+      const generatorContextClone = Helpers.deepClone(generatorContext);
+      generatorContextClone.provider = Provider.ethers_v5;
+
+      const instance = callSuccessAbiGeneratorInstance(
+        abiGenertorOptionsClone,
+        generatorContextClone
+      );
+
+      const buildEthersInterfacesSpy = spyOn(
+        // @ts-ignore
+        instance._ethersFactory,
+        'buildEthersInterfaces'
+      ).and.callThrough();
+
+      const buildWeb3InterfacesSpy = spyOn(
+        // @ts-ignore
+        instance._web3Factory,
+        'buildWeb3Interfaces'
+      ).and.callThrough();
+
+      instance.generate();
+
+      expect(buildEthersInterfacesSpy).toHaveBeenCalledTimes(1);
+      expect(buildEthersInterfacesSpy).toHaveBeenCalledWith(
+        'Abi',
+        EthersVersion.five
+      );
+
+      expect(buildWeb3InterfacesSpy).toHaveBeenCalledTimes(0);
+    });
+
+    it('should call _ethersFactory.buildEventInterfaceProperties once', () => {
+      const abiGenertorOptionsClone = Helpers.deepClone(abiGenertorOptions);
+      abiGenertorOptionsClone.callGenerate = false;
+
+      const generatorContextClone = Helpers.deepClone(generatorContext);
+      generatorContextClone.provider = Provider.ethers_v5;
+
+      const instance = callSuccessAbiGeneratorInstance(
+        abiGenertorOptionsClone,
+        generatorContextClone
+      );
+
+      const ethersBuildEventInterfacePropertiesSpy = spyOn(
+        // @ts-ignore
+        instance._ethersFactory,
+        'buildEventInterfaceProperties'
+      ).and.callThrough();
+
+      const web3BuildEventInterfacePropertiesSpy = spyOn(
+        // @ts-ignore
+        instance._web3Factory,
+        'buildEventInterfaceProperties'
+      ).and.callThrough();
+
+      instance.generate();
+
+      expect(ethersBuildEventInterfacePropertiesSpy).toHaveBeenCalledTimes(1);
+      expect(ethersBuildEventInterfacePropertiesSpy).toHaveBeenCalledWith([
+        {
+          anonymous: false,
+          inputs: [
+            { indexed: true, name: 'token', type: 'address' },
+            { indexed: true, name: 'exchange', type: 'address' },
+            { indexed: false, name: 'user', type: 'address' },
+            { indexed: true, name: '_value', type: 'uint256' },
+          ],
+          name: 'Event1',
+          type: 'event',
+        },
+        {
+          anonymous: false,
+          inputs: [
+            { indexed: true, name: '_owner', type: 'address' },
+            { indexed: true, name: '_spender', type: 'address' },
+            { indexed: false, name: '_value', type: 'uint256' },
+          ],
+          name: 'Event2',
+          type: 'event',
+        },
+        {
+          constant: false,
+          inputs: [
+            {
+              components: [
+                { name: 'address', type: 'address' },
+                { name: 'timestamps', type: 'uint8[2]' },
+              ],
+              name: 'o',
+              type: 'tuple',
+            },
+          ],
+          name: 'tupleInputOnly',
+          outputs: [],
+          payable: false,
+          stateMutability: 'nonpayable',
+          type: 'function',
+        },
+        {
+          constant: true,
+          inputs: [
+            { name: 'exchangeAddress', type: 'address' },
+            { name: 'internalAddress', type: 'address' },
+          ],
+          name: 'tupleInputAndOutput',
+          outputs: [
+            { name: 'affiliate', type: 'address' },
+            { name: 'offerID', type: 'bytes32' },
+            { name: 'creationTime', type: 'uint256' },
+            { name: 'timestamp', type: 'uint8' },
+            { name: 'timestamps', type: 'uint8[5]' },
+          ],
+          payable: false,
+          stateMutability: 'view',
+          type: 'function',
+        },
+        {
+          constant: true,
+          inputs: [
+            { name: '', type: 'address' },
+            { name: '', type: 'address' },
+          ],
+          name: 'tupleNoInputNames',
+          outputs: [
+            { name: 'affiliate', type: 'address' },
+            { name: 'offerID', type: 'bytes32' },
+            { name: 'creationTime', type: 'uint256' },
+            { name: 'timestamp', type: 'uint8' },
+            { name: 'timestamps', type: 'uint8[5]' },
+          ],
+          payable: false,
+          stateMutability: 'view',
+          type: 'function',
+        },
+        {
+          constant: true,
+          inputs: [
+            { name: 'address1', type: 'address' },
+            { name: 'address2', type: 'address' },
+          ],
+          name: 'tupleWithParametersNames',
+          outputs: [
+            { name: 'affiliate', type: 'address' },
+            { name: 'offerID', type: 'bytes32' },
+            { name: 'creationTime', type: 'uint256' },
+            { name: 'timestamp', type: 'uint8' },
+            { name: 'timestamps', type: 'uint8[5]' },
+          ],
+          payable: false,
+          stateMutability: 'view',
+          type: 'function',
+        },
+        {
+          constant: false,
+          inputs: [{ name: 'inputData', type: 'bytes32[2]' }],
+          name: 'byteArrayInputExample',
+          outputs: [],
+          payable: true,
+          stateMutability: 'payable',
+          type: 'function',
+        },
+        {
+          constant: true,
+          gas: 783,
+          inputs: [],
+          name: 'int8ReturnExample',
+          outputs: [{ name: 'out', type: 'uint8' }],
+          payable: false,
+          type: 'function',
+        },
+        {
+          constant: true,
+          gas: 783,
+          inputs: [],
+          name: 'int256ReturnExample',
+          outputs: [{ name: 'out', type: 'uint256' }],
+          payable: false,
+          type: 'function',
+        },
+        {
+          constant: true,
+          gas: 783,
+          inputs: [
+            { name: 'valid', type: 'boolean' },
+            { name: 'exchangeAddress', type: 'address' },
+            { name: 'timestamp', type: 'uint8' },
+          ],
+          name: 'easyExample',
+          outputs: [{ name: 'out', type: 'uint256' }],
+          payable: false,
+          type: 'function',
+        },
+        {
+          name: '__init__',
+          outputs: [],
+          inputs: [
+            { type: 'bytes32', name: '_name' },
+            { type: 'bytes32', name: '_symbol' },
+            { type: 'uint256', name: '_decimals' },
+            { type: 'uint256', name: '_supply' },
+          ],
+          constant: false,
+          payable: false,
+          type: 'constructor',
+        },
+      ]);
+
+      expect(web3BuildEventInterfacePropertiesSpy).toHaveBeenCalledTimes(0);
+    });
+
+    it('should call _ethersFactory.buildMethodReturnContext 9 times', () => {
+      const abiGenertorOptionsClone = Helpers.deepClone(abiGenertorOptions);
+      abiGenertorOptionsClone.callGenerate = false;
+
+      const generatorContextClone = Helpers.deepClone(generatorContext);
+      generatorContextClone.provider = Provider.ethers_v5;
 
       const instance = callSuccessAbiGeneratorInstance(
         abiGenertorOptionsClone,

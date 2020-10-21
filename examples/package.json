@@ -26,6 +26,6 @@
     "web3": "^1.2.7"
   },
   "devDependencies": {
-    "ethereum-abi-types-generator": "^1.0.6"
+    "ethereum-abi-types-generator": "file:ethereum-abi-types-generator-1.0.8.tgz"
   }
 }

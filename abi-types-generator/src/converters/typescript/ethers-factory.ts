@@ -1,5 +1,6 @@
 import { AbiItem, AbiItemType } from '../../abi-properties';
-import Helpers from "../../common/helpers";
+import Helpers from '../../common/helpers';
+import { EthersVersion } from './enums/ethers-version';
 
 export class EthersFactory {
   constructor() {}
@@ -7,17 +8,11 @@ export class EthersFactory {
   /**
    * Build ethers generic interfaces
    */
-  public buildEthersInterfaces(abiName: string): string {
-    return `
-      import { ContractTransaction } from "ethers";
-      import { Arrayish, BigNumber, BigNumberish, Interface } from "ethers/utils";
-      import { EthersContractContext } from "ethereum-abi-types-generator";
-
-      export type ContractContext = EthersContractContext<
-        ${abiName},
-        ${abiName}EventsContext,
-        ${abiName}Events
-      >;
+  public buildEthersInterfaces(
+    abiName: string,
+    ethersVersion: EthersVersion
+  ): string {
+    return `${this.getEthersImports(abiName, ethersVersion)}
 
       export declare type EventFilter = {
         address?: string;
@@ -60,6 +55,49 @@ export class EthersFactory {
          gasLimit?: number;
       }
     `;
+  }
+
+  /**
+   * Get ethers imports by version number
+   * @param abiName The abi name
+   * @param ethersVersion The ethers version
+   */
+  private getEthersImports(
+    abiName: string,
+    ethersVersion: EthersVersion
+  ): string {
+    switch (ethersVersion) {
+      case EthersVersion.four_or_below:
+        return `
+          import { ContractTransaction } from "ethers";
+          import { Arrayish, BigNumber, BigNumberish, Interface } from "ethers/utils";
+          import { EthersContractContext } from "ethereum-abi-types-generator";
+
+          export type ContractContext = EthersContractContext<
+            ${abiName},
+            ${abiName}EventsContext,
+            ${abiName}Events
+          >;
+        `;
+      case EthersVersion.five:
+        return `
+           import { ContractTransaction,
+                    ContractInterface,
+                    BytesLike as Arrayish,
+                    BigNumber,
+                    BigNumberish } from "ethers";
+           import { EthersContractContextV5 } from "ethereum-abi-types-generator";
+
+           export type ContractContext = EthersContractContextV5<
+            ${abiName},
+            ${abiName}MethodNames,
+            ${abiName}EventsContext,
+            ${abiName}Events
+           >;
+        `;
+      default:
+        throw new Error(`Unsupported ethers version ${ethersVersion}`);
+    }
   }
 
   /**

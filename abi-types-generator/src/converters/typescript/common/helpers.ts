@@ -13,6 +13,7 @@ export default class TypeScriptHelpers {
   ): string {
     switch (provider) {
       case Provider.ethers:
+      case Provider.ethers_v5:
         {
           if (type.includes(SolidityType.bytes)) {
             if (type.includes('[')) {
@@ -120,7 +121,8 @@ export default class TypeScriptHelpers {
   ): string {
     // any bespoke provider output type logic
     switch (provider) {
-      case Provider.ethers: {
+      case Provider.ethers:
+      case Provider.ethers_v5: {
         if (
           type.includes(SolidityType.uint) ||
           type.includes(SolidityType.int)

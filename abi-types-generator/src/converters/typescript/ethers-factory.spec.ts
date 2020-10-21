@@ -1,5 +1,6 @@
 import { AbiPropertiesMock } from '../../abi-properties/mocks/abi-properties.mock';
 import Helpers from '../../common/helpers';
+import { EthersVersion } from './enums/ethers-version';
 import { EthersFactory } from './ethers-factory';
 
 describe('EthersFactory', () => {
@@ -10,10 +11,13 @@ describe('EthersFactory', () => {
   });
 
   describe('buildEthersInterfaces', () => {
-    it('should round correct interface', () => {
+    it('should return correct interface for ethers version 4 or below', () => {
       expect(
         Helpers.removeAllWhiteSpace(
-          ethersFactory.buildEthersInterfaces('TestAbi')
+          ethersFactory.buildEthersInterfaces(
+            'TestAbi',
+            EthersVersion.four_or_below
+          )
         )
       ).toEqual(
         Helpers.removeAllWhiteSpace(`
@@ -23,6 +27,71 @@ describe('EthersFactory', () => {
 
           export type ContractContext = EthersContractContext<
             TestAbi,
+            TestAbiEventsContext,
+            TestAbiEvents
+          >;
+
+          export declare type EventFilter = {
+            address?: string;
+            topics?: Array<string>;
+            fromBlock?: string | number;
+            toBlock?: string | number;
+          };
+
+          export interface ContractTransactionOverrides {
+            /**
+             * The maximum units of gas for the transaction to use
+             */
+            gasLimit?: number;
+            /**
+             * The price (in wei) per unit of gas
+             */
+            gasPrice?: BigNumber | string | number | Promise<any>;
+            /**
+             * The nonce to use in the transaction
+             */
+            nonce?: number;
+            /**
+             * The amount to send with the transaction (i.e. msg.value)
+             */
+            value?: BigNumber | string | number | Promise<any>;
+            /**
+             * The chain ID (or network ID) to use
+             */
+            chainId?: number;
+          }
+
+          export interface ContractCallOverrides {
+            /**
+             * The address to execute the call as
+             */
+            from?: string;
+            /**
+             * The maximum units of gas for the transaction to use
+             */
+            gasLimit?: number;
+          }
+        `)
+      );
+    });
+
+    it('should return correct interface for ethers version 5', () => {
+      expect(
+        Helpers.removeAllWhiteSpace(
+          ethersFactory.buildEthersInterfaces('TestAbi', EthersVersion.five)
+        )
+      ).toEqual(
+        Helpers.removeAllWhiteSpace(`
+          import { ContractTransaction,
+                    ContractInterface,
+                    BytesLike as Arrayish,
+                    BigNumber,
+                    BigNumberish } from "ethers";
+           import { EthersContractContextV5 } from "ethereum-abi-types-generator";
+
+          export type ContractContext = EthersContractContextV5<
+            TestAbi,
+            TestAbiMethodNames,
             TestAbiEventsContext,
             TestAbiEvents
           >;
@@ -98,19 +167,23 @@ describe('EthersFactory', () => {
 
     it('should return `Promise<void>` if abiItem.stateMutability === `view`', () => {
       expect(
-          ethersFactory.buildMethodReturnContext(
-              'void',
-              AbiPropertiesMock.AbiTokenV2Mock.find((m) => m.stateMutability === `view`)!
-          )
+        ethersFactory.buildMethodReturnContext(
+          'void',
+          AbiPropertiesMock.AbiTokenV2Mock.find(
+            (m) => m.stateMutability === `view`
+          )!
+        )
       ).toEqual(': Promise<void>');
     });
 
     it('should return `Promise<void>` if abiItem.stateMutability === `pure`', () => {
       expect(
-          ethersFactory.buildMethodReturnContext(
-              'void',
-              AbiPropertiesMock.AbiItemsV2Mock.find((m) => m.stateMutability === `pure`)!
-          )
+        ethersFactory.buildMethodReturnContext(
+          'void',
+          AbiPropertiesMock.AbiItemsV2Mock.find(
+            (m) => m.stateMutability === `pure`
+          )!
+        )
       ).toEqual(': Promise<void>');
     });
 
@@ -118,17 +191,21 @@ describe('EthersFactory', () => {
       expect(
         ethersFactory.buildMethodReturnContext(
           'void',
-          AbiPropertiesMock.AbiTokenMock.find((m) => !Helpers.isNeverModifyBlockchainState(m) && m.payable)!
+          AbiPropertiesMock.AbiTokenMock.find(
+            (m) => !Helpers.isNeverModifyBlockchainState(m) && m.payable
+          )!
         )
       ).toEqual(': Promise<ContractTransaction>');
     });
 
     it('should return `Promise<ContractTransaction>` if abiItem.stateMutability === `payable`', () => {
       expect(
-          ethersFactory.buildMethodReturnContext(
-              'void',
-              AbiPropertiesMock.AbiItemsV2Mock.find((m) => !m.constant && m.stateMutability === 'payable')!
-          )
+        ethersFactory.buildMethodReturnContext(
+          'void',
+          AbiPropertiesMock.AbiItemsV2Mock.find(
+            (m) => !m.constant && m.stateMutability === 'payable'
+          )!
+        )
       ).toEqual(': Promise<ContractTransaction>');
     });
 
@@ -136,7 +213,11 @@ describe('EthersFactory', () => {
       expect(
         ethersFactory.buildMethodReturnContext(
           'void',
-          AbiPropertiesMock.AbiTokenMock.find((m) => !Helpers.isNeverModifyBlockchainState(m) && !Helpers.isAcceptsEther(m))!
+          AbiPropertiesMock.AbiTokenMock.find(
+            (m) =>
+              !Helpers.isNeverModifyBlockchainState(m) &&
+              !Helpers.isAcceptsEther(m)
+          )!
         )
       ).toEqual(': Promise<ContractTransaction>');
     });
