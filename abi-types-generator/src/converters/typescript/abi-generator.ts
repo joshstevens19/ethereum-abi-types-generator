@@ -10,6 +10,7 @@ import Helpers from '../../common/helpers';
 import { Logger } from '../../common/logger';
 import TypeScriptHelpers from './common/helpers';
 import { GeneratorContext } from './contexts/generator-context';
+import { EthersVersion } from './enums/ethers-version';
 import { Provider } from './enums/provider';
 import { EthersFactory } from './ethers-factory';
 import { GenerateResponse } from './models/generate-response';
@@ -220,7 +221,16 @@ export default class AbiGenerator {
         typings += this._web3Factory.buildWeb3Interfaces(this.getAbiName());
         break;
       case Provider.ethers:
-        typings += this._ethersFactory.buildEthersInterfaces(this.getAbiName());
+        typings += this._ethersFactory.buildEthersInterfaces(
+          this.getAbiName(),
+          EthersVersion.four_or_below
+        );
+        break;
+      case Provider.ethers_v5:
+        typings += this._ethersFactory.buildEthersInterfaces(
+          this.getAbiName(),
+          EthersVersion.five
+        );
         break;
       default:
         throw new Error(
@@ -392,6 +402,7 @@ export default class AbiGenerator {
           this._web3Factory.buildEventInterfaceProperties(abiItems)
         );
       case Provider.ethers:
+      case Provider.ethers_v5:
         return TypeScriptHelpers.buildInterface(
           eventsInterfaceName,
           this._ethersFactory.buildEventInterfaceProperties(abiItems)
@@ -476,7 +487,7 @@ export default class AbiGenerator {
     }
 
     // ethers allows you to pass in overrides in methods so add that in here
-    if (this._context.provider === Provider.ethers) {
+    if (this._context.provider.includes(Provider.ethers)) {
       input = this._ethersFactory.addOverridesToParameters(input, abiItem);
     }
 
@@ -547,7 +558,7 @@ export default class AbiGenerator {
               this._context.provider
             )};`;
 
-            if (this._context.provider === Provider.ethers) {
+            if (this._context.provider.includes(Provider.ethers)) {
               ouputProperties += `${i}: ${TypeScriptHelpers.getSolidityOutputTsType(
                 abiTemOutput.type,
                 this._context.provider
@@ -555,7 +566,7 @@ export default class AbiGenerator {
             }
           }
 
-          if (this._context.provider === Provider.ethers) {
+          if (this._context.provider.includes(Provider.ethers)) {
             ouputProperties += `length: ${abiItem.outputs.length};`;
           }
 
@@ -586,6 +597,7 @@ export default class AbiGenerator {
       case Provider.web3:
         return this._web3Factory.buildMethodReturnContext(type, abiItem);
       case Provider.ethers:
+      case Provider.ethers_v5:
         return this._ethersFactory.buildMethodReturnContext(type, abiItem);
       default:
         throw new Error(

@@ -32,9 +32,8 @@ A CLI tool which allows you to convert an ABI json file into fully loaded interf
 ## Supports
 
 - Web3 1.x and 2.x
-- Ethers 4.x (not been tested on anything below that)
-
-When new versions come out which have breaking changes like typings etc we will add a `--version` parameter to allow you to pass in the `ethers` version type.
+- Ethers 5.x
+- Ethers 4.x
 
 ## Motivation
 
@@ -69,14 +68,14 @@ $ abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY
 $ abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --watch
 $ abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --name=ABI_NAME
 $ abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --name=ABI_NAME --watch
-$ abi-types-generator <abiFileLocation> --provider=web3|ethers
-$ abi-types-generator <abiFileLocation> --provider=web3|ethers --watch
-$ abi-types-generator <abiFileLocation> --name=ABI_NAME --provider=web3|ethers
-$ abi-types-generator <abiFileLocation> --name=ABI_NAME --provider=web3|ethers --watch
-$ abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --provider=web3|ethers
-$ abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --provider=web3|ethers --watch
-$ abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --name=ABI_NAME --provider=web3|ethers
-$ abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --name=ABI_NAME --provider=web3|ethers --watch
+$ abi-types-generator <abiFileLocation> --provider=web3|ethers|ethers_v5
+$ abi-types-generator <abiFileLocation> --provider=web3|ethers|ethers_v5 --watch
+$ abi-types-generator <abiFileLocation> --name=ABI_NAME --provider=web3|ethers|ethers_v5
+$ abi-types-generator <abiFileLocation> --name=ABI_NAME --provider=web3|ethers|ethers_v5 --watch
+$ abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --provider=web3|ethers|ethers_v5
+$ abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --provider=web3|ethers|ethers_v5 --watch
+$ abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --name=ABI_NAME --provider=web3|ethers|ethers_v5
+$ abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --name=ABI_NAME --provider=web3|ethers|ethers_v5 --watch
 ```
 
 ### Arguments
@@ -147,7 +146,7 @@ $ abi-types-generator ./examples/abi-examples/uniswap-factory-abi.json --output=
 
 generates: `./examples/ethers/generated-typings/foo.ts`
 
-### `--provider=web3|ethers`
+### `--provider=web3|ethers|ethers_v5`
 
 What `contract` support you want to generate. This is the library you are using on your dapp and the lib you use to call any contract calls.
 
@@ -155,6 +154,7 @@ What `contract` support you want to generate. This is the library you are using 
 export enum Provider {
   web3 = 'web3',
   ethers = 'ethers',
+  ethers_v5 = 'ethers_v5',
 }
 ```
 
@@ -174,7 +174,15 @@ Example:
 $ abi-types-generator ./examples/abi-examples/uniswap-factory-abi.json --provider=ethers
 ```
 
-generates the ethers contract typings based on the web3 lib.
+generates the ethers contract typings based on the ethers 4 lib.
+
+Example:
+
+```ts
+$ abi-types-generator ./examples/abi-examples/uniswap-factory-abi.json --provider=ethers_v5
+```
+
+generates the ethers contract typings based on the ethers 5 lib.
 
 ### `--watch`
 
@@ -341,8 +349,16 @@ The cli tool will generate all your typings for you and expose them in the gener
 
 Lets say i run the cli command:
 
+Ethers v4
+
 ```ts
 $ abi-types-generator ./abi-examples/fake-contract-abi.json  --output=./ethers/generated-typings --name=fake-contract --provider=ethers
+```
+
+Ethers v5
+
+```ts
+$ abi-types-generator ./abi-examples/fake-contract-abi.json  --output=./ethers/generated-typings --name=fake-contract --provider=ethers_v5
 ```
 
 This will generate an `ts` file of `./examples/ethers/fake-contract.ts` which has all your strongly typed methods and events.
