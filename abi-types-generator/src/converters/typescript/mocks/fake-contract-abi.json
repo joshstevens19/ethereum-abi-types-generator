@@ -227,5 +227,51 @@
     "constant": false,
     "payable": false,
     "type": "constructor"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "owner",
+        "type": "address"
+      }
+    ],
+    "name": "getCars",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "tokenId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256[3]",
+            "name": "attachedComponents",
+            "type": "uint256[3]"
+          },
+          {
+            "internalType": "uint256[10]",
+            "name": "detachedComponents",
+            "type": "uint256[10]"
+          },
+          {
+            "internalType": "address",
+            "name": "owner",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "detachedComponentsCount",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct Car.CarInstance[]",
+        "name": "ownedCars",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
   }
 ]

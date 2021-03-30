@@ -3,7 +3,7 @@ import path from 'path';
 import { Options } from 'prettier';
 import prettierTS from 'prettier/parser-typescript';
 import prettier from 'prettier/standalone';
-import { AbiInput, SolidityType } from '../../abi-properties';
+import { AbiInput, AbiOutput, SolidityType } from '../../abi-properties';
 import { AbiItem } from '../../abi-properties/abi-item';
 import { AbiItemType } from '../../abi-properties/abi-item-type';
 import Helpers from '../../common/helpers';
@@ -528,6 +528,41 @@ export default class AbiGenerator {
   }
 
   /**
+   * Build the object response parameter interface
+   * @param name The abi item name
+   * @param abiOutput The abi output
+   */
+  private buildTupleResponseInterface(abiOutput: AbiOutput): string {
+    const interfaceName = TypeScriptHelpers.buildResponseInterfaceName(
+      abiOutput.name
+    );
+
+    let properties = '';
+
+    for (let i = 0; i < abiOutput.components!.length; i++) {
+      const outputTsType = TypeScriptHelpers.getSolidityOutputTsType(
+        abiOutput.components![i],
+        this._context.provider
+      );
+      properties += `${abiOutput.components![i].name}: ${outputTsType};`;
+
+      if (this._context.provider.includes(Provider.ethers)) {
+        properties += `${i}: ${outputTsType};`;
+      }
+    }
+
+    this._parametersAndReturnTypeInterfaces.push(
+      TypeScriptHelpers.buildInterface(interfaceName, properties)
+    );
+
+    if (abiOutput.type.includes('[')) {
+      return `${interfaceName}[]`;
+    }
+
+    return `${interfaceName}`;
+  }
+
+  /**
    * Build property return type interface and return the return type context
    * @param abiItem The abit json
    */
@@ -538,31 +573,35 @@ export default class AbiGenerator {
       if (abiItem.outputs.length === 1) {
         output += this.buildMethodReturnContext(
           TypeScriptHelpers.getSolidityOutputTsType(
-            abiItem.outputs[0].type,
+            abiItem.outputs[0],
             this._context.provider
           ),
           abiItem
         );
+
+        if (abiItem.outputs[0].type.includes(SolidityType.tuple)) {
+          this.buildTupleResponseInterface(abiItem.outputs[0]);
+        }
       } else {
         if (Helpers.isNeverModifyBlockchainState(abiItem)) {
-          const interfaceName = `${Helpers.capitalize(abiItem.name)}Response`;
+          const interfaceName = TypeScriptHelpers.buildResponseInterfaceName(
+            abiItem.name
+          );
 
           let ouputProperties = '';
 
           for (let i = 0; i < abiItem.outputs.length; i++) {
-            const abiTemOutput = abiItem.outputs[i];
-            ouputProperties += `${
-              abiTemOutput.name
-            }: ${TypeScriptHelpers.getSolidityOutputTsType(
-              abiTemOutput.type,
+            const abiItemOutput = abiItem.outputs[i];
+
+            const outputTsType = TypeScriptHelpers.getSolidityOutputTsType(
+              abiItemOutput,
               this._context.provider
-            )};`;
+            );
+
+            ouputProperties += `${abiItemOutput.name}: ${outputTsType};`;
 
             if (this._context.provider.includes(Provider.ethers)) {
-              ouputProperties += `${i}: ${TypeScriptHelpers.getSolidityOutputTsType(
-                abiTemOutput.type,
-                this._context.provider
-              )};`;
+              ouputProperties += `${i}: ${outputTsType};`;
             }
           }
 

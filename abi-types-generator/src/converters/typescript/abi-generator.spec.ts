@@ -308,7 +308,8 @@ describe('AbiGenerator', () => {
       | 'int8ReturnExample'
       | 'int256ReturnExample'
       | 'easyExample'
-      | 'new';
+      | 'new'
+      | 'getCars';
     export interface TupleInputOnlyRequest {
       address: string;
       timestamps: [string | number, string | number, string | number];
@@ -334,6 +335,15 @@ describe('AbiGenerator', () => {
       timestamp: string;
       timestamps: [string, string, string, string, string, string];
     }
+
+    export interface OwnedCarsResponse {
+      tokenId:string;
+      attachedComponents:[string,string,string,string];
+      detachedComponents:[string,string,string,string,string,string,string,string,string,string,string];
+      owner:string;
+      detachedComponentsCount:string;
+    }
+    
     export interface Abi {
       /**
        * Payable: false
@@ -433,7 +443,16 @@ describe('AbiGenerator', () => {
         _decimals: string,
         _supply: string
       ): MethodReturnContext;
-    }
+
+      /**
+       *Payable:false
+       *Constant:true
+       *StateMutability:view
+       *Type:function
+       *@param ownerType:address, Indexed:false 
+       */
+       getCars(owner:string): MethodConstantReturnContext<OwnedCarsResponse[]>;
+      }
     `)
         )
       );
@@ -636,12 +655,58 @@ describe('AbiGenerator', () => {
           payable: false,
           type: 'constructor',
         },
+        {
+          inputs: [
+            {
+              internalType: 'address',
+              name: 'owner',
+              type: 'address',
+            },
+          ],
+          name: 'getCars',
+          outputs: [
+            {
+              components: [
+                {
+                  internalType: 'uint256',
+                  name: 'tokenId',
+                  type: 'uint256',
+                },
+                {
+                  internalType: 'uint256[3]',
+                  name: 'attachedComponents',
+                  type: 'uint256[3]',
+                },
+                {
+                  internalType: 'uint256[10]',
+                  name: 'detachedComponents',
+                  type: 'uint256[10]',
+                },
+                {
+                  internalType: 'address',
+                  name: 'owner',
+                  type: 'address',
+                },
+                {
+                  internalType: 'uint256',
+                  name: 'detachedComponentsCount',
+                  type: 'uint256',
+                },
+              ],
+              internalType: 'struct Car.CarInstance[]',
+              name: 'ownedCars',
+              type: 'tuple[]',
+            },
+          ],
+          stateMutability: 'view',
+          type: 'function',
+        },
       ]);
 
       expect(ethersBuildEventInterfacePropertiesSpy).toHaveBeenCalledTimes(0);
     });
 
-    it('should call _web3Factory.buildMethodReturnContext 9 times', () => {
+    it('should call _web3Factory.buildMethodReturnContext 10 times', () => {
       const abiGenertorOptionsClone = Helpers.deepClone(abiGenertorOptions);
       abiGenertorOptionsClone.callGenerate = false;
 
@@ -661,7 +726,7 @@ describe('AbiGenerator', () => {
 
       instance.generate();
 
-      expect(web3BuildMethodReturnContextSpy).toHaveBeenCalledTimes(9);
+      expect(web3BuildMethodReturnContextSpy).toHaveBeenCalledTimes(10);
       expect(ethersBuildMethodReturnContextSpy).toHaveBeenCalledTimes(0);
     });
   });
@@ -741,7 +806,8 @@ describe('AbiGenerator', () => {
               | 'int8ReturnExample'
               | 'int256ReturnExample'
               | 'easyExample'
-              | 'new';
+              | 'new'
+              | 'getCars';
             export interface TupleInputOnlyRequest {
               address: string;
               timestamps: [BigNumberish, BigNumberish, BigNumberish];
@@ -785,6 +851,20 @@ describe('AbiGenerator', () => {
               4: [number, number, number, number, number, number];
               length: 5;
             }
+
+            export interface OwnedCarsResponse { 
+              tokenId:BigNumber;
+              0:BigNumber;
+              attachedComponents:[BigNumber,BigNumber,BigNumber,BigNumber];
+              1:[BigNumber,BigNumber,BigNumber,BigNumber];
+              detachedComponents:[BigNumber,BigNumber,BigNumber,BigNumber,BigNumber,BigNumber,BigNumber,BigNumber,BigNumber,BigNumber,BigNumber];
+              2:[BigNumber,BigNumber,BigNumber,BigNumber,BigNumber,BigNumber,BigNumber,BigNumber,BigNumber,BigNumber,BigNumber];
+              owner:string;
+              3:string;
+              detachedComponentsCount:BigNumber;
+              4:BigNumber;
+            }
+
             export interface Abi {
               /**
                * Payable: false
@@ -893,6 +973,15 @@ describe('AbiGenerator', () => {
                 _supply: BigNumberish,
                 overrides?: ContractTransactionOverrides
               ): Promise<ContractTransaction>;
+
+              /**
+               *Payable:false
+               *Constant:true
+               *StateMutability:view
+               *Type:function
+               * @param ownerType:address,Indexed:false
+               */
+               getCars(owner:string, overrides?:ContractCallOverrides):Promise<OwnedCarsResponse[]>;
             }
     `)
         )
@@ -1111,12 +1200,58 @@ describe('AbiGenerator', () => {
           payable: false,
           type: 'constructor',
         },
+        {
+          inputs: [
+            {
+              internalType: 'address',
+              name: 'owner',
+              type: 'address',
+            },
+          ],
+          name: 'getCars',
+          outputs: [
+            {
+              components: [
+                {
+                  internalType: 'uint256',
+                  name: 'tokenId',
+                  type: 'uint256',
+                },
+                {
+                  internalType: 'uint256[3]',
+                  name: 'attachedComponents',
+                  type: 'uint256[3]',
+                },
+                {
+                  internalType: 'uint256[10]',
+                  name: 'detachedComponents',
+                  type: 'uint256[10]',
+                },
+                {
+                  internalType: 'address',
+                  name: 'owner',
+                  type: 'address',
+                },
+                {
+                  internalType: 'uint256',
+                  name: 'detachedComponentsCount',
+                  type: 'uint256',
+                },
+              ],
+              internalType: 'struct Car.CarInstance[]',
+              name: 'ownedCars',
+              type: 'tuple[]',
+            },
+          ],
+          stateMutability: 'view',
+          type: 'function',
+        },
       ]);
 
       expect(web3BuildEventInterfacePropertiesSpy).toHaveBeenCalledTimes(0);
     });
 
-    it('should call _ethersFactory.buildMethodReturnContext 9 times', () => {
+    it('should call _ethersFactory.buildMethodReturnContext 10 times', () => {
       const abiGenertorOptionsClone = Helpers.deepClone(abiGenertorOptions);
       abiGenertorOptionsClone.callGenerate = false;
 
@@ -1142,7 +1277,7 @@ describe('AbiGenerator', () => {
 
       instance.generate();
 
-      expect(ethersBuildMethodReturnContextSpy).toHaveBeenCalledTimes(9);
+      expect(ethersBuildMethodReturnContextSpy).toHaveBeenCalledTimes(10);
       expect(web3BuildMethodReturnContextSpy).toHaveBeenCalledTimes(0);
     });
   });
@@ -1226,7 +1361,8 @@ describe('AbiGenerator', () => {
               | 'int8ReturnExample'
               | 'int256ReturnExample'
               | 'easyExample'
-              | 'new';
+              | 'new'
+              | 'getCars';
             export interface TupleInputOnlyRequest {
               address: string;
               timestamps: [BigNumberish, BigNumberish, BigNumberish];
@@ -1270,6 +1406,20 @@ describe('AbiGenerator', () => {
               4: [number, number, number, number, number, number];
               length: 5;
             }
+
+             export interface OwnedCarsResponse { 
+              tokenId:BigNumber;
+              0:BigNumber;
+              attachedComponents:[BigNumber,BigNumber,BigNumber,BigNumber];
+              1:[BigNumber,BigNumber,BigNumber,BigNumber];
+              detachedComponents:[BigNumber,BigNumber,BigNumber,BigNumber,BigNumber,BigNumber,BigNumber,BigNumber,BigNumber,BigNumber,BigNumber];
+              2:[BigNumber,BigNumber,BigNumber,BigNumber,BigNumber,BigNumber,BigNumber,BigNumber,BigNumber,BigNumber,BigNumber];
+              owner:string;
+              3:string;
+              detachedComponentsCount:BigNumber;
+              4:BigNumber;
+            }
+            
             export interface Abi {
               /**
                * Payable: false
@@ -1378,6 +1528,15 @@ describe('AbiGenerator', () => {
                 _supply: BigNumberish,
                 overrides?: ContractTransactionOverrides
               ): Promise<ContractTransaction>;
+
+              /**
+               *Payable:false
+               *Constant:true
+               *StateMutability:view
+               *Type:function
+               * @param ownerType:address,Indexed:false
+               */
+               getCars(owner:string, overrides?:ContractCallOverrides):Promise<OwnedCarsResponse[]>;
             }
     `)
         )
@@ -1596,12 +1755,58 @@ describe('AbiGenerator', () => {
           payable: false,
           type: 'constructor',
         },
+        {
+          inputs: [
+            {
+              internalType: 'address',
+              name: 'owner',
+              type: 'address',
+            },
+          ],
+          name: 'getCars',
+          outputs: [
+            {
+              components: [
+                {
+                  internalType: 'uint256',
+                  name: 'tokenId',
+                  type: 'uint256',
+                },
+                {
+                  internalType: 'uint256[3]',
+                  name: 'attachedComponents',
+                  type: 'uint256[3]',
+                },
+                {
+                  internalType: 'uint256[10]',
+                  name: 'detachedComponents',
+                  type: 'uint256[10]',
+                },
+                {
+                  internalType: 'address',
+                  name: 'owner',
+                  type: 'address',
+                },
+                {
+                  internalType: 'uint256',
+                  name: 'detachedComponentsCount',
+                  type: 'uint256',
+                },
+              ],
+              internalType: 'struct Car.CarInstance[]',
+              name: 'ownedCars',
+              type: 'tuple[]',
+            },
+          ],
+          stateMutability: 'view',
+          type: 'function',
+        },
       ]);
 
       expect(web3BuildEventInterfacePropertiesSpy).toHaveBeenCalledTimes(0);
     });
 
-    it('should call _ethersFactory.buildMethodReturnContext 9 times', () => {
+    it('should call _ethersFactory.buildMethodReturnContext 10 times', () => {
       const abiGenertorOptionsClone = Helpers.deepClone(abiGenertorOptions);
       abiGenertorOptionsClone.callGenerate = false;
 
@@ -1627,7 +1832,7 @@ describe('AbiGenerator', () => {
 
       instance.generate();
 
-      expect(ethersBuildMethodReturnContextSpy).toHaveBeenCalledTimes(9);
+      expect(ethersBuildMethodReturnContextSpy).toHaveBeenCalledTimes(10);
       expect(web3BuildMethodReturnContextSpy).toHaveBeenCalledTimes(0);
     });
   });

@@ -1,4 +1,4 @@
-import { SolidityType } from '../../../abi-properties';
+import { AbiOutput, SolidityType } from '../../../abi-properties';
 import Helpers from '../../../common/helpers';
 import { Provider } from '../enums/provider';
 
@@ -113,10 +113,11 @@ export default class TypeScriptHelpers {
 
   /**
    * Get the solidity type mapped to typescript type
-   * @param type The solidity type
+   * @param abiOutput The abi output type
+   * @param provider The provider
    */
   public static getSolidityOutputTsType(
-    type: string,
+    abiOutput: AbiOutput,
     provider: Provider
   ): string {
     // any bespoke provider output type logic
@@ -124,30 +125,36 @@ export default class TypeScriptHelpers {
       case Provider.ethers:
       case Provider.ethers_v5: {
         if (
-          type.includes(SolidityType.uint) ||
-          type.includes(SolidityType.int)
+          abiOutput.type.includes(SolidityType.uint) ||
+          abiOutput.type.includes(SolidityType.int)
         ) {
-          if (type.includes(SolidityType.uint)) {
+          if (abiOutput.type.includes(SolidityType.uint)) {
             const numberType = this.buildEtherjsNumberType(
-              type,
+              abiOutput.type,
               SolidityType.uint
             );
 
-            if (type.includes('[')) {
-              return this.buildUpMultidimensionalArrayTypes(type, numberType);
+            if (abiOutput.type.includes('[')) {
+              return this.buildUpMultidimensionalArrayTypes(
+                abiOutput.type,
+                numberType
+              );
             }
 
             return numberType;
           }
 
-          if (type.includes(SolidityType.int)) {
+          if (abiOutput.type.includes(SolidityType.int)) {
             const numberType = this.buildEtherjsNumberType(
-              type,
+              abiOutput.type,
               SolidityType.int
             );
 
-            if (type.includes('[')) {
-              return this.buildUpMultidimensionalArrayTypes(type, numberType);
+            if (abiOutput.type.includes('[')) {
+              return this.buildUpMultidimensionalArrayTypes(
+                abiOutput.type,
+                numberType
+              );
             }
 
             return numberType;
@@ -156,28 +163,48 @@ export default class TypeScriptHelpers {
       }
     }
 
-    if (type.includes(SolidityType.bool)) {
-      if (type.includes('[')) {
-        return this.buildUpMultidimensionalArrayTypes(type, 'boolean');
+    if (abiOutput.type.includes(SolidityType.tuple)) {
+      const interfaceName = this.buildResponseInterfaceName(abiOutput.name);
+      if (abiOutput.type.includes('[')) {
+        return `${interfaceName}[]`;
+      }
+
+      return interfaceName;
+    }
+
+    if (abiOutput.type.includes(SolidityType.bool)) {
+      if (abiOutput.type.includes('[')) {
+        return this.buildUpMultidimensionalArrayTypes(
+          abiOutput.type,
+          'boolean'
+        );
       }
       return 'boolean';
     }
 
     if (
-      type.includes(SolidityType.address) ||
-      type.includes(SolidityType.string) ||
-      type.includes(SolidityType.bytes) ||
-      type.includes(SolidityType.uint) ||
-      type.includes(SolidityType.int)
+      abiOutput.type.includes(SolidityType.address) ||
+      abiOutput.type.includes(SolidityType.string) ||
+      abiOutput.type.includes(SolidityType.bytes) ||
+      abiOutput.type.includes(SolidityType.uint) ||
+      abiOutput.type.includes(SolidityType.int)
     ) {
-      if (type.includes('[')) {
-        return this.buildUpMultidimensionalArrayTypes(type, 'string');
+      if (abiOutput.type.includes('[')) {
+        return this.buildUpMultidimensionalArrayTypes(abiOutput.type, 'string');
       }
 
       return 'string';
     }
 
-    throw new Error(`${type} is not valid solidty type`);
+    throw new Error(`${abiOutput.type} is not valid solidty type`);
+  }
+
+  /**
+   * Build response interface name
+   * @param name The name
+   */
+  public static buildResponseInterfaceName(name: string): string {
+    return `${Helpers.capitalize(name)}Response`;
   }
 
   /**

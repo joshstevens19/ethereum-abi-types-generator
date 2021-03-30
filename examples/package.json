@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
+    "broke-example": "abi-types-generator './abi-examples/failing-contract-example-abi.json' --output='./web3/fake-contract-example/generated-typings' --name=broken-contract",
     "web3-example": "abi-types-generator './abi-examples/fake-contract-abi.json' --output='./web3/fake-contract-example/generated-typings' --name=fake-contract",
     "web3-token-abi": "abi-types-generator './abi-examples/token-abi.json' --output='./web3/uniswap-example/generated-typings' --name=token-contract",
     "web3-uniswap-exchange-abi": "abi-types-generator './abi-examples/uniswap-exchange-abi.json' --output='./web3/uniswap-example/generated-typings' --name=uniswap-exchange-contract",
@@ -26,6 +27,6 @@
     "web3": "^1.2.7"
   },
   "devDependencies": {
-    "ethereum-abi-types-generator": "file:ethereum-abi-types-generator-1.0.8.tgz"
+    "ethereum-abi-types-generator": "file:ethereum-abi-types-generator-1.1.0.tgz"
   }
 }
