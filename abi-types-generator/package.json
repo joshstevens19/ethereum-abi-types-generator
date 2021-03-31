@@ -1,6 +1,6 @@
 {
   "name": "ethereum-abi-types-generator",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Generate types from an ethereum ABI json file.",
   "main": "dist/index.js",
   "scripts": {
@@ -36,7 +36,7 @@
     "reflect-metadata": "^0.1.13",
     "yargs": "^15.3.1",
     "ethers": "^4.0.47",
-    "ethersv5": "npm:ethers@^5.0.18"
+    "ethersv5": "npm:ethers@^5.0.32"
   },
   "devDependencies": {
     "@types/dotenv": "^8.2.0",

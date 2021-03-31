@@ -55,7 +55,11 @@ $ npm install ethereum-abi-types-generator --save-dev
 $ yarn add ethereum-abi-types-generator --dev
 ```
 
-You can install this globally as well but you **must** make sure wherever the `--output` location is which generates the typings file has `ethereum-abi-types-generator` installed in that project, as it uses imports from this package to map the `ContractContext` to make your life easier handling the generic type build up automatically.
+You can install this globally as well but you **must** make sure wherever the `--output` location is which generates the typings file has `ethereum-abi-types-generator` installed in that project, as it uses imports from this package to map the `ContractContext` to make your life easier handling the generic type build up automatically. We suggest always running this tool inside a project context.
+
+## Tsconfig compile time issues
+
+If you get compile time errors due to it waiting `web3` dependencies when using ethers please set `skipLibCheck`: true in the tsconfig.json compiler options and this should fix that issue.
 
 ## CLI usage
 
@@ -76,6 +80,34 @@ $ abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --provider=web3|
 $ abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --provider=web3|ethers|ethers_v5 --watch
 $ abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --name=ABI_NAME --provider=web3|ethers|ethers_v5
 $ abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --name=ABI_NAME --provider=web3|ethers|ethers_v5 --watch
+```
+
+We suggest running these within the `script` commands in npm or yarn this way you will not lose your commands and can be run on build agents as well. Also you will not get confused with sharing the script and others running in the wrong paths. Examples below:
+
+```json
+{
+  "name": "examples",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "web3-example": "abi-types-generator './abi-examples/fake-contract-abi.json' --output='./web3/fake-contract-example/generated-typings' --name=fake-contract",
+    "web3-token-abi": "abi-types-generator './abi-examples/token-abi.json' --output='./web3/uniswap-example/generated-typings' --name=token-contract",
+    "web3-uniswap-exchange-abi": "abi-types-generator './abi-examples/uniswap-exchange-abi.json' --output='./web3/uniswap-example/generated-typings' --name=uniswap-exchange-contract",
+    "web3-uniswap-factory-abi": "abi-types-generator './abi-examples/uniswap-factory-abi.json' --output='./web3/uniswap-example/generated-typings' --name=uniswap-factory-contract",
+    "web3-uniswap": "npm run web3-token-abi && npm run web3-uniswap-exchange-abi && npm run web3-uniswap-factory-abi",
+    "ethers-example": "abi-types-generator './abi-examples/fake-contract-abi.json' --output='./ethers/fake-contract-example/generated-typings' --name=fake-contract --provider=ethers",
+    "ethers-token-abi": "abi-types-generator './abi-examples/token-abi.json' --output='./ethers/uniswap-example/generated-typings' --name=token-contract --provider=ethers",
+    "ethers-uniswap-exchange-abi": "abi-types-generator './abi-examples/uniswap-exchange-abi.json' --output='./ethers/uniswap-example/generated-typings' --name=uniswap-exchange-contract --provider=ethers",
+    "ethers-uniswap-factory-abi": "abi-types-generator './abi-examples/uniswap-factory-abi.json' --output='./ethers/uniswap-example/generated-typings' --name=uniswap-factory-contract --provider=ethers",
+    "ethers-uniswap": "npm run ethers-token-abi && npm run ethers-uniswap-exchange-abi && npm run ethers-uniswap-factory-abi",
+    "ethers-v5-example": "abi-types-generator './abi-examples/fake-contract-abi.json' --output='./ethers_v5/fake-contract-example/generated-typings' --name=fake-contract --provider=ethers_v5",
+    "ethers-v5-token-abi": "abi-types-generator './abi-examples/token-abi.json' --output='./ethers_v5/uniswap-example/generated-typings' --name=token-contract --provider=ethers_v5",
+    "ethers-v5-uniswap-exchange-abi": "abi-types-generator './abi-examples/uniswap-exchange-abi.json' --output='./ethers_v5/uniswap-example/generated-typings' --name=uniswap-exchange-contract --provider=ethers_v5",
+    "ethers-v5-uniswap-factory-abi": "abi-types-generator './abi-examples/uniswap-factory-abi.json' --output='./ethers_v5/uniswap-example/generated-typings' --name=uniswap-factory-contract --provider=ethers_v5",
+    "ethers-v5-uniswap": "npm run ethers-token-abi && npm run ethers-uniswap-exchange-abi && npm run ethers-uniswap-factory-abi"
+  }
+}
 ```
 
 ### Arguments
@@ -221,12 +253,12 @@ The cli tool will generate all your typings for you and expose them in the gener
 Lets say i run the cli command:
 
 ```ts
-$ abi-types-generator ./abi-examples/fake-contract-abi.json  --output=./web3/generated-typings --name=fake-contract
+$ abi-types-generator ./abi-examples/fake-contract-abi.json  --output=./generated-typings --name=fake-contract
 ```
 
-This will generate an `ts` file of `./examples/web3/fake-contract.ts` which has all your strongly typed methods and events.
+This will generate an `ts` file of `./generated-typings/fake-contract.ts` which has all your strongly typed methods and events.
 
-All you meed to do is cast your `new web3.eth.Contract` code to an `ContractContext` which is exposed in where you defined the `--output` path to. In this example it is `'./examples/web3/fake-contract.ts'`.
+All you meed to do is cast your `new web3.eth.Contract` code to an `ContractContext` which is exposed in where you defined the `--output` path to. In this example it is `./generated-typings/fake-contract.ts`
 
 #### Example:
 
@@ -352,18 +384,18 @@ Lets say i run the cli command:
 Ethers v4
 
 ```ts
-$ abi-types-generator ./abi-examples/fake-contract-abi.json  --output=./ethers/generated-typings --name=fake-contract --provider=ethers
+$ abi-types-generator ./abi-examples/fake-contract-abi.json  --output=./generated-typings --name=fake-contract --provider=ethers
 ```
 
 Ethers v5
 
 ```ts
-$ abi-types-generator ./abi-examples/fake-contract-abi.json  --output=./ethers/generated-typings --name=fake-contract --provider=ethers_v5
+$ abi-types-generator ./abi-examples/fake-contract-abi.json  --output=./generated-typings --name=fake-contract --provider=ethers_v5
 ```
 
-This will generate an `ts` file of `./examples/ethers/fake-contract.ts` which has all your strongly typed methods and events.
+This will generate an `ts` file of `./generated-typings/fake-contract.ts` which has all your strongly typed methods and events.
 
-All you meed to do is cast your `new ethers.Contract` code to an `ContractContext` which is exposed in where you defined the `--output` path to. In this example it is `'./examples/ethers/fake-contract.ts'`.
+All you meed to do is cast your `new web3.eth.Contract` code to an `ContractContext` which is exposed in where you defined the `--output` path to. In this example it is `./generated-typings/fake-contract.ts`
 
 #### Example:
 

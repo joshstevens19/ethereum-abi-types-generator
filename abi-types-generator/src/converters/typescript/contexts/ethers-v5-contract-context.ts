@@ -1,4 +1,3 @@
-import { Signer } from 'ethers';
 import {
   BlockTag,
   Listener,
@@ -6,7 +5,7 @@ import {
   TransactionRequest,
   TransactionResponse,
 } from 'ethers/providers';
-import { BigNumber, BigNumberish, EventFilter } from 'ethersv5';
+import { BigNumber, BigNumberish, EventFilter, Signer } from 'ethersv5';
 import {
   AbiCoder,
   BytesLike as Arrayish,
@@ -149,37 +148,79 @@ interface EthersContractV5<TMethods, TMethodNames, TEventsContext, TEventType>
   readonly functions: TMethods;
   readonly filters: TEventsContext;
   deployed(): Promise<
-    EthersContractV5<TMethods, TMethodNames, TEventsContext, TEventType>
+    EthersContractContextV5<TMethods, TMethodNames, TEventsContext, TEventType>
   >;
   _deployed(
     blockTag?: BlockTag
   ): Promise<
-    EthersContractV5<TMethods, TMethodNames, TEventsContext, TEventType>
+    EthersContractContextV5<TMethods, TMethodNames, TEventsContext, TEventType>
   >;
+
+  /**
+   * Type any here so if you are using a different version of ethers then
+   * installed it will still compile
+   * @param signerOrProvider should be type of Wallet | Signer | Provider | string
+   */
   connect(
-    signerOrProvider: Signer | Provider | string
-  ): EthersContractV5<TMethods, TMethodNames, TEventsContext, TEventType>;
+    // tslint:disable-next-line: no-any
+    signerOrProvider: any
+  ): EthersContractContextV5<
+    TMethods,
+    TMethodNames,
+    TEventsContext,
+    TEventType
+  >;
   attach(
     addressOrName: string
-  ): EthersContractV5<TMethods, TMethodNames, TEventsContext, TEventType>;
+  ): EthersContractContextV5<
+    TMethods,
+    TMethodNames,
+    TEventsContext,
+    TEventType
+  >;
   // need to overwrite the event filters for strongly typed events
   on(
     event: EventFilter | TEventType,
     listener: Listener
-  ): EthersContractV5<TMethods, TMethodNames, TEventsContext, TEventType>;
+  ): EthersContractContextV5<
+    TMethods,
+    TMethodNames,
+    TEventsContext,
+    TEventType
+  >;
   once(
     event: EventFilter | TEventType,
     listener: Listener
-  ): EthersContractV5<TMethods, TMethodNames, TEventsContext, TEventType>;
+  ): EthersContractContextV5<
+    TMethods,
+    TMethodNames,
+    TEventsContext,
+    TEventType
+  >;
   addListener(
     eventName: EventFilter | TEventType,
     listener: Listener
-  ): EthersContractV5<TMethods, TMethodNames, TEventsContext, TEventType>;
+  ): EthersContractContextV5<
+    TMethods,
+    TMethodNames,
+    TEventsContext,
+    TEventType
+  >;
   removeAllListeners(
     eventName: EventFilter | TEventType
-  ): EthersContractV5<TMethods, TMethodNames, TEventsContext, TEventType>;
+  ): EthersContractContextV5<
+    TMethods,
+    TMethodNames,
+    TEventsContext,
+    TEventType
+  >;
   removeListener(
     eventName: TEventType,
     listener: Listener
-  ): EthersContractV5<TMethods, TMethodNames, TEventsContext, TEventType>;
+  ): EthersContractContextV5<
+    TMethods,
+    TMethodNames,
+    TEventsContext,
+    TEventType
+  >;
 }

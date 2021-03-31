@@ -5,7 +5,6 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "broke-example": "abi-types-generator './abi-examples/failing-contract-example-abi.json' --output='./web3/fake-contract-example/generated-typings' --name=broken-contract",
     "web3-example": "abi-types-generator './abi-examples/fake-contract-abi.json' --output='./web3/fake-contract-example/generated-typings' --name=fake-contract",
     "web3-token-abi": "abi-types-generator './abi-examples/token-abi.json' --output='./web3/uniswap-example/generated-typings' --name=token-contract",
     "web3-uniswap-exchange-abi": "abi-types-generator './abi-examples/uniswap-exchange-abi.json' --output='./web3/uniswap-example/generated-typings' --name=uniswap-exchange-contract",
@@ -17,16 +16,24 @@
     "ethers-uniswap-exchange-abi": "abi-types-generator './abi-examples/uniswap-exchange-abi.json' --output='./ethers/uniswap-example/generated-typings' --name=uniswap-exchange-contract --provider=ethers",
     "ethers-uniswap-factory-abi": "abi-types-generator './abi-examples/uniswap-factory-abi.json' --output='./ethers/uniswap-example/generated-typings' --name=uniswap-factory-contract --provider=ethers",
     "ethers-uniswap": "npm run ethers-token-abi && npm run ethers-uniswap-exchange-abi && npm run ethers-uniswap-factory-abi",
-    "ethers-run-uniswap": "tsc && node ./dist/ethers/uniswap-example/uniswap-contract-strongly-typed-example.js"
+    "ethers-run-uniswap": "tsc && node ./dist/ethers/uniswap-example/uniswap-contract-strongly-typed-example.js",
+    "ethers-v5-example": "abi-types-generator './abi-examples/fake-contract-abi.json' --output='./ethers_v5/fake-contract-example/generated-typings' --name=fake-contract --provider=ethers_v5",
+    "ethers-v5-token-abi": "abi-types-generator './abi-examples/token-abi.json' --output='./ethers_v5/uniswap-example/generated-typings' --name=token-contract --provider=ethers_v5",
+    "ethers-v5-uniswap-exchange-abi": "abi-types-generator './abi-examples/uniswap-exchange-abi.json' --output='./ethers_v5/uniswap-example/generated-typings' --name=uniswap-exchange-contract --provider=ethers_v5",
+    "ethers-v5-uniswap-factory-abi": "abi-types-generator './abi-examples/uniswap-factory-abi.json' --output='./ethers_v5/uniswap-example/generated-typings' --name=uniswap-factory-contract --provider=ethers_v5",
+    "ethers-v5-uniswap": "npm run ethers-token-abi && npm run ethers-uniswap-exchange-abi && npm run ethers-uniswap-factory-abi",
+    "ethers-v5-run-uniswap": "tsc && node ./dist/ethers_v5/uniswap-example/uniswap-contract-strongly-typed-example.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "bignumber.js": "^9.0.0",
     "ethers": "^4.0.47",
-    "web3": "^1.2.7"
+    "web3": "^1.2.7",
+    "ethersv5": "npm:ethers@^5.0.32"
   },
   "devDependencies": {
-    "ethereum-abi-types-generator": "file:ethereum-abi-types-generator-1.1.0.tgz"
+    "ethereum-abi-types-generator": "file:ethereum-abi-types-generator-1.1.1.tgz",
+    "typescript": "^4.2.3"
   }
 }

@@ -49,8 +49,14 @@ interface EthersContract<TMethods, TEventsContext, TEventType>
   _deployed(
     blockTag?: BlockTag
   ): Promise<EthersContractContext<TMethods, TEventsContext, TEventType>>;
+  /**
+   * Type any here so if you are using a different version of ethers then
+   * installed it will still compile
+   * @param signerOrProvider should be type of Wallet | Signer | Provider | string
+   */
   connect(
-    signerOrProvider: Signer | Provider | string
+    // tslint:disable-next-line: no-any
+    signerOrProvider: any
   ): EthersContractContext<TMethods, TEventsContext, TEventType>;
   attach(
     addressOrName: string

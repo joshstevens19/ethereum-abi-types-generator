@@ -1,5 +1,3 @@
-import { AbiItem } from 'ethereum-abi-types-generator';
-
 export class AbiExamples {
   /**
    * Mainnet fun token contract address
@@ -34,7 +32,7 @@ export class AbiExamples {
   public static uniswapExchangeAbi = require('../../abi-examples/uniswap-exchange-abi');
 
   // used for giffs and fake contract example
-  public static YOUR_ABI = ('' as unknown) as AbiItem[];
+  public static YOUR_ABI: any = require('../../abi-examples/YOUR_ABI_JSON_FILE');
 
   // used for giffs and fake contract example
   public static YOUR_CONTRACT_ADDRESS = AbiExamples.funContractAddress;
