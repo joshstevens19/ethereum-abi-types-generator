@@ -397,7 +397,7 @@ $ abi-types-generator ./abi-examples/fake-contract-abi.json  --output=./generate
 
 This will generate an `ts` file of `./generated-typings/fake-contract.ts` which has all your strongly typed methods and events.
 
-All you meed to do is cast your `new web3.eth.Contract` code to an `ContractContext` which is exposed in where you defined the `--output` path to. In this example it is `./generated-typings/fake-contract.ts`
+All you meed to do is cast your `new ethers.Contract` code to an `ContractContext` which is exposed in where you defined the `--output` path to. In this example it is `./generated-typings/fake-contract.ts`
 
 #### Example:
 
