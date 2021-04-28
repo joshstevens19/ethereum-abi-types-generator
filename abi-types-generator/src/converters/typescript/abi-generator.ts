@@ -603,6 +603,10 @@ export default class AbiGenerator {
             if (this._context.provider.includes(Provider.ethers)) {
               ouputProperties += `${i}: ${outputTsType};`;
             }
+
+            if (abiItemOutput.type === SolidityType.tuple) {
+              this.buildTupleResponseInterface(abiItem.outputs[0]);
+            }
           }
 
           if (this._context.provider.includes(Provider.ethers)) {

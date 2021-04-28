@@ -8,7 +8,8 @@
     "watch": "tsc --watch",
     "build": "tsc",
     "lint": "npx tslint -c tslint.json 'src/**/*.ts'",
-    "publish-cli": "node ./copy-readme.js && tsc && npm publish --access public"
+    "publish-cli": "node ./copy-readme.js && tsc && npm publish --access public",
+    "generate-playground": "node ./dist/bin/generator-cli.js './src/__PLAYGROUND__/abi.json' --output='./src/__PLAYGROUND__' --name=playground-contract --provider=ethers_v5"
   },
   "keywords": [
     "ethereum",
