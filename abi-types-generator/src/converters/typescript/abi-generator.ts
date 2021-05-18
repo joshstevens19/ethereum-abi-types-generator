@@ -534,7 +534,7 @@ export default class AbiGenerator {
    */
   private buildTupleResponseInterface(abiOutput: AbiOutput): string {
     const interfaceName = TypeScriptHelpers.buildResponseInterfaceName(
-      abiOutput.name
+      abiOutput
     );
 
     let properties = '';
@@ -548,6 +548,43 @@ export default class AbiGenerator {
 
       if (this._context.provider.includes(Provider.ethers)) {
         properties += `${i}: ${outputTsType};`;
+      }
+
+      // check for deep tuples in tuple in tuples
+      if (abiOutput.components![i].components) {
+        const deepInterfaceName = TypeScriptHelpers.buildResponseInterfaceName(
+          abiOutput.components![i]
+        );
+        let deepProperties = '';
+        for (
+          let deep = 0;
+          deep < abiOutput.components![i].components!.length;
+          deep++
+        ) {
+          if (abiOutput.components![i].components![deep].components) {
+            var deepOutputTsType = TypeScriptHelpers.getSolidityOutputTsType(
+              abiOutput.components![i].components![deep],
+              this._context.provider
+            );
+            let propertyName = abiOutput.components![i].components![deep].name;
+            if (propertyName.length === 0) {
+              propertyName = `result${deep}`;
+            }
+
+            deepProperties += propertyName + ': ' + deepOutputTsType + ';';
+            if (this._context.provider.includes(Provider.ethers)) {
+              deepProperties += deep + ': ' + outputTsType + ';';
+            }
+
+            this.buildTupleResponseInterface(
+              abiOutput.components![i].components![deep]
+            );
+          }
+        }
+
+        this._parametersAndReturnTypeInterfaces.push(
+          TypeScriptHelpers.buildInterface(deepInterfaceName, deepProperties)
+        );
       }
     }
 
@@ -585,7 +622,7 @@ export default class AbiGenerator {
       } else {
         if (Helpers.isNeverModifyBlockchainState(abiItem)) {
           const interfaceName = TypeScriptHelpers.buildResponseInterfaceName(
-            abiItem.name
+            abiItem
           );
 
           let ouputProperties = '';
@@ -598,14 +635,19 @@ export default class AbiGenerator {
               this._context.provider
             );
 
-            ouputProperties += `${abiItemOutput.name}: ${outputTsType};`;
+            let propertyName = abiItemOutput.name;
+            if (propertyName.length === 0) {
+              propertyName = `result${i}`;
+            }
+
+            ouputProperties += `${propertyName}: ${outputTsType};`;
 
             if (this._context.provider.includes(Provider.ethers)) {
               ouputProperties += `${i}: ${outputTsType};`;
             }
 
-            if (abiItemOutput.type === SolidityType.tuple) {
-              this.buildTupleResponseInterface(abiItem.outputs[0]);
+            if (abiItemOutput.type.includes(SolidityType.tuple)) {
+              this.buildTupleResponseInterface(abiItem.outputs[i]);
             }
           }
 

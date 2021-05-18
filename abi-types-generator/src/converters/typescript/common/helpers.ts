@@ -1,4 +1,4 @@
-import { AbiOutput, SolidityType } from '../../../abi-properties';
+import { AbiInput, AbiOutput, SolidityType } from '../../../abi-properties';
 import Helpers from '../../../common/helpers';
 import { Provider } from '../enums/provider';
 
@@ -164,7 +164,7 @@ export default class TypeScriptHelpers {
     }
 
     if (abiOutput.type.includes(SolidityType.tuple)) {
-      const interfaceName = this.buildResponseInterfaceName(abiOutput.name);
+      const interfaceName = this.buildResponseInterfaceName(abiOutput);
       if (abiOutput.type.includes('[')) {
         return `${interfaceName}[]`;
       }
@@ -201,10 +201,32 @@ export default class TypeScriptHelpers {
 
   /**
    * Build response interface name
-   * @param name The name
+   * @param inputOrOutput The input or output
    */
-  public static buildResponseInterfaceName(name: string): string {
-    return `${Helpers.capitalize(name)}Response`;
+  public static buildResponseInterfaceName(
+    inputOrOutput: AbiOutput | AbiInput
+  ): string {
+    if (inputOrOutput.name.length > 0) {
+      return `${Helpers.capitalize(inputOrOutput.name)}Response`;
+    }
+
+    if (!inputOrOutput.internalType) {
+      throw new Error(
+        `All tuple types need a name or a internal type else the tool can not generate static naming for the responses please check all your tuple and tuple[] have got a name or a internal type. - ${JSON.stringify(
+          inputOrOutput
+        )}`
+      );
+    }
+
+    let internalType = Helpers.deepClone(inputOrOutput.internalType!);
+
+    return `${Helpers.capitalize(
+      internalType
+        .substring(internalType.indexOf('.'))
+        .replace('.', '')
+        .replace('[', '')
+        .replace(']', '')
+    )}Response`;
   }
 
   /**
