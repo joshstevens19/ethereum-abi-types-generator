@@ -207,7 +207,7 @@
           }
         ],
         "internalType": "struct PositionsV2.Cartesian",
-        "name": "cartesian",
+        "name": "",
         "type": "tuple"
       }
     ],
@@ -309,7 +309,7 @@
           }
         ],
         "internalType": "struct ICometManagerV4.Comet",
-        "name": "comet",
+        "name": "",
         "type": "tuple"
       }
     ],
