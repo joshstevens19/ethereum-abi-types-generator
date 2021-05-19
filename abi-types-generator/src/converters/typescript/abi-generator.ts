@@ -516,9 +516,7 @@ export default class AbiGenerator {
       )};`;
     }
 
-    this._parametersAndReturnTypeInterfaces.push(
-      TypeScriptHelpers.buildInterface(interfaceName, properties)
-    );
+    this.addReturnTypeInterface(interfaceName, properties);
 
     if (abiInput.type.includes('[')) {
       return `${interfaceName}[]`;
@@ -582,15 +580,11 @@ export default class AbiGenerator {
           }
         }
 
-        this._parametersAndReturnTypeInterfaces.push(
-          TypeScriptHelpers.buildInterface(deepInterfaceName, deepProperties)
-        );
+        this.addReturnTypeInterface(deepInterfaceName, deepProperties);
       }
     }
 
-    this._parametersAndReturnTypeInterfaces.push(
-      TypeScriptHelpers.buildInterface(interfaceName, properties)
-    );
+    this.addReturnTypeInterface(interfaceName, properties);
 
     if (abiOutput.type.includes('[')) {
       return `${interfaceName}[]`;
@@ -655,9 +649,7 @@ export default class AbiGenerator {
             ouputProperties += `length: ${abiItem.outputs.length};`;
           }
 
-          this._parametersAndReturnTypeInterfaces.push(
-            TypeScriptHelpers.buildInterface(interfaceName, ouputProperties)
-          );
+          this.addReturnTypeInterface(interfaceName, ouputProperties);
 
           output += this.buildMethodReturnContext(interfaceName, abiItem);
         } else {
@@ -670,6 +662,27 @@ export default class AbiGenerator {
     }
 
     return output;
+  }
+
+  /**
+   * add return type interfaces
+   * @param interfaceName
+   * @param interfaceContext
+   */
+  private addReturnTypeInterface(
+    interfaceName: string,
+    interfaceContext: string
+  ): void {
+    // filter out any repeated interfaces
+    if (
+      !this._parametersAndReturnTypeInterfaces.find((c) =>
+        c.includes(`export interface ${interfaceName}`)
+      )
+    ) {
+      this._parametersAndReturnTypeInterfaces.push(
+        TypeScriptHelpers.buildInterface(interfaceName, interfaceContext)
+      );
+    }
   }
 
   /**
