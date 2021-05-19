@@ -666,8 +666,8 @@ export default class AbiGenerator {
 
   /**
    * add return type interfaces
-   * @param interfaceName
-   * @param interfaceContext
+   * @param interfaceName The interface name
+   * @param interfaceContext The interface context
    */
   private addReturnTypeInterface(
     interfaceName: string,
