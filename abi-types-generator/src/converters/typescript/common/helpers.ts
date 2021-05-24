@@ -218,14 +218,17 @@ export default class TypeScriptHelpers {
       );
     }
 
-    let internalType = Helpers.deepClone(inputOrOutput.internalType!);
+    const internalType = Helpers.deepClone(inputOrOutput.internalType!);
 
     return `${Helpers.capitalize(
       internalType
         .substring(internalType.indexOf('.'))
+        .toLocaleLowerCase()
+        .replace('struct', '')
         .replace('.', '')
         .replace('[', '')
         .replace(']', '')
+        .replace(/\s/g, '')
     )}Response`;
   }
 

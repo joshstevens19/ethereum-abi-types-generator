@@ -23,7 +23,8 @@
     "ethers-v5-uniswap-factory-abi": "abi-types-generator './abi-examples/uniswap-factory-abi.json' --output='./ethers_v5/uniswap-example/generated-typings' --name=uniswap-factory-contract --provider=ethers_v5",
     "ethers-v5-uniswap": "npm run ethers-token-abi && npm run ethers-uniswap-exchange-abi && npm run ethers-uniswap-factory-abi",
     "ethers-v5-run-uniswap": "tsc && node ./dist/ethers_v5/uniswap-example/uniswap-contract-strongly-typed-example.js",
-    "issue-14": "abi-types-generator './abi-examples/issue-14.json' --output='./ethers_v5/uniswap-example/generated-typings' --name=issue-14 --provider=ethers_v5"
+    "issue-14": "abi-types-generator './abi-examples/issue-14.json' --output='./ethers_v5/uniswap-example/generated-typings' --name=issue-14 --provider=ethers_v5",
+    "issue-14-take-2": "abi-types-generator './abi-examples/issue-14-take-2.json' --output='./ethers_v5/uniswap-example/generated-typings' --name=issue-14-take-2 --provider=ethers_v5"
   },
   "author": "",
   "license": "ISC",
@@ -34,7 +35,7 @@
     "ethersv5": "npm:ethers@^5.0.32"
   },
   "devDependencies": {
-    "ethereum-abi-types-generator": "file:ethereum-abi-types-generator-1.1.4.tgz",
+    "ethereum-abi-types-generator": "file:ethereum-abi-types-generator-1.1.5.tgz",
     "typescript": "^4.2.3"
   }
 }
