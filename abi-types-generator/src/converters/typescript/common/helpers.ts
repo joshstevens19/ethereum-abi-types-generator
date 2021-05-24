@@ -223,7 +223,7 @@ export default class TypeScriptHelpers {
     return `${Helpers.capitalize(
       internalType
         .substring(internalType.indexOf('.'))
-        .toLocaleLowerCase()
+        .toLowerCase()
         .replace('struct', '')
         .replace('.', '')
         .replace('[', '')
