@@ -277,10 +277,10 @@ const web3 = new Web3(
 // contract interfaces which conflicts with `web3` typings.
 // This all work great but the compiler gets confused.
 // Casting to unknown first then the `ContractContext` solves this.
-const contract = (new web3.eth.Contract(
+const contract = new web3.eth.Contract(
   AbiExamples.YOUR_ABI,
   AbiExamples.YOUR_CONTRACT_ADDRESS
-) as unknown) as ContractContext;
+) as unknown as ContractContext;
 ```
 
 Easy as that 🔥🔥
@@ -307,10 +307,10 @@ const example = async () => {
   // contract interfaces which conflicts with `web3` typings.
   // This all work great but the compiler gets confused.
   // Casting to unknown first then the `ContractContext` solves this.
-  const contract = (new web3.eth.Contract(
+  const contract = new web3.eth.Contract(
     AbiExamples.YOUR_ABI,
     AbiExamples.YOUR_CONTRACT_ADDRESS
-  ) as unknown) as ContractContext;
+  ) as unknown as ContractContext;
 
   // you now have full typings on `contract.methods` which has generated docs
   const simpleCall = await contract.methods
@@ -415,11 +415,11 @@ const customHttpProvider = new ethers.providers.JsonRpcProvider(
 // contract interfaces which conflicts with `ethers` typings.
 // This all work great but the compiler gets confused.
 // Casting to unknown first then the `ContractContext` solves this.
-const contract = (new ethers.Contract(
+const contract = new ethers.Contract(
   AbiExamples.YOUR_CONTRACT_ADDRESS,
   AbiExamples.YOUR_ABI,
   customHttpProvider
-) as unknown) as ContractContext;
+) as unknown as ContractContext;
 ```
 
 Easy as that 🔥🔥
@@ -447,11 +447,11 @@ const example = async () => {
   // contract interfaces which conflicts with `ethers` typings.
   // This all work great but the compiler gets confused.
   // Casting to unknown first then the `ContractContext` solves this.
-  const contract = (new ethers.Contract(
+  const contract = new ethers.Contract(
     AbiExamples.YOUR_CONTRACT_ADDRESS,
     AbiExamples.YOUR_ABI,
     customHttpProvider
-  ) as unknown) as ContractContext;
+  ) as unknown as ContractContext;
 
   // you now have full typings on `contract.x` which has generated docs
   const simpleCall = await contract.easyExample(
@@ -569,6 +569,14 @@ Please raise any issues in the below link.
 
 https://github.com/joshstevens19/ethereum-abi-types-generator/issues
 
-## Thanks
+## Thanks And Support
 
-This package is brought to you by [Josh Stevens](https://github.com/joshstevens19). My aim is to be able to keep creating these awesome packages to help the Ethereum space grow with easier-to-use tools to allow the learning curve to get involved with blockchain development easier and also making Ethereum ecosystem better. So if you want to help out with that vision and allow me to invest more time into creating cool packages please [sponsor me](https://github.com/sponsors/joshstevens19), every little helps. By sponsoring me, you're supporting me to be able to maintain existing packages, extend existing packages (as Ethereum matures), and allowing me to build more packages for Ethereum due to being able to invest more time into it. Thanks, everyone!
+This package is brought to you by [Josh Stevens](https://github.com/joshstevens19). My aim is to be able to keep creating these awesome packages to help the Ethereum space grow with easier-to-use tools to allow the learning curve to get involved with blockchain development easier and making Ethereum ecosystem better. If you want to help with that vision and allow me to invest more time into creating cool packages or if this package has saved you a lot of development time donations are welcome, every little helps. By donating, you are supporting me to be able to maintain existing packages, extend existing packages (as Ethereum matures), and allowing me to build more packages for Ethereum due to being able to invest more time into it. Thanks, everyone!
+
+## Direct donations
+
+Direct donations any token accepted - Eth address > `0x699c2daD091ffcF18f3cd9E8495929CA3a64dFe1`
+
+## Github sponsors
+
+[sponsor me](https://github.com/sponsors/joshstevens19) via github using fiat money
