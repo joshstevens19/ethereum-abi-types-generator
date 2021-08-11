@@ -35,7 +35,7 @@
     "ethersv5": "npm:ethers@^5.0.32"
   },
   "devDependencies": {
-    "ethereum-abi-types-generator": "file:ethereum-abi-types-generator-1.1.5.tgz",
+    "ethereum-abi-types-generator": "file:ethereum-abi-types-generator-1.1.8.tgz",
     "typescript": "^4.2.3"
   }
 }
