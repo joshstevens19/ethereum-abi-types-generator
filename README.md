@@ -35,9 +35,44 @@ A CLI tool which allows you to convert an ABI json file into fully loaded interf
 - Ethers 5.x
 - Ethers 4.x
 
-## Motivation
+## ethereum-abi-types-generator vs TypeChain
 
-The first question I normally get is “have you seen typechain”, yes I have of course but it didn’t have the dev user experience I wanted. The main difference with this vs typechain is you can use the same web3 and ethers interface and not have to use the typechain generated one. Meaning no lines of code change.
+The first question I normally get is “have you seen TypeChain”, yes I have of course and it is a great tool but it was missing and did a few things which I didn't want as a developer. The main differences with this ethereum-abi-types-generator vs typechain are:
+
+### No bundle size at all added
+
+With TypeChain you have a class factory you have to connect to adding size into the final bundle. This package is all interfaces meaning nothing is added to your final    bundle size.
+
+### Exposes proper typed interfaces meaning you can use them in your application
+
+TypeChain has dynamic interfaces aka ```public contractCall(): Promise<{ foo: BigNumber }>``` so if you wanted to use that interface somewhere in your app its not exported so can not be used. This lib generates response interfaces which are exported aka:
+
+```ts
+export interface ContractCallResponse {
+  foo: BigNumber
+}
+
+public contractCall(): Promise<ContractCallResponse>
+```
+
+This means you can use this interface anywhere in your app as its just exported for you. The naming for this is `${contractCallMethodName}Response` aka if a method was called HelloWorld the response interface would be `HelloWorldResponse`. This also follows suit on the request interfaces aka:
+
+```ts
+export interface FooRequest {
+  foo: BigNumber,
+  boo: string;
+}
+
+public contractCall(request: FooRequest): Promise<ContractCallResponse>
+```
+
+If you have worked with dynamic interfaces you understand the pain it brings having to recreate everytime. 
+
+### Use your provider interface your use too
+
+TypeChain you have to connect to the factory then use the contract that way. With this lib you just use web3 or ethers interface for every contract call meaning you don't have to get use to another process it just works and zero code changes just cast and you got compile time errors for contracts. 
+  
+## Motivation
 
 Blockchain development in JavaScript is already super hard. You have all these tools like `truffle,` `ethers`, `web3` (the list goes on) which you have to get use to and the learning curve is already quite high. On top of this, you have loads of other tools to get things to work as you need. TypeScript allows you to bring runtime errors in the compiler but on contract calls most developers have to either build their own types meaning maintaining them and easily getting out of sync or have no compile type errors using the dreaded `any` hoping and praying you don't break anything. The idea was to not have to make the developer wrap any kind of `web3` or `ethers` instance or use a new tool to get this working but with a simple 1 line change you can use all the same libraries interfaces as what the developer is use to but with `types` `auto-generated` for you to bring back compile-time errors on any contract calls with super ease.
 
