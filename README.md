@@ -330,7 +330,7 @@ describe('Example test', function () {
 
   it('I love to write unit tests', async () => {
     const foo: GetFooRequest = { fooBoo: true };
-    const result = await contract.getFoo(foo);
+    const result: GetFooResponse = await contract.getFoo(foo);
 
     expect(result).to.equal(
       { fooResponse: 'boo' }
