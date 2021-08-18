@@ -4,7 +4,7 @@ import { ProgramOptions } from '../common/models/program-options';
 import { ConverterType } from '../converters/enums/converter-type';
 import AbiGenerator from '../converters/typescript/abi-generator';
 import { Provider } from '../converters/typescript/enums/provider';
-import { GenerateResponse } from '../converters/typescript/models/generate-response';
+import { HardhatFactory } from '../converters/typescript/hardhat-factory';
 import { CommandTypes } from './enums/command-types';
 
 const help = Helpers.getHelpMessageByCommandType(CommandTypes.generate);
@@ -17,18 +17,29 @@ export = {
 
     const language = cmd.options.lang || ConverterType.ts;
 
-    let generateResponse: GenerateResponse;
-
     try {
       switch (language) {
         case ConverterType.ts:
-          generateResponse = new AbiGenerator({
-            provider: (cmd.options.provider as Provider) || Provider.web3,
-            abiFileLocation: cmd.command,
-            outputPathDirectory: cmd.options.output,
-            name: cmd.options.name,
-            watch: cmd.options.watch !== undefined,
-          }).generate();
+          if (cmd.command === 'hardhat') {
+            const response = await new HardhatFactory().generate();
+            if (response) {
+              Logger.log(
+                `successfully created typings for all contracts for hardhat, these are saved in ${response}`
+              );
+            }
+          } else {
+            const generateResponse = new AbiGenerator({
+              provider: (cmd.options.provider as Provider) || Provider.web3,
+              abiFileLocation: cmd.command,
+              outputPathDirectory: cmd.options.output,
+              name: cmd.options.name,
+              watch: cmd.options.watch !== undefined,
+            }).generate();
+
+            Logger.log(
+              `successfully created typings for abi file ${generateResponse.abiJsonFileLocation} saved in ${generateResponse.outputLocation}`
+            );
+          }
           break;
         default:
           Logger.error(
@@ -40,9 +51,5 @@ export = {
       Logger.error(error.message);
       return;
     }
-
-    Logger.log(
-      `successfully created typings for abi file ${generateResponse.abiJsonFileLocation} saved in ${generateResponse.outputLocation}`
-    );
   },
 };

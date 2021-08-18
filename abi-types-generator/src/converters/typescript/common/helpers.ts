@@ -1,3 +1,5 @@
+import fs from 'fs-extra';
+import path from 'path';
 import { AbiInput, AbiOutput, SolidityType } from '../../../abi-properties';
 import Helpers from '../../../common/helpers';
 import { Provider } from '../enums/provider';
@@ -351,5 +353,20 @@ export default class TypeScriptHelpers {
     }
 
     return `export type ${typeName} = ${result};`;
+  }
+
+  /**
+   * Check is a path is a directory
+   * @param pathValue The path value
+   */
+  public static isDirectory(pathValue: string): boolean {
+    return fs.existsSync(pathValue) && fs.lstatSync(pathValue).isDirectory();
+  }
+
+  /**
+   * Build the executing path
+   */
+  public static buildExecutingPath(joinPath: string): string {
+    return path.resolve(process.cwd(), joinPath);
   }
 }

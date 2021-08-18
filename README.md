@@ -34,6 +34,7 @@ A CLI tool which allows you to convert an ABI json file into fully loaded interf
 - Web3 1.x and 2.x
 - Ethers 5.x
 - Ethers 4.x
+- Hardhat
 
 ## ethereum-abi-types-generator vs TypeChain
 
@@ -41,11 +42,11 @@ The first question I normally get is “have you seen TypeChain”, yes I have o
 
 ### No bundle size at all added
 
-With TypeChain you have a class factory you have to connect to adding size into the final bundle. This package is all interfaces meaning nothing is added to your final    bundle size.
+With TypeChain you have a class factory you have to connect to adding size into the final bundle. This package is all interfaces meaning nothing is added to your final bundle size.
 
 ### Exposes proper typed interfaces meaning you can use them in your application
 
-TypeChain has dynamic interfaces aka ```public contractCall(): Promise<{ foo: BigNumber }>``` so if you wanted to use that interface somewhere in your app its not exported so can not be used. This lib generates response interfaces which are exported aka:
+TypeChain has dynamic interfaces aka `public contractCall(): Promise<{ foo: BigNumber }>` so if you wanted to use that interface somewhere in your app its not exported so can not be used. This lib generates response interfaces which are exported aka:
 
 ```ts
 export interface ContractCallResponse {
@@ -66,12 +67,12 @@ export interface FooRequest {
 public contractCall(request: FooRequest): Promise<ContractCallResponse>
 ```
 
-If you have worked with dynamic interfaces you understand the pain it brings having to recreate everytime. 
+If you have worked with dynamic interfaces you understand the pain it brings having to recreate everytime.
 
 ### Use your provider interface your use too
 
-TypeChain you have to connect to the factory then use the contract that way. With this lib you just use web3 or ethers interface for every contract call meaning you don't have to get use to another process it just works and zero code changes just cast and you got compile time errors for contracts. 
-  
+TypeChain you have to connect to the factory then use the contract that way. With this lib you just use web3 or ethers interface for every contract call meaning you don't have to get use to another process it just works and zero code changes just cast and you got compile time errors for contracts.
+
 ## Motivation
 
 Blockchain development in JavaScript is already super hard. You have all these tools like `truffle,` `ethers`, `web3` (the list goes on) which you have to get use to and the learning curve is already quite high. On top of this, you have loads of other tools to get things to work as you need. TypeScript allows you to bring runtime errors in the compiler but on contract calls most developers have to either build their own types meaning maintaining them and easily getting out of sync or have no compile type errors using the dreaded `any` hoping and praying you don't break anything. The idea was to not have to make the developer wrap any kind of `web3` or `ethers` instance or use a new tool to get this working but with a simple 1 line change you can use all the same libraries interfaces as what the developer is use to but with `types` `auto-generated` for you to bring back compile-time errors on any contract calls with super ease.
@@ -100,6 +101,8 @@ If you get compile time errors due to it waiting `web3` dependencies when using 
 
 ## CLI usage
 
+### Web3 1.x and 2.x & Ethers 5.x & Ethers 4.x
+
 ```ts
 $ abi-types-generator <abiFileLocation>
 $ abi-types-generator <abiFileLocation> --name=ABI_NAME
@@ -117,6 +120,12 @@ $ abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --provider=web3|
 $ abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --provider=web3|ethers|ethers_v5 --watch
 $ abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --name=ABI_NAME --provider=web3|ethers|ethers_v5
 $ abi-types-generator <abiFileLocation> --output=PATH_DIRECTORY --name=ABI_NAME --provider=web3|ethers|ethers_v5 --watch
+```
+
+#### Hardhat
+
+```ts
+$ abi-types-generator hardhat
 ```
 
 We suggest running these within the `script` commands in npm or yarn this way you will not lose your commands and can be run on build agents as well. Also you will not get confused with sharing the script and others running in the wrong paths. Examples below:
@@ -142,7 +151,8 @@ We suggest running these within the `script` commands in npm or yarn this way yo
     "ethers-v5-token-abi": "abi-types-generator './abi-examples/token-abi.json' --output='./ethers_v5/uniswap-example/generated-typings' --name=token-contract --provider=ethers_v5",
     "ethers-v5-uniswap-exchange-abi": "abi-types-generator './abi-examples/uniswap-exchange-abi.json' --output='./ethers_v5/uniswap-example/generated-typings' --name=uniswap-exchange-contract --provider=ethers_v5",
     "ethers-v5-uniswap-factory-abi": "abi-types-generator './abi-examples/uniswap-factory-abi.json' --output='./ethers_v5/uniswap-example/generated-typings' --name=uniswap-factory-contract --provider=ethers_v5",
-    "ethers-v5-uniswap": "npm run ethers-token-abi && npm run ethers-uniswap-exchange-abi && npm run ethers-uniswap-factory-abi"
+    "ethers-v5-uniswap": "npm run ethers-token-abi && npm run ethers-uniswap-exchange-abi && npm run ethers-uniswap-factory-abi",
+    "hardhat-example": "abi-types-generator hardhat"
   }
 }
 ```
@@ -274,6 +284,59 @@ We use `prettier` to format all files, to make sure it matches your coding style
 ##### Running tslint as well
 
 Right now the package does not try to find any of your `tslint.json` settings. It will support this soon. For now if you get any `tslint` errors when running the linter it's best to ignore any generated file in the `linterOptions` > `exclude` of the `tslint.json`. I tend to put all my generated files in 1 place so I can ignore the entire folder.
+
+### Using with hardhat
+
+First you create a script in your `package.json` that runs the `abi-types-generator` script after it compiles everytime.
+
+```json
+{
+  "scripts": {
+    "compile": "npx hardhat compile && abi-types-generator hardhat"
+  }
+}
+```
+
+If your contracts are ready to compile run:
+
+```bash
+$ npm run compile
+```
+
+You types are now created within the root of your hardhat project in a folder called `ethereum-abi-types` and you can use them throughout your tests/scripts or anything `ts` related.
+
+### Test example
+
+```ts
+import { expect } from 'chai';
+import { ethers } from 'hardhat';
+import {
+  ContractContext as MyVeryFirstContract,
+  GetFooResponse,
+  GetFooRequest,
+} from '../ethereum-abi-types/MyVeryFirstContract';
+
+describe('Example test', function () {
+  let contract: NftMetadataHelper;
+  beforeEach(async () => {
+    const contractFactory = await ethers.getContractFactory(
+      'MyVeryFirstContract'
+    );
+
+    // thats it you now have full typings on your contract
+    contract =
+      (await contractFactory.deploy()) as unknown as MyVeryFirstContract;
+  });
+
+  it('I love to write unit tests', async () => {
+    const foo: GetFooRequest = { fooBoo: true };
+    const result = await contract.getFoo(foo);
+
+    expect(result).to.equal(
+      { fooResponse: 'boo' }
+  });
+});
+```
 
 ### Using with web3 and ethers
 

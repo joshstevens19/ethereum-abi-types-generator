@@ -33,7 +33,7 @@ export default class AbiGenerator {
    */
   public generate(): GenerateResponse {
     this.clearAllQuotesFromContextInfo();
-    if (!this.isDirectory(this.getOutputPathDirectory())) {
+    if (!TypeScriptHelpers.isDirectory(this.getOutputPathDirectory())) {
       throw new Error('output path must be a directory');
     }
 
@@ -258,11 +258,14 @@ export default class AbiGenerator {
     }
 
     try {
-      const result: AbiItem[] = JSON.parse(
-        fs.readFileSync(abiFileFullPath, 'utf8')
-      );
+      // tslint:disable-next-line: no-any
+      const result: any = JSON.parse(fs.readFileSync(abiFileFullPath, 'utf8'));
 
-      return result;
+      if (result.abi) {
+        return result.abi;
+      }
+
+      return result as AbiItem[];
     } catch (error) {
       throw new Error(
         `Abi file ${abiFileFullPath} is not a json file. Abi must be a json file.`
@@ -281,15 +284,7 @@ export default class AbiGenerator {
    * Build the executing path
    */
   private buildExecutingPath(joinPath: string): string {
-    return path.resolve(process.cwd(), joinPath);
-  }
-
-  /**
-   * Check is a path is a directory
-   * @param pathValue The path value
-   */
-  private isDirectory(pathValue: string): boolean {
-    return fs.existsSync(pathValue) && fs.lstatSync(pathValue).isDirectory();
+    return TypeScriptHelpers.buildExecutingPath(joinPath);
   }
 
   /**
