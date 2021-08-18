@@ -317,7 +317,7 @@ import {
 } from '../ethereum-abi-types/MyVeryFirstContract';
 
 describe('Example test', function () {
-  let contract: NftMetadataHelper;
+  let contract: MyVeryFirstContract;
   beforeEach(async () => {
     const contractFactory = await ethers.getContractFactory(
       'MyVeryFirstContract'
