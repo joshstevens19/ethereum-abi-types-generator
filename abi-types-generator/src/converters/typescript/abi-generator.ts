@@ -554,21 +554,21 @@ export default class AbiGenerator {
           deep < abiOutput.components![i].components!.length;
           deep++
         ) {
+          const deepOutputTsType = TypeScriptHelpers.getSolidityOutputTsType(
+            abiOutput.components![i].components![deep],
+            this._context.provider
+          );
+          let propertyName = abiOutput.components![i].components![deep].name;
+          if (propertyName.length === 0) {
+            propertyName = `result${deep}`;
+          }
+
+          deepProperties += propertyName + ': ' + deepOutputTsType + ';';
+          if (this._context.provider.includes(Provider.ethers)) {
+            deepProperties += deep + ': ' + outputTsType + ';';
+          }
+
           if (abiOutput.components![i].components![deep].components) {
-            var deepOutputTsType = TypeScriptHelpers.getSolidityOutputTsType(
-              abiOutput.components![i].components![deep],
-              this._context.provider
-            );
-            let propertyName = abiOutput.components![i].components![deep].name;
-            if (propertyName.length === 0) {
-              propertyName = `result${deep}`;
-            }
-
-            deepProperties += propertyName + ': ' + deepOutputTsType + ';';
-            if (this._context.provider.includes(Provider.ethers)) {
-              deepProperties += deep + ': ' + outputTsType + ';';
-            }
-
             this.buildTupleResponseInterface(
               abiOutput.components![i].components![deep]
             );
