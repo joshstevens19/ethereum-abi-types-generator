@@ -343,7 +343,7 @@ describe('AbiGenerator', () => {
       owner:string;
       detachedComponentsCount:string;
     }
-    
+
     export interface Abi {
       /**
        * Payable: false
@@ -449,7 +449,7 @@ describe('AbiGenerator', () => {
        *Constant:true
        *StateMutability:view
        *Type:function
-       *@param ownerType:address, Indexed:false 
+       *@param ownerType:address, Indexed:false
        */
        getCars(owner:string): MethodConstantReturnContext<OwnedCarsResponse[]>;
       }
@@ -852,7 +852,7 @@ describe('AbiGenerator', () => {
               length: 5;
             }
 
-            export interface OwnedCarsResponse { 
+            export interface OwnedCarsResponse {
               tokenId:BigNumber;
               0:BigNumber;
               attachedComponents:[BigNumber,BigNumber,BigNumber,BigNumber];
@@ -1301,7 +1301,11 @@ describe('AbiGenerator', () => {
                     ContractInterface,
                     BytesLike as Arrayish,
                     BigNumber,
-                    BigNumberish } from "ethers"
+                    BigNumberish,
+                    EventFilter,
+                    PayableOverrides,
+                    Overrides,
+                    CallOverrides } from "ethers"
             import { EthersContractContextV5 } from "ethereum-abi-types-generator";
             export type ContractContext = EthersContractContextV5<
               Abi,
@@ -1309,44 +1313,6 @@ describe('AbiGenerator', () => {
               AbiEventsContext,
               AbiEvents
             >;
-            export declare type EventFilter = {
-              address?: string;
-              topics?: Array<string>;
-              fromBlock?: string | number;
-              toBlock?: string | number;
-            };
-            export interface ContractTransactionOverrides {
-              /**
-               * The maximum units of gas for the transaction to use
-               */
-              gasLimit?: number;
-              /**
-               * The price (in wei) per unit of gas
-               */
-              gasPrice?: BigNumber | string | number | Promise<any>;
-              /**
-               * The nonce to use in the transaction
-               */
-              nonce?: number;
-              /**
-               * The amount to send with the transaction (i.e. msg.value)
-               */
-              value?: BigNumber | string | number | Promise<any>;
-              /**
-               * The chain ID (or network ID) to use
-               */
-              chainId?: number;
-            }
-            export interface ContractCallOverrides {
-              /**
-               * The address to execute the call as
-               */
-              from?: string;
-              /**
-               * The maximum units of gas for the transaction to use
-               */
-              gasLimit?: number;
-            }
             export type AbiEvents = 'Event1' | 'Event2';
             export interface AbiEventsContext {
               Event1(...parameters: any): EventFilter;
@@ -1407,7 +1373,7 @@ describe('AbiGenerator', () => {
               length: 5;
             }
 
-             export interface OwnedCarsResponse { 
+             export interface OwnedCarsResponse {
               tokenId:BigNumber;
               0:BigNumber;
               attachedComponents:[BigNumber,BigNumber,BigNumber,BigNumber];
@@ -1419,7 +1385,7 @@ describe('AbiGenerator', () => {
               detachedComponentsCount:BigNumber;
               4:BigNumber;
             }
-            
+
             export interface Abi {
               /**
                * Payable: false
@@ -1430,7 +1396,7 @@ describe('AbiGenerator', () => {
                */
               tupleInputOnly(
                 o: TupleInputOnlyRequest,
-                overrides?: ContractTransactionOverrides
+                overrides?: Overrides
               ): Promise<ContractTransaction>;
               /**
                * Payable: false
@@ -1443,7 +1409,7 @@ describe('AbiGenerator', () => {
               tupleInputAndOutput(
                 exchangeAddress: string,
                 internalAddress: string,
-                overrides?: ContractCallOverrides
+                overrides?: CallOverrides
               ): Promise<TupleInputAndOutputResponse>;
               /**
                * Payable: false
@@ -1456,7 +1422,7 @@ describe('AbiGenerator', () => {
               tupleNoInputNames(
                 parameter0: string,
                 parameter1: string,
-                overrides?: ContractCallOverrides
+                overrides?: CallOverrides
               ): Promise<TupleNoInputNamesResponse>;
               /**
                * Payable: false
@@ -1469,7 +1435,7 @@ describe('AbiGenerator', () => {
               tupleWithParametersNames(
                 address1: string,
                 address2: string,
-                overrides?: ContractCallOverrides
+                overrides?: CallOverrides
               ): Promise<TupleWithParametersNamesResponse>;
               /**
                * Payable: true
@@ -1480,7 +1446,7 @@ describe('AbiGenerator', () => {
                */
               byteArrayInputExample(
                 inputData: [Arrayish, Arrayish, Arrayish],
-                overrides?: ContractTransactionOverrides
+                overrides?: PayableOverrides
               ): Promise<ContractTransaction>;
               /**
                * Payable: false
@@ -1488,14 +1454,14 @@ describe('AbiGenerator', () => {
                * StateMutability: undefined
                * Type: function
                */
-              int8ReturnExample(overrides?: ContractCallOverrides): Promise<number>;
+              int8ReturnExample(overrides?: CallOverrides): Promise<number>;
               /**
                * Payable: false
                * Constant: true
                * StateMutability: undefined
                * Type: function
                */
-              int256ReturnExample(overrides?: ContractCallOverrides): Promise<BigNumber>;
+              int256ReturnExample(overrides?: CallOverrides): Promise<BigNumber>;
               /**
                * Payable: false
                * Constant: true
@@ -1509,7 +1475,7 @@ describe('AbiGenerator', () => {
                 valid: boolean,
                 exchangeAddress: string,
                 timestamp: BigNumberish,
-                overrides?: ContractCallOverrides
+                overrides?: CallOverrides
               ): Promise<BigNumber>;
               /**
                * Payable: false
@@ -1526,7 +1492,7 @@ describe('AbiGenerator', () => {
                 _symbol: Arrayish,
                 _decimals: BigNumberish,
                 _supply: BigNumberish,
-                overrides?: ContractTransactionOverrides
+                overrides?: Overrides
               ): Promise<ContractTransaction>;
 
               /**
@@ -1536,7 +1502,7 @@ describe('AbiGenerator', () => {
                *Type:function
                * @param ownerType:address,Indexed:false
                */
-               getCars(owner:string, overrides?:ContractCallOverrides):Promise<OwnedCarsResponse[]>;
+               getCars(owner:string, overrides?:CallOverrides):Promise<OwnedCarsResponse[]>;
             }
     `)
         )
