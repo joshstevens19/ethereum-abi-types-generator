@@ -80,7 +80,7 @@ export class Web3Factory {
         for (let a = 0; a < abiItems[i].inputs!.length; a++) {
           if (abiItems[i].inputs![a].indexed === true) {
             const paramterType = TypeScriptHelpers.getSolidityInputTsType(
-              abiItems[i].inputs![a].type,
+              abiItems[i].inputs![a],
               Provider.web3
             );
             filtersProperties += `${
