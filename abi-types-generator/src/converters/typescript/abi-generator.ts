@@ -309,6 +309,26 @@ export default class AbiGenerator {
           )};`;
           break;
         case AbiItemType.event:
+          const eventInputs = abi[i].inputs;
+          if (eventInputs && eventInputs.length > 0) {
+            const eventInterfaceName = `${Helpers.capitalize(
+              abi[i].name
+            )}EventEmittedResponse`;
+            let eventTypeProperties = '';
+            for (let e = 0; e < eventInputs.length; e++) {
+              const eventTsType = TypeScriptHelpers.getSolidityInputTsType(
+                eventInputs[e],
+                this._context.provider
+              );
+
+              eventTypeProperties += `${eventInputs[e].name}: ${eventTsType};`;
+            }
+
+            this.addReturnTypeInterface(
+              eventInterfaceName,
+              eventTypeProperties
+            );
+          }
           this._events.push(abi[i].name);
           break;
       }
@@ -513,7 +533,8 @@ export default class AbiGenerator {
       // check for deep tuples in tuple in tuples
       if (abiInput.components![i].components) {
         const deepInterfaceName = TypeScriptHelpers.buildInterfaceName(
-          abiInput.components![i]
+          abiInput.components![i],
+          'Request'
         );
         let deepProperties = '';
         for (
@@ -542,8 +563,6 @@ export default class AbiGenerator {
             );
           }
         }
-
-        console.log(deepProperties);
 
         this.addReturnTypeInterface(deepInterfaceName, deepProperties);
       }
