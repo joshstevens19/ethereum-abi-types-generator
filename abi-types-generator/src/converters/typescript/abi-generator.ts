@@ -552,9 +552,6 @@ export default class AbiGenerator {
           }
 
           deepProperties += propertyName + ': ' + deepInputTsType + ';';
-          if (this._context.provider.includes(Provider.ethers)) {
-            deepProperties += deep + ': ' + deepInputTsType + ';';
-          }
 
           if (abiInput.components![i].components![deep].components) {
             this.buildTupleParametersInterface(
