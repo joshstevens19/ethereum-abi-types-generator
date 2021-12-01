@@ -367,7 +367,7 @@ export default class AbiGenerator {
    */
   private getAbiFileLocationRawName(): string {
     const basename = path.basename(this._context.abiFileLocation);
-    return basename.split('.')[0];
+    return basename.substr(0, basename.lastIndexOf('.')); 
   }
 
   /**
