@@ -37,7 +37,7 @@
     "reflect-metadata": "^0.1.13",
     "yargs": "^15.3.1",
     "ethers": "^4.0.47",
-    "ethersv5": "npm:ethers@^5.0.32"
+    "ethersv5": "github:ethers-io/ethers.js"
   },
   "devDependencies": {
     "@types/dotenv": "^8.2.0",
