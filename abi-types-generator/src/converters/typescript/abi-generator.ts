@@ -531,7 +531,7 @@ export default class AbiGenerator {
     name: string,
     abiInput: AbiInput
   ): string {
-    const interfaceName = `${Helpers.capitalize(name)}Request`;
+    const interfaceName = `${Helpers.capitalize(name)}${Helpers.capitalize(abiInput.name)}Request`;
 
     let properties = '';
 
