@@ -310,6 +310,17 @@ describe('AbiGenerator', () => {
       | 'easyExample'
       | 'new'
       | 'getCars';
+    export interface Event1EventEmittedResponse {
+      token:string;
+      exchange:string;
+      user:string;
+      _value:string;
+    }
+    export interface Event2EventEmittedResponse {
+     _owner:string;
+     _spender:string;
+     _value:string
+    }
     export interface TupleInputOnlyRequest {
       address: string;
       timestamps: [string | number, string | number, string | number];
@@ -808,6 +819,17 @@ describe('AbiGenerator', () => {
               | 'easyExample'
               | 'new'
               | 'getCars';
+            export interface Event1EventEmittedResponse {
+                token:string;
+                exchange:string;
+                user:string;
+                _value:BigNumberish;
+            }
+            export interface Event2EventEmittedResponse {
+              _owner:string;
+              _spender:string;
+              _value:BigNumberish;
+            }
             export interface TupleInputOnlyRequest {
               address: string;
               timestamps: [BigNumberish, BigNumberish, BigNumberish];
@@ -1329,6 +1351,17 @@ describe('AbiGenerator', () => {
               | 'easyExample'
               | 'new'
               | 'getCars';
+            export interface Event1EventEmittedResponse {
+                token:string;
+                exchange:string;
+                user:string;
+                _value:BigNumberish;
+            }
+            export interface Event2EventEmittedResponse {
+              _owner:string;
+              _spender:string;
+              _value:BigNumberish;
+            }
             export interface TupleInputOnlyRequest {
               address: string;
               timestamps: [BigNumberish, BigNumberish, BigNumberish];

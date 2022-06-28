@@ -28,6 +28,8 @@ A CLI tool which allows you to convert an ABI json file into fully loaded interf
 🚀 Supported multidimensional return types aka `bytes32[4] >`[string, string, string, string, string]`
 <br/>
 🚀 Automatic documentation generated on each method outputting all the details about it which is on the ABI - no jumping back and forth
+<br/>
+🚀 Generated event typings
 
 ## Supports
 

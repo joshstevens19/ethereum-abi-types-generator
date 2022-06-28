@@ -309,6 +309,26 @@ export default class AbiGenerator {
           )};`;
           break;
         case AbiItemType.event:
+          const eventInputs = abi[i].inputs;
+          if (eventInputs && eventInputs.length > 0) {
+            const eventInterfaceName = `${Helpers.capitalize(
+              abi[i].name
+            )}EventEmittedResponse`;
+            let eventTypeProperties = '';
+            for (let e = 0; e < eventInputs.length; e++) {
+              const eventTsType = TypeScriptHelpers.getSolidityInputTsType(
+                eventInputs[e],
+                this._context.provider
+              );
+
+              eventTypeProperties += `${eventInputs[e].name}: ${eventTsType};`;
+            }
+
+            this.addReturnTypeInterface(
+              eventInterfaceName,
+              eventTypeProperties
+            );
+          }
           this._events.push(abi[i].name);
           break;
       }
@@ -347,7 +367,7 @@ export default class AbiGenerator {
    */
   private getAbiFileLocationRawName(): string {
     const basename = path.basename(this._context.abiFileLocation);
-    return basename.split('.')[0];
+    return basename.substr(0, basename.lastIndexOf('.')); 
   }
 
   /**
@@ -474,7 +494,7 @@ export default class AbiGenerator {
           )}`;
         } else {
           input += `${inputName}: ${TypeScriptHelpers.getSolidityInputTsType(
-            abiItem.inputs[i].type,
+            abiItem.inputs[i],
             this._context.provider
           )}`;
         }
@@ -516,12 +536,46 @@ export default class AbiGenerator {
     let properties = '';
 
     for (let i = 0; i < abiInput.components!.length; i++) {
-      properties += `${
-        abiInput.components![i].name
-      }: ${TypeScriptHelpers.getSolidityInputTsType(
-        abiInput.components![i].type,
+      const inputTsType = TypeScriptHelpers.getSolidityInputTsType(
+        abiInput.components![i],
         this._context.provider
-      )};`;
+      );
+
+      properties += `${abiInput.components![i].name}: ${inputTsType};`;
+
+      // check for deep tuples in tuple in tuples
+      if (abiInput.components![i].components) {
+        const deepInterfaceName = TypeScriptHelpers.buildInterfaceName(
+          abiInput.components![i],
+          'Request'
+        );
+        let deepProperties = '';
+        for (
+          let deep = 0;
+          deep < abiInput.components![i].components!.length;
+          deep++
+        ) {
+          const deepInputTsType = TypeScriptHelpers.getSolidityInputTsType(
+            abiInput.components![i].components![deep],
+            this._context.provider
+          );
+          let propertyName = abiInput.components![i].components![deep].name;
+          if (propertyName.length === 0) {
+            propertyName = `result${deep}`;
+          }
+
+          deepProperties += propertyName + ': ' + deepInputTsType + ';';
+
+          if (abiInput.components![i].components![deep].components) {
+            this.buildTupleParametersInterface(
+              deepInterfaceName,
+              abiInput.components![i].components![deep]
+            );
+          }
+        }
+
+        this.addReturnTypeInterface(deepInterfaceName, deepProperties);
+      }
     }
 
     this.addReturnTypeInterface(interfaceName, properties);
@@ -539,9 +593,7 @@ export default class AbiGenerator {
    * @param abiOutput The abi output
    */
   private buildTupleResponseInterface(abiOutput: AbiOutput): string {
-    const interfaceName = TypeScriptHelpers.buildResponseInterfaceName(
-      abiOutput
-    );
+    const interfaceName = TypeScriptHelpers.buildInterfaceName(abiOutput);
 
     let properties = '';
 
@@ -558,7 +610,7 @@ export default class AbiGenerator {
 
       // check for deep tuples in tuple in tuples
       if (abiOutput.components![i].components) {
-        const deepInterfaceName = TypeScriptHelpers.buildResponseInterfaceName(
+        const deepInterfaceName = TypeScriptHelpers.buildInterfaceName(
           abiOutput.components![i]
         );
         let deepProperties = '';
@@ -623,9 +675,7 @@ export default class AbiGenerator {
         }
       } else {
         if (Helpers.isNeverModifyBlockchainState(abiItem)) {
-          const interfaceName = TypeScriptHelpers.buildResponseInterfaceName(
-            abiItem
-          );
+          const interfaceName = TypeScriptHelpers.buildInterfaceName(abiItem);
 
           let ouputProperties = '';
 

@@ -5,33 +5,44 @@ import Helpers from '../../../common/helpers';
 import { Provider } from '../enums/provider';
 
 export default class TypeScriptHelpers {
+  public static getSolidityInputTsTypeByTypeName(
+    type: string,
+    provider: Provider
+  ): string {
+    // tslint:disable-next-line: no-any
+    return this.getSolidityInputTsType({ type } as any, provider);
+  }
+
   /**
    * Get the solidity input type mapped to typescript type
    * @param type The solidity type
    */
   public static getSolidityInputTsType(
-    type: string,
+    abiInput: AbiInput,
     provider: Provider
   ): string {
     switch (provider) {
       case Provider.ethers:
       case Provider.ethers_v5:
         {
-          if (type.includes(SolidityType.bytes)) {
-            if (type.includes('[')) {
-              return this.buildUpMultidimensionalArrayTypes(type, 'Arrayish');
+          if (abiInput.type.includes(SolidityType.bytes)) {
+            if (abiInput.type.includes('[')) {
+              return this.buildUpMultidimensionalArrayTypes(
+                abiInput.type,
+                'Arrayish'
+              );
             }
 
             return 'Arrayish';
           }
 
           if (
-            type.includes(SolidityType.uint) ||
-            type.includes(SolidityType.int)
+            abiInput.type.includes(SolidityType.uint) ||
+            abiInput.type.includes(SolidityType.int)
           ) {
-            if (type.includes('[')) {
+            if (abiInput.type.includes('[')) {
               return this.buildUpMultidimensionalArrayTypes(
-                type,
+                abiInput.type,
                 'BigNumberish'
               );
             }
@@ -42,10 +53,10 @@ export default class TypeScriptHelpers {
         break;
       case Provider.web3:
         {
-          if (type.includes(SolidityType.bytes)) {
-            if (type.includes('[')) {
+          if (abiInput.type.includes(SolidityType.bytes)) {
+            if (abiInput.type.includes('[')) {
               return this.buildUpMultidimensionalArrayTypes(
-                type,
+                abiInput.type,
                 'string | number[]'
               );
             }
@@ -54,30 +65,36 @@ export default class TypeScriptHelpers {
           }
 
           if (
-            type.includes(SolidityType.uint) ||
-            type.includes(SolidityType.int)
+            abiInput.type.includes(SolidityType.uint) ||
+            abiInput.type.includes(SolidityType.int)
           ) {
-            if (type.includes(SolidityType.uint)) {
+            if (abiInput.type.includes(SolidityType.uint)) {
               const numberType = this.buildWeb3NumberType(
-                type,
+                abiInput.type,
                 SolidityType.uint
               );
 
-              if (type.includes('[')) {
-                return this.buildUpMultidimensionalArrayTypes(type, numberType);
+              if (abiInput.type.includes('[')) {
+                return this.buildUpMultidimensionalArrayTypes(
+                  abiInput.type,
+                  numberType
+                );
               }
 
               return numberType;
             }
 
-            if (type.includes(SolidityType.int)) {
+            if (abiInput.type.includes(SolidityType.int)) {
               const numberType = this.buildWeb3NumberType(
-                type,
+                abiInput.type,
                 SolidityType.int
               );
 
-              if (type.includes('[')) {
-                return this.buildUpMultidimensionalArrayTypes(type, numberType);
+              if (abiInput.type.includes('[')) {
+                return this.buildUpMultidimensionalArrayTypes(
+                  abiInput.type,
+                  numberType
+                );
               }
 
               return numberType;
@@ -87,9 +104,9 @@ export default class TypeScriptHelpers {
         break;
     }
 
-    if (type.includes(SolidityType.bool)) {
-      if (type.includes('[')) {
-        return this.buildUpMultidimensionalArrayTypes(type, 'boolean');
+    if (abiInput.type.includes(SolidityType.bool)) {
+      if (abiInput.type.includes('[')) {
+        return this.buildUpMultidimensionalArrayTypes(abiInput.type, 'boolean');
       }
       return 'boolean';
     }
@@ -97,20 +114,29 @@ export default class TypeScriptHelpers {
     // always fall back to hex string if something goes nuts in the ABI
     // should not happen but good having some fallback
     if (
-      type.includes(SolidityType.address) ||
-      type.includes(SolidityType.uint) ||
-      type.includes(SolidityType.bytes) ||
-      type.includes(SolidityType.string) ||
-      type.includes(SolidityType.int)
+      abiInput.type.includes(SolidityType.address) ||
+      abiInput.type.includes(SolidityType.uint) ||
+      abiInput.type.includes(SolidityType.bytes) ||
+      abiInput.type.includes(SolidityType.string) ||
+      abiInput.type.includes(SolidityType.int)
     ) {
-      if (type.includes('[')) {
-        return this.buildUpMultidimensionalArrayTypes(type, 'string');
+      if (abiInput.type.includes('[')) {
+        return this.buildUpMultidimensionalArrayTypes(abiInput.type, 'string');
       }
 
       return 'string';
     }
 
-    throw new Error(`${type} is not valid solidty type`);
+    if (abiInput.type.includes(SolidityType.tuple)) {
+      const interfaceName = this.buildInterfaceName(abiInput, 'Request');
+      if (abiInput.type.includes('[')) {
+        return `${interfaceName}[]`;
+      }
+
+      return interfaceName;
+    }
+
+    throw new Error(`${abiInput.type} is not valid solidty type`);
   }
 
   /**
@@ -166,7 +192,7 @@ export default class TypeScriptHelpers {
     }
 
     if (abiOutput.type.includes(SolidityType.tuple)) {
-      const interfaceName = this.buildResponseInterfaceName(abiOutput);
+      const interfaceName = this.buildInterfaceName(abiOutput);
       if (abiOutput.type.includes('[')) {
         return `${interfaceName}[]`;
       }
@@ -198,18 +224,19 @@ export default class TypeScriptHelpers {
       return 'string';
     }
 
-    throw new Error(`${abiOutput.type} is not valid solidty type`);
+    throw new Error(`${abiOutput.type} is not valid solidty type 1`);
   }
 
   /**
    * Build response interface name
    * @param inputOrOutput The input or output
    */
-  public static buildResponseInterfaceName(
-    inputOrOutput: AbiOutput | AbiInput
+  public static buildInterfaceName(
+    inputOrOutput: AbiOutput | AbiInput,
+    requestInterfaceType: 'Request' | 'Response' = 'Response'
   ): string {
     if (inputOrOutput.name.length > 0) {
-      return `${Helpers.capitalize(inputOrOutput.name)}Response`;
+      return `${Helpers.capitalize(inputOrOutput.name)}${requestInterfaceType}`;
     }
 
     if (!inputOrOutput.internalType) {
