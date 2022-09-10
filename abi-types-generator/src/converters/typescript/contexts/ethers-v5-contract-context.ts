@@ -223,4 +223,11 @@ interface EthersContractV5<TMethods, TMethodNames, TEventsContext, TEventType>
     TEventsContext,
     TEventType
   >;
+  queryFilter(
+    event: EventFilter | string,
+    fromBlockOrBlockhash?: BlockTag | string, 
+    toBlock?: BlockTag
+  ): Promise<
+    TEventType[]
+  >;
 }
