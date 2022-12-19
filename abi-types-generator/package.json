@@ -46,7 +46,7 @@
     "@types/prettier": "^2.0.0",
     "@types/yargs": "^15.0.4",
     "jest": "^24.9.0",
-    "ts-jest": "^24.1.0",
+    "ts-jest": "^29.0.3",
     "tslint": "^6.1.2",
     "typescript": "^3.8.3"
   },
