@@ -1,6 +1,6 @@
 {
   "name": "ethereum-abi-types-generator",
-  "version": "1.3.2",
+  "version": "1.3.3",
   "description": "Generate types from an ethereum ABI json file.",
   "main": "dist/index.js",
   "scripts": {

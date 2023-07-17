@@ -19,7 +19,8 @@ export default class TypeScriptHelpers {
    */
   public static getSolidityInputTsType(
     abiInput: AbiInput,
-    provider: Provider
+    provider: Provider,
+    prefix: 'Request' | 'EventEmittedResponse' = 'Request'
   ): string {
     switch (provider) {
       case Provider.ethers:
@@ -128,7 +129,7 @@ export default class TypeScriptHelpers {
     }
 
     if (abiInput.type.includes(SolidityType.tuple)) {
-      const interfaceName = this.buildInterfaceName(abiInput, 'Request');
+      const interfaceName = this.buildInterfaceName(abiInput, prefix);
       if (abiInput.type.includes('[')) {
         return `${interfaceName}[]`;
       }
@@ -233,7 +234,10 @@ export default class TypeScriptHelpers {
    */
   public static buildInterfaceName(
     inputOrOutput: AbiOutput | AbiInput,
-    requestInterfaceType: 'Request' | 'Response' = 'Response'
+    requestInterfaceType:
+      | 'Request'
+      | 'Response'
+      | 'EventEmittedResponse' = 'Response'
   ): string {
     if (inputOrOutput.name.length > 0) {
       return `${Helpers.capitalize(inputOrOutput.name)}${requestInterfaceType}`;

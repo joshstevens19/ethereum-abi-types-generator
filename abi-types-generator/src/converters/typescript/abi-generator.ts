@@ -318,10 +318,20 @@ export default class AbiGenerator {
             for (let e = 0; e < eventInputs.length; e++) {
               const eventTsType = TypeScriptHelpers.getSolidityInputTsType(
                 eventInputs[e],
-                this._context.provider
+                this._context.provider,
+                'EventEmittedResponse'
               );
 
               eventTypeProperties += `${eventInputs[e].name}: ${eventTsType};`;
+
+              if (eventInputs[e].type === SolidityType.tuple) {
+                this.buildTupleParametersInterface(
+                  // remove due to prefix of components
+                  eventTsType.replace('EventEmittedResponse', ''),
+                  eventInputs[e],
+                  'EventEmittedResponse'
+                );
+              }
             }
 
             this.addReturnTypeInterface(
@@ -367,7 +377,7 @@ export default class AbiGenerator {
    */
   private getAbiFileLocationRawName(): string {
     const basename = path.basename(this._context.abiFileLocation);
-    return basename.substr(0, basename.lastIndexOf('.')); 
+    return basename.substr(0, basename.lastIndexOf('.'));
   }
 
   /**
@@ -516,9 +526,10 @@ export default class AbiGenerator {
    */
   private buildTupleParametersInterface(
     name: string,
-    abiInput: AbiInput
+    abiInput: AbiInput,
+    prefix: 'Request' | 'Response' | 'EventEmittedResponse' = 'Request'
   ): string {
-    const interfaceName = `${Helpers.capitalize(name)}Request`;
+    const interfaceName = `${Helpers.capitalize(name)}${prefix}`;
 
     let properties = '';
 
@@ -534,7 +545,7 @@ export default class AbiGenerator {
       if (abiInput.components![i].components) {
         const deepInterfaceName = TypeScriptHelpers.buildInterfaceName(
           abiInput.components![i],
-          'Request'
+          prefix
         );
         let deepProperties = '';
         for (
