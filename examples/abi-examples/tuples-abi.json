@@ -1,0 +1,85 @@
+[
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "profileId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "string",
+            "name": "contentURI",
+            "type": "string"
+          },
+          {
+            "internalType": "address[]",
+            "name": "actionModules",
+            "type": "address[]"
+          },
+          {
+            "internalType": "bytes[]",
+            "name": "actionModulesInitDatas",
+            "type": "bytes[]"
+          },
+          {
+            "internalType": "address",
+            "name": "referenceModule",
+            "type": "address"
+          },
+          {
+            "internalType": "bytes",
+            "name": "referenceModuleInitData",
+            "type": "bytes"
+          }
+        ],
+        "internalType": "struct Types.PostParams",
+        "name": "postParams",
+        "type": "tuple"
+      },
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "signer",
+            "type": "address"
+          },
+          {
+            "internalType": "uint8",
+            "name": "v",
+            "type": "uint8"
+          },
+          {
+            "internalType": "bytes32",
+            "name": "r",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "bytes32",
+            "name": "s",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "uint256",
+            "name": "deadline",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct Types.EIP712Signature",
+        "name": "signature",
+        "type": "tuple"
+      }
+    ],
+    "name": "postWithSig",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+]

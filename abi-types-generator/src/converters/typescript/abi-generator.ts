@@ -499,7 +499,7 @@ export default class AbiGenerator {
 
         if (abiItem.inputs[i].type.includes(SolidityType.tuple)) {
           input += `${inputName}: ${this.buildTupleParametersInterface(
-            abiItem.name,
+            inputName,
             abiItem.inputs[i]
           )}`;
         } else {
