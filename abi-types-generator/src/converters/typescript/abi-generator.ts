@@ -512,8 +512,21 @@ export default class AbiGenerator {
     }
 
     // ethers allows you to pass in overrides in methods so add that in here
-    if (this._context.provider.includes(Provider.ethers)) {
-      input = this._ethersFactory.addOverridesToParameters(input, abiItem);
+    switch (this._context.provider) {
+      case Provider.ethers:
+        input = this._ethersFactory.addOverridesToParameters(
+          input,
+          abiItem,
+          EthersVersion.four_or_below
+        );
+        break;
+      case Provider.ethers_v5:
+        input = this._ethersFactory.addOverridesToParameters(
+          input,
+          abiItem,
+          EthersVersion.five
+        );
+        break;
     }
 
     return (input += ')');
